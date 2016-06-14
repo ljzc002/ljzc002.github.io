@@ -1,2 +1,2 @@
-# ljzc002.github.com
+# ljzc002.github.io
 Test the github static web page
