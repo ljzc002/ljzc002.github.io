@@ -77,7 +77,7 @@ function createScene() //标准起式
     // Terrain
     //地面
     //name,url,width,height,subdivisions,minheight,maxheight,updateble,onready,scene
-    ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", "../IMAGE/map.jpg", 1000, 1000, 100, 0, 12, scene, true);//地面类型的网格
+    ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", "../IMAGE/map.jpg", 1000, 1000, 100, 0, 120, scene, true);//地面类型的网格
     var groundMaterial = new BABYLON.StandardMaterial("groundMat", scene);//泥土材质
     groundMaterial.diffuseTexture = new BABYLON.Texture("../IMAGE/terre.png", scene);//地面的纹理贴图
     groundMaterial.diffuseTexture.uScale = 50.0;//纹理重复效果
@@ -89,7 +89,7 @@ function createScene() //标准起式
     //墙
     var Mur = BABYLON.Mesh.CreateBox("Mur", 1, scene);
     Mur.scaling = new BABYLON.Vector3(15, 6, 1);
-    Mur.position.y = 3.1;
+    Mur.position.y = 31;
     Mur.position.z = 20;
     Mur.checkCollisions = true;
 
@@ -100,7 +100,7 @@ function createScene() //标准起式
         meshPlayer = newMeshes[0];//网格数据
         meshOctree = newMeshes;
         meshPlayer.scaling= new BABYLON.Vector3(0.05, 0.05, 0.05);//缩放
-        meshPlayer.position = new BABYLON.Vector3(-5.168, 3.392, -7.463);//位置
+        meshPlayer.position = new BABYLON.Vector3(-5.168, 33.92, -7.463);//位置
         meshPlayer.rotation = new BABYLON.Vector3(0, 3.9, 0);//旋转
         cameraArcRotative[0].alpha = -parseFloat(meshPlayer.rotation.y) - 4.69;//初始化相机角度
 
