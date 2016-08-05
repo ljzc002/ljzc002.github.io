@@ -41,7 +41,7 @@ function StandOnGroundWithA(object)
         ry0=ryt;
         ms0 = mst;
 
-        if (PlayAnnimation === false && (v0.forward != 0 || v0.left != 0||v0.up!=0))//如果没有动画但又在运动
+        if (PlayAnnimation === false && (v0.forward != 0 || v0.left != 0))//如果没有动画但又在运动
         {
             totalFrame = skeletonsPlayer[0]._scene._activeSkeletons.data.length;//总帧数
             start = 0;
@@ -130,18 +130,21 @@ function StandOnGroundWithA(object)
         else {
             mchange.left = v0.left * schange;
         }
-        if(v0.up<0&&flag_standonground==0&&((py0-object.position.y)<(-mchange.up)/5))//正在下落，但没有下落应有的距离
+        if(v0.up<0&&flag_standonground==0&&(0<(py0-object.position.y)<(-mchange.up)*3/4))//正在下落，但没有下落应有的距离
         {
             v0.up=0;
+            vt.up=0;
+            vm.down=1;
             flag_standonground=1;
             witha.up=-0.5;//考虑到下坡的存在，还要有一点向下的分量，使其能够向下但又不至于抖动过于剧烈
         }
-        else if(flag_standonground==1&&((py0-object.position.y)>(-mchange.up)/5))//遇到了一个坑
+        else if(flag_standonground==1&&((py0-object.position.y)>(-mchange.up)*3/4)>0)//遇到了一个坑
         {
             flag_standonground=0;
+            vm.down=100;
             witha.up=-9.82;
         }
-        if (witha2.up != 0&&flag_standonground==0) {//不在地面才考虑上下移动
+        if (witha2.up != 0) {//不在地面才考虑上下移动&&flag_standonground==0
 
             vt.up = v0.up + witha2.up * schange;//速度变化
             if ((0 < vt.up && vt.up < vm.up) || (0 > vt.up && vt.up > -vm.down)) {
@@ -162,13 +165,13 @@ function StandOnGroundWithA(object)
         v0.forward = vt.forward;
         v0.left = vt.left;
         v0.up = vt.up;
-        if (v0.forward < 0.001 && v0.forward > -0.001) {
+        if (v0.forward < 0.01 && v0.forward > -0.01) {
             v0.forward = 0;
         }
-        if (v0.left < 0.001 && v0.left > -0.001) {
+        if (v0.left < 0.01 && v0.left > -0.01) {
             v0.left = 0;
         }
-        if (v0.up < 0.001 && v0.up > -0.001) {
+        if (v0.up < 0.01 && v0.up > -0.01) {
             v0.up = 0;
         }
         /*if(flag_standonground==1&&v0.up<0)//如果在地面上就不能再向下了！！
@@ -176,23 +179,27 @@ function StandOnGroundWithA(object)
             v0.up = 0;
             mchange.up=0;
         }*/
-        if(mchange.forward<0.001&& mchange.forward > -0.001)
+        if(mchange.forward<0.01&& mchange.forward > -0.01)
          {
             mchange.forward=0;
          }
-         if(mchange.left<0.001&& mchange.left > -0.001)
+         if(mchange.left<0.01&& mchange.left > -0.01)
          {
             mchange.left=0;
          }
-         if(mchange.up<0.001&& mchange.up > -0.001)
+         if(mchange.up<0.01&& mchange.up > -0.01)
          {
              mchange.up=0;
          }
         if (v0.forward == 0 && v0.left == 0&& v0.up == 0) {
-            scene.stopAnimation(skeletonsPlayer[0]);
-            PlayAnnimation = false;
+
         }
         else {
+            if(v0.forward == 0 && v0.left == 0)
+            {
+                scene.stopAnimation(skeletonsPlayer[0]);
+                PlayAnnimation = false;
+            }
             py0=object.position.y;
             var vectir1=(new BABYLON.Vector3(parseFloat(Math.sin(parseFloat(object.rotation.y))) * mchange.forward * flag_runfast,
                 0, parseFloat(Math.cos(parseFloat(object.rotation.y))) * mchange.forward * flag_runfast)).negate();
@@ -201,6 +208,11 @@ function StandOnGroundWithA(object)
             var vectir3=new BABYLON.Vector3(0, mchange.up * flag_runfast, 0);
             vmove = vectir1.add(vectir2).add(vectir3);
             object.moveWithCollisions(vmove);
+            if(flag_standonground==1)
+            {
+                //v0.up=0;
+                //vt.up=0;
+            }
         }
     }
 }
