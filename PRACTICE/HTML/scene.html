@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Babylon - Basic scene</title>
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+    <script src="../JS/LIB/babylon.js"></script>
+    <script src="../JS/LIB/jquery-1.11.3.min.js"></script>
+    <!--script src="../JS/movewitha.js"></script-->
+    <script src="../JS/standongroundwitha.js"></script>
+    <script src="../JS/showvalue.js"></script>
+</head>
+<body>
+<canvas id="renderCanvas"></canvas>
+<div id="div_condition" style="width: 400px;height: 200px;background-color: transparent;z-index: 100;position: fixed;top: 0px;
+right: 0px;color:green;border: 1px solid;font-size: 12px;overflow-y: scroll;display: none">
+</div>
+<textarea id="div_condition2" style="width: 400px;height: 200px;background-color: transparent;z-index: 100;position: fixed;top: 0px;
+right: 0px;color:green;border: 1px solid;font-size: 12px;overflow-y: scroll" contenteditable="false"></textarea>
+<script type="text/javascript">
+var canvas = document.getElementById("renderCanvas");
+var PlayAnnimation = false,//是否启动动画
+        PlayerCharger = false,
+        skybox,
+        scene,
+        sceneCharger = false,
+        meshPlayer,//网格玩家
+        meshOctree,
+        skeletonsPlayer = [], //玩家列表
+        cameraArcRotative = [],//弧形旋转相机列表
+        octree;
+var ground;
+function createScene() //标准起式
+{
+    var engine = new BABYLON.Engine(canvas, true);//把engine的定义放在了主函数的里面！！
+    engine.displayLoadingUI();
+    scene = new BABYLON.Scene(engine);
+
+    //Active gravity and collision
+    //启用重力和碰撞
+    //scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+    //scene.enablePhysics(new BABYLON.Vector3(0, -9.82, 0), new BABYLON.CannonJSPlugin()),
+            scene.collisionsEnabled = true;
+
+    // Light directional
+    //定向光照
+    var LightDirectional = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(-2, -4, 2), scene);
+    LightDirectional.diffuse = new BABYLON.Color3(1, 1, 1);//散射
+    LightDirectional.specular = new BABYLON.Color3(0, 0, 0);//镜面
+    LightDirectional.position = new BABYLON.Vector3(250, 400, 0);
+    LightDirectional.intensity = 1.8;//强度
+
+    // Camera 3 eme personne
+    //相机
+    cameraArcRotative[0] = new BABYLON.ArcRotateCamera("CameraBaseRotate", -Math.PI/2, Math.PI/2.2, 12, new BABYLON.Vector3(0, 5.0, 0), scene);
+    cameraArcRotative[0].wheelPrecision = 15;//鼠标滚轮？
+    cameraArcRotative[0].lowerRadiusLimit = 2;
+    cameraArcRotative[0].upperRadiusLimit = 22;
+    cameraArcRotative[0].minZ = 0;
+    cameraArcRotative[0].minX = 4096;
+    scene.activeCamera = cameraArcRotative[0];
+    cameraArcRotative[0].attachControl(canvas);//控制关联
+
+    // Terrain
+    //地面
+    //name,url,width,height,subdivisions,minheight,maxheight,updateble,onready,scene
+    ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", "../IMAGE/map.jpg", 1000, 1000, 100, 0, 12, scene, true);//地面类型的网格
+    var groundMaterial = new BABYLON.StandardMaterial("groundMat", scene);//泥土材质
+    groundMaterial.diffuseTexture = new BABYLON.Texture("../IMAGE/terre.png", scene);//地面的纹理贴图
+    groundMaterial.diffuseTexture.uScale = 50.0;//纹理重复效果
+    groundMaterial.diffuseTexture.vScale = 50.0;
+    ground.material = groundMaterial;
+    ground.checkCollisions = true;
+
+    // Wall
+    //墙
+    var Mur = BABYLON.Mesh.CreateBox("Mur", 1, scene);
+    Mur.scaling = new BABYLON.Vector3(15, 6, 1);
+    Mur.position.y = 3.1;
+    Mur.position.z = 20;
+    Mur.checkCollisions = true;
+
+    // Character import
+    //角色导入
+    BABYLON.SceneLoader.ImportMesh("", "../MODEL/him/", "him.babylon", scene, function (newMeshes, particleSystems, skeletons)
+    {//载入完成的回调函数
+        meshPlayer = newMeshes[0];//网格数据
+        meshOctree = newMeshes;
+        meshPlayer.scaling= new BABYLON.Vector3(0.05, 0.05, 0.05);//缩放
+        meshPlayer.position = new BABYLON.Vector3(-5.168, 3.392, -7.463);//位置
+        meshPlayer.rotation = new BABYLON.Vector3(0, 3.9, 0);//旋转
+        cameraArcRotative[0].alpha = -parseFloat(meshPlayer.rotation.y) - 4.69;//初始化相机角度
+
+        skeletonsPlayer[0] = skeletons[0];//帧效果数据？骨骼动画数据
+        skeletonsPlayer.push(skeletons[0]);
+        var totalFrame = skeletons[0]._scene._activeSkeletons.data.length;
+        var start = 0;
+        var end = 100;
+        var vitesse = 100 / 100;
+        scene.beginAnimation(skeletons[0], 100*start/totalFrame, 100*end/totalFrame, true, vitesse);
+
+        meshPlayer.checkCollisions = true;
+        meshPlayer.ellipsoid = new BABYLON.Vector3(0.5, 1, 0.5);//碰撞检测椭球
+        meshPlayer.ellipsoidOffset = new BABYLON.Vector3(0, 2, 0);//上移一些
+        meshPlayer.applyGravity = true;
+
+    });
+
+    scene.registerBeforeRender(function(){//每次渲染前
+        if(scene.isReady() && meshPlayer)
+        {//加载完毕
+            if(sceneCharger == false) {
+                engine.hideLoadingUI();//隐藏载入ui
+                sceneCharger = true;
+                window.addEventListener("keydown", onKeyDown, false);//按键按下
+                window.addEventListener("keyup", onKeyUp, false);//按键抬起
+            }
+            //animatActor();//执行动画
+            StandOnGroundWithA(meshPlayer);//根据输入决定meshPlayer的运动方式
+            WriteLog2();
+        }
+    });
+
+    engine.runRenderLoop(function () {
+        scene.render();
+        if(scene.isReady() && meshPlayer){
+
+            CameraFollowActor(meshPlayer);//根据人物重定位相机
+
+            if(PlayerCharger == false) {//如果人物没有移动
+                scene.stopAnimation(skeletonsPlayer[0]);//停止骨骼动画
+                PlayerCharger = true;
+
+                octree = scene.createOrUpdateSelectionOctree();//八叉树，用来快速确定物体位置
+                for(var i = 0; i < meshOctree.length; i++) {
+                    octree.dynamicContent.push(meshOctree[i]);
+                }
+            }
+        }
+    });
+
+    window.addEventListener("resize", function () { engine.resize();});//监听屏幕大小变化
+
+}
+
+function WriteLog(text)//以日志方式写系统信息
+{
+    var p=document.createElement("p");
+    p.style.marginBottom="6px";
+    p.style.marginTop="6px";
+    p.innerHTML=text;
+    document.getElementById("div_condition").appendChild(p);
+}
+createScene();
+</script>
+</body>
+</html>
