@@ -253,6 +253,7 @@ function onKeyDown(event)
             witha.up=-9.82;
             flag_standonground=0;
             v0.up = 100;
+            vm.down=100;
             break;
         }
     }
