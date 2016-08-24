@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>003Basic_Material</title>
+    <link href="../CSS/normalize.min.css"  rel="stylesheet">
+    <link href="../CSS/slideout.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/font-awesome.min.css"  rel="stylesheet">
+    <link href="../CSS/perfect-scrollbar.min.css"  rel="stylesheet">
+    <link href="../CSS/main.css"  rel="stylesheet">
+</head>
+<body>
+<!--@@下面是翻译正文@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<nav class=" slideout-menu slideout-menu" id="menu">
+    <div class="searchbar-mobile searchbar">
+        <form action="/search" method="get"><input name="q" type="text" placeholder="Search..." value="">
+            <button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="http://doc.babylonjs.com/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="http://doc.babylonjs.com/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="http://doc.babylonjs.com/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="http://doc.babylonjs.com/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="http://doc.babylonjs.com/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="http://doc.babylonjs.com/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="http://doc.babylonjs.com/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="http://doc.babylonjs.com/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="http://doc.babylonjs.com/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com/" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a>
+    <div class="searchbar-mobile searchbar">
+        <form action="/search" method="get"><input name="q" type="text" placeholder="Search..." value=""><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="http://doc.babylonjs.com/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="http://doc.babylonjs.com/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="http://doc.babylonjs.com/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="http://doc.babylonjs.com/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="http://doc.babylonjs.com/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="http://doc.babylonjs.com/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="http://doc.babylonjs.com/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="http://doc.babylonjs.com/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="http://doc.babylonjs.com/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com/" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a></nav>
+<nav class="nav-main"><!-- Hamburger menu : displayed only in small screens--><i class="fa fa-bars" id="mobilemenu"></i><!-- this button only shows on mobile version of a "class" page-->
+    <div class="banner">
+        <div class="menu">
+            <div class="do-not-hover" id="home"><a style="cursor: help;" href="http://doc.babylonjs.com/">Babylon.js
+                | DOCUMENTATION</a></div>
+            <div class="item" id="whatsnew"><a style="cursor: help;" href="http://doc.babylonjs.com/whats-new">What's
+                new</a></div>
+            <div class="item" id="general"><a style="cursor: help;" href="http://doc.babylonjs.com/generals">General</a></div>
+            <div class="item active" id="tutorials"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials">Tutorials</a></div>
+            <div class="item" id="overview"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/overviews">Overviews</a></div>
+            <div class="item" id="exporters"><a style="cursor: help;" href="http://doc.babylonjs.com/exporters">Exporters</a></div>
+            <div class="item" id="extensions"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/extensions">Extensions</a></div>
+            <div class="item" id="classes"><a style="cursor: help;" href="http://doc.babylonjs.com/classes">Classes</a></div>
+            <div class="item" id="playground"><a style="cursor: help;" href="http://doc.babylonjs.com/playground">Playground</a></div></div>
+        <div class="more">
+            <div class="searchbar">
+                <form action="/search" method="get"><input name="q" type="text" placeholder="Search..." value=""><button type="submit"><i class="fa fa-search"></i></button></form></div></div></div></nav>
+<div class=" slideout-panel slideout-panel" id="wrapper">
+    <div class="statics-banner">
+        <h1 style="border-image: none; cursor: help;">教程</h1></div>
+    <div class="horizontal-separator"></div>
+    <div class="static-content">
+        <h1 style="border-image: none; cursor: help;">材质</h1><br>
+        <div class="contentTable">
+            <div class="tocHeader"><span class="tocTitle" style="border-image: none; cursor: help;"><i class="tocIcon fa fa-book"></i>内容列表</span><span class="tocToggle"><i class="fa fa-arrow-up"></i></span></div>
+            <div class="tocContent">
+                <ul>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/#introduction">简介</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/#how-can-i-do-this">怎么做
+                        ?</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/#next-step">下一步</a></li></ul></div></div>
+        <div id="staticContent">
+            <h2 style="border-image: none; cursor: help;"><a name="introduction" class="anchor" href="http://doc.babylonjs.com/tutorials/#introduction"></a>简介</h2>
+            <p style="border-image: none; cursor: help;">现在你已经可以在场景的任意位置建立基本网格元素了，我们现在将给这些网格赋予材质，定义这些网格看起来是什么样的。</p>
+            <p><img alt="Elements" src="../IMAGE/04.png"></p>
+            <p><a href="http://www.babylonjs.com/playground/?4"><strong style="border-image: none; cursor: help;">Playground
+                示例场景4 - 材质</strong></a></p>
+            <h2 style="border-image: none; cursor: help;"><a name="how-can-i-do-this" class="anchor" href="http://doc.babylonjs.com/tutorials/#how-can-i-do-this"></a>怎么做 ?</h2>
+            <p style="border-image: none; cursor: help;">我们是如此擅长编写createScene
+                函数以至于可以一边睡觉一边做，不是吗？所以让我们来和一个全向点光源和一个弧形旋转相机一起摇滚。然后，我们会创建一些基本网格元素来测试我们的材质。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-function"><span class="hljs-keyword" style="cursor: help;">function</span> <span class="hljs-title" style="border-image: none; cursor: help;">createScene</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword" style="border-image: none; cursor: help;">var</span> scene = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Scene(engine);
+    <span class="hljs-keyword" style="border-image: none; cursor: help;">var</span> light = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.PointLight(<span class="hljs-string" style="cursor: help;">"Omni"</span>, <span class="hljs-keyword" style="border-image: none; cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number" style="cursor: help;">100</span>, <span class="hljs-number" style="cursor: help;">100</span>), scene);
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="border-image: none; cursor: help;">new</span> BABYLON.ArcRotateCamera(<span class="hljs-string" style="border-image: none; cursor: help;">"Camera"</span>, <span class="hljs-number">0</span>, <span class="hljs-number" style="cursor: help;">0.8</span>, <span class="hljs-number" style="cursor: help;">100</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3.Zero(), scene);
+
+    <span class="hljs-comment" style="border-image: none; cursor: help;">//Creation of spheres</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> sphere1 = BABYLON.Mesh.CreateSphere(<span class="hljs-string" style="border-image: none; cursor: help;">"Sphere1"</span>, <span class="hljs-number" style="cursor: help;">10.0</span>, <span class="hljs-number" style="cursor: help;">6.0</span>, scene);
+    <span class="hljs-keyword" style="border-image: none; cursor: help;">var</span> sphere2 = BABYLON.Mesh.CreateSphere(<span class="hljs-string" style="border-image: none; cursor: help;">"Sphere2"</span>, <span class="hljs-number" style="cursor: help;">2.0</span>, <span class="hljs-number" style="cursor: help;">7.0</span>, scene);
+    <span class="hljs-keyword" style="cursor: help;">var</span> sphere3 = BABYLON.Mesh.CreateSphere(<span class="hljs-string" style="border-image: none; cursor: help;">"Sphere3"</span>, <span class="hljs-number" style="border-image: none; cursor: help;">10.0</span>, <span class="hljs-number" style="cursor: help;">8.0</span>, scene);
+    […]
+    <span class="hljs-comment" style="border-image: none; cursor: help;">//Positioning the meshes</span>
+    sphere1.position.x = -<span class="hljs-number">40</span>;
+    sphere2.position.x = -<span class="hljs-number">30</span>;
+</code></pre>
+            <p style="border-image: none; cursor: help;">现在，你只有一些灰颜色的网格。多么的单调！为了给它们赋予材质，你需要像这样建立一个材质对象：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> materialSphere1 = <span class="hljs-keyword" style="border-image: none; cursor: help;">new</span> BABYLON.StandardMaterial(<span class="hljs-string" style="border-image: none; cursor: help;">"texture1"</span>, scene);
+</code></pre>
+            <p style="border-image: none; cursor: help;">然后把这个材质赋予你选择的物体，例如：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">sphere1.material = materialSphere1;
+</code></pre>
+            <p style="border-image: none; cursor: help;">或者把建立和赋予一步到位:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">sphere1.material = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.StandardMaterial(<span class="hljs-string" style="border-image: none; cursor: help;">"texture1"</span>, scene);
+</code></pre>
+            <p style="border-image: none; cursor: help;">“我测试了我的场景，然后...什么变化也没有…”</p>
+            <p style="border-image: none; cursor: help;">确切来说，因为这个材质只是默认的材质（不赋予材质使用的就是默认材质）。你必须亲自把它设定成你需要的样子。你不需要改变网格本身，只修改材质对象。</p>
+            <p style="border-image: none; cursor: help;">“那么我该怎样调整我的材质来给我的物体一个完美的外观呢?”</p>
+            <p style="border-image: none; cursor: help;">这是通过调整材质对象的属性来做到的。让我们来看看都有哪些:</p>
+            <ul>
+                <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">透明度</strong>
+                    (alpha 通道)（另外的三个通道是红、绿、蓝，简称rgba）</li></ul>
+            <p style="border-image: none; cursor: help;">Alpha 合成和透明度可能有一点复杂。一篇专门的文章可以在<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/page.php?p=25100">这里</a>找到.
+                你可能也想阅读<a style="border-image: none; cursor: help;" href="http://en.wikipedia.org/wiki/Alpha_compositing">关于它的维基百科网页</a>.
+                在你使用 babylonjs粒子系统和babylonjs精灵系统时将遇到更多和它有关的问题。</p>
+            <p style="border-image: none; cursor: help;">Alpha 透明度, 通过百分比表示(%),
+                可以通过这样的方式赋予一个材质:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.alpha = <span class="hljs-number" style="cursor: help;">0.5</span>;
+</code></pre>
+            <ul>
+                <li><strong style="border-image: none; cursor: help;">漫反射性</strong></li></ul>
+            <p style="border-image: none; cursor: help;">漫反射性是物体受到光照时显示的本色（也就是通常来说“物体的颜色”）。你可以指定一种实色来作为材质的<code style="border-image: none; cursor: help;">diffuseColor</code>属性:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.diffuseColor = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Color3(<span class="hljs-number" style="border-image: none; cursor: help;">1.0</span>, <span class="hljs-number" style="border-image: none; cursor: help;">0.2</span>, <span class="hljs-number" style="border-image: none; cursor: help;">0.7</span>);
+</code></pre>
+            <p style="border-image: none; cursor: help;">或者，你可以使用一个纹理:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.diffuseTexture = <span class="hljs-keyword" style="border-image: none; cursor: help;">new</span> BABYLON.Texture(<span class="hljs-string" style="cursor: help;">"grass.png"</span>, scene);
+</code></pre>
+            <p><img alt="tof" src="../IMAGE/04-1.png"></p>
+            <p style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">更多关于纹理的事:</strong>请确定使用正确的图片文件路径（相对的或绝对的）。支持的图片格式包括JPG,
+                PNG, JPEG, BMP, GIF…（每一种你的浏览器支持的图片格式）</p>
+            <p style="border-image: none; cursor: help;">如果你想在你的网格上移动（偏移）材质，你可以使用“u偏移”和“v偏移”属性：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.diffuseTexture.uOffset = <span class="hljs-number" style="cursor: help;">1.5</span>;
+    materialSphere1.diffuseTexture.vOffset = <span class="hljs-number" style="border-image: none; cursor: help;">0.5</span>;
+</code></pre>
+            <p style="border-image: none; cursor: help;">如果你想重复/拉伸显示图片样式（例如背景草地纹理就是五次重复），你可以使用“u缩放”和“v缩放”属性:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.diffuseTexture.uScale = <span class="hljs-number" style="cursor: help;">5.0</span>;
+    materialSphere1.diffuseTexture.vScale = <span class="hljs-number" style="border-image: none; cursor: help;">5.0</span>;
+</code></pre>
+            <p style="border-image: none; cursor: help;">请记住那个(u,v)坐标系参考这样的坐标轴:（这张图片用了多少年了）</p>
+            <p><img alt="tof" src="../IMAGE/crate.jpg"></p>
+            <p style="border-image: none; cursor: help;">并且如果你的纹理图片本身具有透明度属性，你需要声明这一点:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.diffuseTexture.hasAlpha = <span class="hljs-literal" style="border-image: none; cursor: help;">true</span>;
+</code></pre>
+            <p style="border-image: none; cursor: help;">在这种情况下，alpha属性被用作透明度测试。但你可能需要使用它和图片的原有透明度混合。为达到这样的效果，你只需要设定：<code style="border-image: none; cursor: help;">materialSphere1.useAlphaFromDiffuseTexture</code></p>
+            <p style="border-image: none; cursor: help;">所有的这些纹理设定同样对其他类型的基本材质生效。（.emissiveTexture,
+                .ambientTexture, .specularTexture）我以后将提到。现在让我们继续讨论我们的基本材质属性</p>
+            <ul>
+                <li><strong style="border-image: none; cursor: help;">放射性</strong></li></ul>
+            <p style="border-image: none; cursor: help;">放射性指物体自己产生的光的颜色。你可以设定一个实色到 <code style="border-image: none; cursor: help;">emissiveColor</code>属性:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.emissiveColor = <span class="hljs-keyword" style="border-image: none; cursor: help;">new</span> BABYLON.Color3(<span class="hljs-number">1</span>, .<span class="hljs-number">2</span>, .<span class="hljs-number">7</span>);
+</code></pre>
+            <p style="border-image: none; cursor: help;">或者，你可以使用一个纹理:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.emissiveTexture = <span class="hljs-keyword" style="border-image: none; cursor: help;">new</span> BABYLON.Texture(<span class="hljs-string" style="border-image: none; cursor: help;">"grass.png"</span>, scene);
+</code></pre>
+            <p style="border-image: none; cursor: help;">看<strong style="border-image: none; cursor: help;">更多关于纹理的事</strong>那一段.
+                当然，要注意把“diffuse”改成“emissive”.</p>
+            <ul>
+                <li><strong style="border-image: none; cursor: help;">环境</strong></li></ul>
+            <p style="border-image: none; cursor: help;">“环境”可以被看做漫反射性的更高层次。发出的光被乘以漫反射颜色。当你想在纹理中使用光照贴图时这是十分有用的。你可以设置一种实色到<code style="border-image: none; cursor: help;">ambientColor</code> 属性:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.ambientColor = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Color3(<span class="hljs-number">1</span>, <span class="hljs-number" style="border-image: none; cursor: help;">0.2</span>, <span class="hljs-number" style="border-image: none; cursor: help;">0.7</span>);
+</code></pre>
+            <p style="border-image: none; cursor: help;">或者，你可以使用一个纹理:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.ambientTexture = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Texture(<span class="hljs-string" style="border-image: none; cursor: help;">"grass.png"</span>, scene);
+</code></pre>
+            <p style="border-image: none; cursor: help;">看<strong style="border-image: none; cursor: help;">更多关于纹理的事</strong>
+                那一段.  当然，要注意吧“diffuse”改成“ambient”.</p>
+            <ul>
+                <li><strong style="border-image: none; cursor: help;">镜面</strong></li></ul>
+            <p style="border-image: none; cursor: help;">镜面是一束光在表面镜面反射是产生的颜色。你可以设置一种实色到<code style="border-image: none; cursor: help;">specularColor</code> 属性:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.specularColor = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Color3(<span class="hljs-number" style="border-image: none; cursor: help;">1.0</span>, <span class="hljs-number" style="border-image: none; cursor: help;">0.2</span>, <span class="hljs-number" style="border-image: none; cursor: help;">0.7</span>);
+</code></pre>
+            <p style="border-image: none; cursor: help;">或者，你可以使用一个纹理:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.specularTexture = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Texture(<span class="hljs-string" style="border-image: none; cursor: help;">"grass.png"</span>, scene);
+</code></pre>
+            <p style="border-image: none; cursor: help;">在使用纹理时，你可以设置 <code style="border-image: none; cursor: help;">materialSphere1.useGlossinessFromSpecularMapAlpha</code>为true来使用镜面贴图的alpha值表现物体的光泽度。</p>
+            <p style="border-image: none; cursor: help;">你也可以控制镜面材质如何处理alpha。默认情况下，镜面材质与alpha无关，但你可以设置<code style="border-image: none; cursor: help;">materialSphere1.useSpecularOverAlpha</code>
+                为true来让alpha与镜面值成反比。</p>
+            <p style="border-image: none; cursor: help;">同上,看<strong style="border-image: none; cursor: help;">更多关于纹理的事</strong>
+                那一段。当然，要注意把“diffuse”改成“specular”。（这些纹理的属性代表了Babylonjs预定义的几种“着色器”，不同的着色器对应不同的GPU算法，如果想深入学习可以参考http://learningwebgl.com/blog/?p=1658等教程，这一系列教程已有中文翻译版）</p>
+            <p style="border-image: none; cursor: help;">镜面属性还有一个额外的设定。镜面反射的尺寸和强度可以通过<code style="border-image: none; cursor: help;">specularPower</code>属性设定:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.specularPower = <span class="hljs-number">32</span>;
+</code></pre>
+            <p><strong><em style="border-image: none; cursor: help;">不透明度纹理的介绍将在这里，即将到来.
+            </em></strong></p>
+            <p style="border-image: none; cursor: help;">现在，我们浏览了基本材质的基本颜色和纹理属性。但工作还没有完成。这里是一些额外的实用的属性。</p>
+            <ul>
+                <li><strong style="border-image: none; cursor: help;">背面剔除</strong></li></ul>
+            <p style="border-image: none; cursor: help;">简单的说，“背面剔除”决定一个基本材质的背面是否可见。更精确的说，“渲染速度优化技术”决定图形对象的一个多边形是否可见。如果设为true或布尔值1，Babylon引擎将不会渲染使用这个材质的网格的被遮挡的面。这个属性默认为true，但在需要时可以设置为false。你可能想要阅读更多关于背面剔除的知识从<a style="border-image: none; cursor: help;" href="http://en.wikipedia.org/wiki/Back_face_culling">关于它的维基百科网页</a>.
+            </p>
+            <p style="border-image: none; cursor: help;">在这个例子中，纹理具有alpha，并且前面的球体被设置了背面剔除属性为false，可以看到它黑色的内面:</p>
+            <p><img alt="tof" src="../IMAGE/04-2.png"></p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.backFaceCulling = <span class="hljs-literal" style="border-image: none; cursor: help;">false</span>;
+</code></pre>
+            <ul>
+                <li><strong style="border-image: none; cursor: help;">线框</strong></li></ul>
+            <p style="border-image: none; cursor: help;">你可以看到一个对象的线框图:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">materialSphere1.wireframe = <span class="hljs-literal" style="border-image: none; cursor: help;">true</span>;
+</code></pre>
+            <p><img alt="tof" src="../IMAGE/04-3.png"></p>
+            <p style="border-image: none; cursor: help;">再一次, 你可以看到这个教程的示例...振作点...通过浏览<a style="border-image: none; cursor: help;" href="http://www.babylonjs.com/playground/?4">the
+                Babylon.js Playground scene 4</a>.</p>
+            <p style="border-image: none; cursor: help;">更多关于材质的信息可以获得通过阅读<a href="http://blogs.msdn.com/b/eternalcoding/archive/2013/07/01/babylon-js-unleash-the-standardmaterial-for-your-babylon-js-game.aspx"><strong style="border-image: none; cursor: help;">释放基本材质</strong></a>和<a href="http://doc.babylonjs.com/tutorials/Advanced_Texturing"><strong style="border-image: none; cursor: help;">进阶纹理</strong></a>.</p>
+            <h2 style="border-image: none; cursor: help;"><a name="next-step" class="anchor" href="http://doc.babylonjs.com/tutorials/#next-step"></a>下一步</h2>
+            <p style="border-image: none; cursor: help;">非常棒，加上这些材质之后你的场景比以前的看起来都要好！稍后我们将研究如何使用进阶的材质技术。但是现在，我们不得不学习<a href="http://doc.babylonjs.com/tutorials/Cameras"><strong style="border-image: none; cursor: help;">怎样使用相机</strong></a>.</p>
+        </div></div>
+</div>
+
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<footer class="footer"><div class="footer-item"><a style="border-image: none; cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>    Forum</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>    Github</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>    Contribute</a></div></footer>
+<div style="position: static; width: 0px; height: 0px; border: none; padding: 0px; margin: 0px;"><div id="trans-tooltip"><div id="tip-left-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-top.png);"></div><div id="tip-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-top.png) repeat-x;"></div><div id="tip-right-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-top.png);"></div><div id="tip-right" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right.png) repeat-y;"></div><div id="tip-right-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-bottom.png);"></div><div id="tip-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-bottom.png) repeat-x;"></div><div id="tip-left-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-bottom.png);"></div><div id="tip-left" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left.png);"></div><div id="trans-content"></div></div><div id="tip-arrow-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-bottom.png);"></div><div id="tip-arrow-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-top.png);"></div></div>
+
+<!--@@下面是工具脚本@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<div id="div_hidden" style="display: none">
+    <div id="div_mod1">
+        <div class="div_inmod1" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px" >
+            <button onclick="ExportHtml()" style="margin-left: auto;margin-right: auto;float: left;position: relative;left: 10px">导出网页</button>
+        </div>
+    </div>
+    <div id="div_mod2">
+        <div class="div_inmod2" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid">
+                <BUTTON title="点击关闭对话框" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAABbSURBVDhPY3zw5v9/BjIAE5QmGVBHY3jXMTBGB9jEsdqIrAibQSCAETi4FK4ss4KyIADDRnQFIIBNjHqhis2p2MQwQhUGQM5DdiK6ZqxORdaAzX8gMGSSHAMDANOtJxQi19d5AAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击确定修改" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMFSURBVHjaYvz//z8DJQAgAINxcAQgCANA8MgQlRkefrUDLZM6LBQSAd3XxlxOZofYNtQTWhMWOqYVxHjVsdWY0gj/x+Iw7NqP/KByfwKIiSTrQI79/TtBXVlqV6S1hZUAK98/gAAi2gCgV0X/MTHMdrfQm1/r6Shz8drzfw/uvEoECCCW/wz/FYHB8A2o5iUOnQz//vwz4xbjnJ/soqUVoKHM0LH7PMOx0w8yGbmZNgEEEIuQCO/VX7//3fz8+I8PGwPDUxS9//6z/vj7J1VOTbCnwseY00ZcgKF853mGXQcf1DOxs8xiYPzHABBATHzM3J99HBQNuAXZVv7+808IrJMRGE5//2v85WBY5uaoNHVqmAenlbgkQ+Oeawy79j7vZ/vP0sTABIk9gABienbn+0wJBjGG7EAra0YuhnX//jEw/vn9z5VXnGVXarBBSIOrO4M4Dw9D78FLDNu2v1zF/pu5nAEp5AACAEEAvv8DBjAZ5u70+2RxSUoEBw3+H8fX4mUiKg1hdlc6FEoiMwD4/vMAn8nQAK6t6bgA+v1dAAf89/wE+gD9BvkA/wf8AAIAQQC+/wMQMCHw7e73HRUcCDNXMDwBCBn3DlM2LgUqDyMA7vzpALHU0wCxquzRAfIBWQUFAuwD/QQABf0GAAb7CQAG+QoAAgBBAL7/AxAvIv/99AX78gHvWy8nFwEwFiQAA/8DAO/96gC/3dYArqXx4P/tAU0GBwHgBfwGAAb8CAAI+QwACPYPAAn0EAACiFlIQ5uB9Q/H4y+f/1nxq35V4mFnYfj0/xXD6Sf3GLYu/f7m91OWACaO31f+M/+DeJoRGPEgzPQPjAECiInjFzsD5z+2n4zP+LaePv2e4TnjHYaLr+4z7Fz668uv21wxzMwMp/ElMIAAYmL+y84Awhz/2Be9PsP98MTt5wxHVzH/+n5ZIBuoeSehFAoQQMwSakbAKGVmYGJk/M70jUPszW0eix/XeesYmP9M+8/2h+Ef82+G/yzADAT2AiOGAQABxEhpdgYIMABQrSEzlY7wIwAAAABJRU5ErkJggg==") no-repeat;border: 0px;vertical-align:top' onclick="ChangeValue();DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击恢复上一历史状态" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMiSURBVHjaYvz//z8DJQAggFhABCNjD5D8A8T/gBygECszA8OvvwwMTP8txJUFZv3lYuF4++GnOyMTw/3///4x/Aep42dj+H8xgwEggJiwGvvrryiQ7PYL1Ty6YYW/rp2ppPT/t9+E/v34zfD/z18UpQABxIKh+f9fJxFR3gmdXXa6ibE6DIzMTAy/fv39wfDzz1cGLhaQc4FqEMoBAgjJgP9AmX/Fzi6qTTMmO3PyKIowLLn+nyFI5Q8D86+/PGwsTC1MHMwfGFiYWBhYGFh/MTHeBWqqAwggRlAgMjJ2gdzdm5FuWjR1kiPD+fdsDG2HGRgEWX4xzPH5x3Dj1nuGZ6+/M7CxAe0Aop9Au1rnXWTYN9ufESCAoC74W5qXa140cZILw6qbjAxLLvxn+An0LzvLd4apB38zcHGwA73CwvDt408GdsY/DNH2ogzKktzgwAAIILABpsZS9e3tdgwrbjEyLDj7n4Hj/y8G1t8/GF58+M4w5+53hh9ffzD8+Pyd4dPHrwwCbH8YrFU4GP7+/Qe2GiAASWSUAgAIg1CJdf+71tYWLUrKb32gPoDUIsLrdAJOM04gnSENjGaY9iHWlTU2cuUfk7oCCGzAyVNPuhsbj9W0ttoxfH3/h2HR0a8M/37+YhAAhoGXJisDO9D5//9wMHz5zMHAyfyPQUyAjYEZop8BIIDABvz7x9TY1n5ECphGktrbrBik2H8xVK14x8DP+4+hMUCW4eWbnwyvP/5gYGbiAcbgf4a7z78xPH79nRmkFyCAoIHI9Ifh/7+0jo4jr+7ce1c8baId67JsKYbFu54zfPzxn6Gi7czvnVvuHmQU5fwMjELm/8wMbD9YGR+AdAIEEFI6YAKG6v/KNauunT975mVbf7+tcneiHMP3n/8Yvv/++/nrtz85DN9+32QA2csCdD8PRCtAAGFJysyr7t/74BoYun1uWt4RhqcvvzOwc7KwAz3Nw/D3PzgdQMMPDAACCJqQuiEZCZxGgbKsQNNBaf7/f28FXZGpP9mZGF+8/OrMyMR45z/Qyv8sQHXcwIA9n8EAEECMlGZngAADALCEL2yqmxZQAAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="ReloadValue();DeleteWindow();" type=submit></BUTTON>
+            </div>
+            <textarea class="div_inmod2_content" style="width: 100%;height: 98px;overflow-x: hidden;margin:0;border: 0;padding:0" onchange=""></textarea>
+        </div>
+    </div>
+</div>
+<script src="../JS/MYLIB/MIN/Events.min.js"></script>
+<script src="../JS/MYLIB/MIN/FileText.min.js"></script>
+<script src="../JS/MYLIB/MIN/View.min.js"></script>
+<script>
+    var bbl_current_obj;
+    var bbl_style_temp;
+    var bbl_int_count2=0;
+    var bbl_arr_history=[];
+    window.onload=function()
+    {
+        delete_div("div_ExportHtml");
+        Open_div("","div_ExportHtml",100,80,0,0);
+        if(true)
+            return;
+        var div_ExportHtml=document.getElementById("div_ExportHtml");
+        div_ExportHtml.innerHTML=document.getElementById("div_mod1").innerHTML;
+        div_ExportHtml.style.position="fixed";
+        div_ExportHtml.style.right="0px";
+        div_ExportHtml.style.top="300px";
+        //div_ExportHtml.style.float="right";
+        var int_count=0;//为每一个可调整标签设置不同的tid属性
+        var arr_tags=["p","a","span","h1","h2","h3","h4","h5","li","td","th","code","strong","em"];
+        var leng=arr_tags.length;
+        for(var i=0;i<leng;i++)//对于每一种标签
+        {
+            var objs=document.getElementsByTagName(arr_tags[i]);
+            var leng2=objs.length;
+            for(var j=0;j<leng2;j++)//对于每一个标签
+            {
+                var children=objs[j].childNodes;
+                var leng3=children.length;
+                for(var k=0;k<leng3;k++)//寻找文本节点
+                {
+                    if(children[k].nodeName=="#text"&&children[k].textContent.Trim().length>2)
+                    {
+                        objs[j].tid="tid"+int_count;
+                        objs[j].style.cursor="help";
+                        objs[j].onmouseover=function()
+                        {
+                            bbl_style_temp=this.style.border;
+                            this.style.border="2px solid rgb(59, 203, 249)";
+                            bbl_current_obj=objs[j];
+                        }
+                        objs[j].onmouseout=function()
+                        {
+                            this.style.border=bbl_style_temp;
+                        }
+                        objs[j].onclick=function(){
+                            var evt=evt||window.event;
+                            cancelEvent(evt);
+                            cancelPropagation(evt);
+                            //alert(this.textContent);
+                            var arr_child=this.childNodes;
+                            var leng4=arr_child.length;
+                            //首先删除所有已经存在的对话框
+                            for(var l=0;l<bbl_int_count2;l++)
+                            {
+                                delete_div("div_inmod2_"+l);
+                            }
+                            bbl_int_count2=0;
+                            for(var l=0;l<leng4;l++)//对于其中的每一个文本节点，弹出修改对话框
+                            {
+                                if(arr_child[l].nodeName=="#text"&&arr_child[l].textContent.Trim().length>2)
+                                {
+                                    Open_div(this,"div_inmod2_"+bbl_int_count2,240,120,0+bbl_int_count2*250,0);
+                                    var div_inmod2=document.getElementById("div_inmod2_"+bbl_int_count2);//取出新添加的元素
+                                    div_inmod2.ttid=this.getAttribute("tid")?this.getAttribute("tid"):this.tid;//把被选择标签的全局标记交给弹出框
+                                    div_inmod2.tobj=this;
+                                    div_inmod2.textnum=l;//在文本框中记录，这个文本框对应的是标签的第几个子节点
+                                    div_inmod2.innerHTML=document.getElementById("div_mod2").innerHTML;
+                                    con_getElementsByClassName("div_inmod2_content",div_inmod2)[0].innerHTML=arr_child[l].textContent;//填入原有值，考虑标签嵌套问题//#text型标签没有innerhtml属性！！
+                                    bbl_int_count2++;//记下有多少个，后面删除所有对话框时使用
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    function DeleteWindow()
+    {//只删除掉点击关闭的这一个标签
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var str_id=obj.parentNode.parentNode.parentNode.id;
+        delete_div(str_id);
+    }
+    //写入修改后的标签值，并写入日志
+    function ChangeValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        //document.getElementsByTagName()
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var obj_text=obj.parentNode.parentNode.getElementsByTagName("textarea")[0];//输入的文本框
+        if(obj_text.innerHTML.trim().length<1)
+        {
+            alert("修改后的文本过短");
+        }
+        else {
+            var tobj = div_inmod2.getAttribute("tobj") ? div_inmod2.getAttribute("tobj") : div_inmod2.tobj;//取得该输入框对应的标签
+            var ttid = div_inmod2.getAttribute("tid") ? div_inmod2.getAttribute("tid") : div_inmod2.tid;//
+            var textnum = div_inmod2.getAttribute("textnum") ? div_inmod2.getAttribute("textnum") : div_inmod2.textnum;
+            //写日志
+            var arr_temp = [];
+            arr_temp.push(ttid + "&" + textnum);
+            arr_temp.push(tobj.childNodes[textnum].textContent);
+            bbl_arr_history.push(arr_temp);
+            //改值
+            tobj.childNodes[textnum].textContent = obj_text.innerHTML;
+        }
+    }
+    //根据日志恢复标签内容
+    function ReloadValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var tobj=div_inmod2.getAttribute("tobj")?div_inmod2.getAttribute("tobj"):div_inmod2.tobj;//取得该输入框对应的标签
+        var ttid=div_inmod2.getAttribute("tid")?div_inmod2.getAttribute("tid"):div_inmod2.tid;//
+        var textnum=div_inmod2.getAttribute("textnum")?div_inmod2.getAttribute("textnum"):div_inmod2.textnum;
+
+
+        var flag=0;//0表示没有找到，对应的日志记录
+        var leng=bbl_arr_history.length;
+        for(var i=leng-1;i>=0;i--)
+        {
+            var str=ttid+"&"+textnum;
+            if(bbl_arr_history[i][0]==str)//找到新的这一条
+            {
+                tobj.childNodes[textnum].textContent=bbl_arr_history[i][1];
+                bbl_arr_history.splice(i,1);//将日志里的这一条删除
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+        {
+            alert("没有日志记录！");
+        }
+    }
+    //以html格式导出网页
+    function ExportHtml()
+    {
+        DownloadText(MakeDateStr()+document.title,("<!DOCTYPE html><html>"+document.getElementsByTagName("html")[0].innerHTML+"</html>"));
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>004Basic_Cameras</title>
+    <link href="../CSS/normalize.min.css"  rel="stylesheet">
+    <link href="../CSS/slideout.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/font-awesome.min.css"  rel="stylesheet">
+    <link href="../CSS/perfect-scrollbar.min.css"  rel="stylesheet">
+    <link href="../CSS/main.css"  rel="stylesheet">
+</head>
+<body>
+<!--@@下面是翻译正文@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<nav class=" slideout-menu slideout-menu slideout-menu slideout-menu" id="menu"><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a></nav><nav class="nav-main"><!-- Hamburger menu : displayed only in small screens--><i class="fa fa-bars" id="mobilemenu"></i><!-- this button only shows on mobile version of a "class" page--><div class="banner"><div class="menu"><div class="do-not-hover" id="home"><a style="cursor: help;" href="/">Babylon.js | DOCUMENTATION</a></div><div class="item" id="whatsnew"><a style="cursor: help;" href="/whats-new">What's new</a></div><div class="item" id="general"><a style="cursor: help;" href="/generals">General</a></div><div class="item active" id="tutorials"><a style="cursor: help;" href="/tutorials">Tutorials</a></div><div class="item" id="overview"><a style="cursor: help;" href="/overviews">Overviews</a></div><div class="item" id="exporters"><a style="cursor: help;" href="/exporters">Exporters</a></div><div class="item" id="extensions"><a style="border-image: none; cursor: help;" href="/extensions">Extensions</a></div><div class="item" id="classes"><a style="border-image: none; cursor: help;" href="/classes">Classes</a></div><div class="item" id="playground"><a style="border-image: none; cursor: help;" href="/playground">Playground</a></div></div><div class="more"><div class="searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div></div></div></nav><div class=" slideout-panel slideout-panel slideout-panel slideout-panel" id="wrapper"><div class="statics-banner"><h1 style="border-image: none; cursor: help;">教程</h1></div><div class="horizontal-separator"></div><div class="static-content"><h1 style="border-image: none; cursor: help;">相机</h1><br><div class="contentTable"><div class="tocHeader"><span class="tocTitle" style="border-image: none; cursor: help;"><i class="tocIcon fa fa-book"></i>内容列表</span><span class="tocToggle"><i class="fa fa-arrow-up"></i></span></div><div class="tocContent"><ul>
+    <li><a style="border-image: none; cursor: help;" href="#babylonjs-cameras">Babylon.js 相机</a><ul>
+        <li><a style="border-image: none; cursor: help;" href="#unique-purpose-cameras">唯一的目的相机</a></li>
+        <li><a style="border-image: none; cursor: help;" href="#inputs">输入</a></li>
+        <li><a style="border-image: none; cursor: help;" href="#customizing-inputs">自定义输入</a></li>
+        <li><a style="border-image: none; cursor: help;" href="#next-step">下一步</a></li>
+    </ul>
+    </li>
+</ul>
+</div></div><div id="staticContent"><h1 style="border-image: none; cursor: help;"><a name="babylonjs-cameras" class="anchor" href="#babylonjs-cameras"></a>Babylon.js 相机</h1><p style="border-image: none; cursor: help;">在任何Babylon.js场景中，你可以建立任意多个相机，但是一次只有一个相机是可用的(除非你使用<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/How_to_use_Multi-Views">多视口技术</a>).</p>
+    <p style="border-image: none; cursor: help;">Babylon.js 中的相机管理是非常简单的：首先你建立一个下列种类的相机，然后把它和特定canvas的鼠标和触摸输入关联起来(可以参考<strong style="border-image: none; cursor: help;">总结</strong> 那一段).</p>
+    <p style="border-image: none; cursor: help;">Babylon.js 支持很多类型的相机。我们将从两种最常见的种类开始介绍——the FreeCamera 和 the ArcRotateCamera.</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="cursor: help;">FreeCamera</strong> - 这是一个“第一人称射击”（FPS）类型的相机，你可以通过鼠标和光标按键来控制相机。和我们的大部分相机一样，你也可以增加控制按键，或者把它们重设为其他按键，比如wasd。（原生WebGL要求使用者完全自主编写控制，Three.js为相机提供了可选的control库，Babylon.js则直接为相机封装了控制）</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">FreeCamera 并不会自动的指向一个目标，但是在建立了一个 FreeCamera  之后，你可以方便的让相机锁定一个vector3 位置...使用<em style="border-image: none; cursor: help;">lockedtarget</em> 属性.</p>
+    <p style="border-image: none; cursor: help;">这里是Babylon.js FreeCamera的建立方法:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// FreeCamera &gt;&gt; You can move around the scene with mouse and cursor keys</span>
+    <span class="hljs-comment" style="cursor: help;">// Parameters : name, position, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.FreeCamera(<span class="hljs-string" style="cursor: help;">"FreeCamera"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">15</span>), scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">这个FreeCamera被创建为指向一个+z方向。我们上面使用的位置数字把它放在了一个有用的起始位置（Babylonjs中定义三维空间的z轴指向屏幕内，y中向上，x轴向右，这个相机z=-15，看原点附近的物体是+z方向）。 FreeCamera具有许多可以调整的属性。其中最常用的一些属性是<em style="border-image: none; cursor: help;">position</em>, <em style="border-image: none; cursor: help;">rotation</em>, <em style="border-image: none; cursor: help;">speed</em>, <em style="border-image: none; cursor: help;">inertia</em>, 和<em style="border-image: none; cursor: help;">fov</em>.FreeCamera 也常被用做其他相机的基础，所以你将和它成为老朋友。请参考<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/FreeCamera">FreeCamera API page</a>来了解更多信息.</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">ArcRotateCamera</strong> - 这是一种绕着某一中心点旋转的相机。它可以通过光标和鼠标或者触摸来控制。使用它需要一个第三方文件“hand.js”。这个文件包含在我们的很多示例里，你也可以下载它通过<a href="http://handjs.codeplex.com/releases/view/119684"><strong style="border-image: none; cursor: help;">点击这里</strong></a>.</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">这里是我们方便的 ArcRotateCamera的建立方法:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// ArcRotateCamera &gt;&gt; Camera turning around a 3D point (here Vector zero) with mouse and cursor keys</span>
+    <span class="hljs-comment" style="cursor: help;">// Parameters : name, alpha, beta, radius, target, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.ArcRotateCamera(<span class="hljs-string" style="cursor: help;">"ArcRotateCamera"</span>, <span class="hljs-number">1</span>, <span class="hljs-number" style="cursor: help;">0.8</span>, <span class="hljs-number">10</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>), scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">ArcRotateCamera 起初用起来有一点奇怪，但很快你将经常的使用它。ArcRotateCamera 有三个独有的属性分别是：<em style="cursor: help;">alpha</em> (弧度), <em style="cursor: help;">beta</em> (弧度), 和<em style="cursor: help;">radius</em> (数字).如果你把ArcRotateCamera 想象成一个围绕地球旋转的卫星，那么<em style="border-image: none; cursor: help;">alpha</em> 沿着纵轴旋转的弧度, <em style="cursor: help;">beta</em> 是沿着横轴旋转的弧度<em style="cursor: help;">radius</em> 是卫星到地核的距离，这里是一张示意图:
+        <img alt="" src="../IMAGE/arc01.jpg"></p>
+    <p style="border-image: none; cursor: help;">ArcRotateCamera 有很多可以调整的属性。其中最常用的一些属性是：<em style="border-image: none; cursor: help;">alpha</em>, <em style="border-image: none; cursor: help;">beta</em>, <em style="border-image: none; cursor: help;">radius</em>, <em style="border-image: none; cursor: help;">target</em>, <em style="border-image: none; cursor: help;">speed</em>, <em style="border-image: none; cursor: help;">inertia</em>, 和<em style="cursor: help;">fov</em>.</p>
+    <p style="border-image: none; cursor: help;">默认情况下,（在没有设置.alpha和.beta属性时）ArcRotateCamera指向+x方向。 <em style="border-image: none; cursor: help;">？</em> 讽刺的是ArcRotateCamera并没有可以设置的alpha和beta属性，而是有一个相机位置属性。因为一个ArcRotateCamera 的位置和方向相对于目标点，所以使用<em style="border-image: none; cursor: help;">setPosition()</em> 方法设定相机的位置是一个明智的选择.</p>
+    <p style="border-image: none; cursor: help;">在下面的例子中，我们将建立一个指向原点的ArcRotateCameras ，它没有内置的<em style="border-image: none; cursor: help;">alpha</em>, <em style="border-image: none; cursor: help;">beta</em>, 和<em style="border-image: none; cursor: help;">radius</em> 值. (警告：一个半径为零的ArcRotateCameras 将指向一个奇怪的方向直到调用<em style="border-image: none; cursor: help;">setPosition()</em>为止). 然后我们使用setPosition() 方法将相机设置在一个Vector3 位置<em style="border-image: none; cursor: help;">alpha</em>, <em style="border-image: none; cursor: help;">beta</em>, 和<em style="border-image: none; cursor: help;">radius</em>值将立刻自动生成:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">   <span class="hljs-comment" style="cursor: help;">// Create an ArcRotateCamera aimed at 0,0,0, with no alpha, beta or radius, so be careful. It will look broken.</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.ArcRotateCamera(<span class="hljs-string" style="cursor: help;">"ArcRotateCamera"</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, BABYLON.Vector3.Zero(), scene);
+    <span class="hljs-comment" style="cursor: help;">// Quick, let's use the setPosition() method... with a common Vector3 position, to make our camera better aimed.</span>
+    camera.setPosition(<span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">15</span>, -<span class="hljs-number">30</span>));
+</code></pre>
+    <p style="border-image: none; cursor: help;">在我们使用这个方便的<em style="border-image: none; cursor: help;">setPosition()</em> 方法时，我们没有必要亲自关心<em style="border-image: none; cursor: help;">alpha</em>, <em style="cursor: help;">beta</em>, 和<em style="border-image: none; cursor: help;">radius</em>. 我们只需要设定一个<em style="border-image: none; cursor: help;">目标</em>属性 ( 通过构造函数中的new BABYLON.Vector3.Zero()设定 ), 然后使用<em style="border-image: none; cursor: help;">setPosition()</em> 来将我们的相机设定在需要的位置，在3D空间中。这个方便的<em style="border-image: none; cursor: help;">setPosition()</em>方法做了其他的所有事。放轻松。</p>
+    <p style="border-image: none; cursor: help;">ArcRotateCamera 是一种非常适合做动画的相机。默认情况下，ArcRotateCamera 没有<em style="border-image: none; cursor: help;">增加阈值</em> or <em style="border-image: none; cursor: help;">减少阈值</em>所以一旦你将你的ArcRotateCamera 设定为scene.activeCamera（详见下文），你的ArcRotateCamera 将可以平滑的围绕目标物体滑动。。。通过将这简单的一行JavaScript代码添加到你的场景的渲染循环中：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">   scene.activeCamera.alpha += .<span class="hljs-number">01</span>;
+</code></pre>
+    <p style="border-image: none; cursor: help;">这就是美丽, 这就是简单, 这就是Babylon.js. 请浏览<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/ArcRotateCamera">ArcRotateCamera API page</a>来了解更多的信息.</p>
+    <p style="border-image: none; cursor: help;">知道可以对一个ArcRotateCamera 进行漫游控制是很有趣的。默认情况下你可以使用ctrl
+        +鼠标左键，但你也可以设置为用鼠标右键代替，通过设置<em style="border-image: none; cursor: help;">useCtrlForPanning</em>为 false 在<em style="border-image: none; cursor: help;">attachControl</em>方法中 :</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">   camera.attachControl(canvas, noPreventDefault, useCtrlForPanning);
+</code></pre>
+    <p style="border-image: none; cursor: help;">(更多关于这个方法的内容请参考<strong style="border-image: none; cursor: help;">总结</strong>段)</p>
+    <p style="border-image: none; cursor: help;">如果需要你也可以完全禁用漫游控制 :</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">   scene.activeCamera.panningSensibility = <span class="hljs-number">0</span>;
+</code></pre>
+    <h2 style="border-image: none; cursor: help;"><a name="unique-purpose-cameras" class="anchor" href="#unique-purpose-cameras"></a>专用相机</h2><p style="border-image: none; cursor: help;">有一些Babylon.js相机具有专门的用处。我将在讨论它们的构造方法时试着解释他们的设计目的。</p>
+    <p style="border-image: none; cursor: help;">下面的两种相机。。。触摸和游戏手柄。。。在某种程度上已经被我们的新型<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/UniversalCamera">通用相机</a> (很久以后会介绍).  这些关于触摸和游戏手柄相机的文档仍然被包含在这里。。。作为历史纪念。</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">TouchCamera</strong> -  TouchCamera 的工作与hand.js紧密相关，它将Babylon.js与新的DOM手势识别技术结合在了一起。触摸是一种“手势”，不论是在pad还是屏幕上，通过手指、笔、手套、脚和镭射笔。任何能够被感知到的动作。。。都能被认为是一种“姿态”。你可以学习所有与姿态识别有关的知识通过访问<a href="http://en.wikipedia.org/wiki/Gesture_recognition"><strong style="border-image: none; cursor: help;">a wikipedia page that tells all about it</strong></a>.</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">TouchCamera 为几乎所有的现代姿态驱动输入设备进行了特别编程。其中大部分代码在hand.js中。如果你希望学习更多关于hand.js和它的姿态处理方法的知识，可以看一下<a href="http://blogs.msdn.com/b/eternalcoding/archive/2013/01/16/hand-js-a-polyfill-for-supporting-pointer-events-on-every-browser.aspx"><strong style="border-image: none; cursor: help;">this comprehensive blog entry</strong></a> ，它的作者是我们的伙伴和英雄 David Catuhe.</p>
+    <p style="border-image: none; cursor: help;">TouchCamera有更多潜在的魔法，但是和所有其他Babylon.js中的事物一样，我们让它对你变得简单易用。以下是如何建立一个TouchCamera</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// TouchCamera &gt;&gt; Move in your world with your touch-gesture device</span>
+    <span class="hljs-comment" style="cursor: help;">// Parameters : name, position, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.TouchCamera(<span class="hljs-string" style="cursor: help;">"TouchCamera"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">15</span>), scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">TouchCamera 使用一个FreeCamera 作为它的基础，因此所有FreeCamera中的强大的属性和方法都在TouchCamera 中可用。你可以了解TouchCamera 中所有的属性和方法通过访问<a href="http://doc.babylonjs.com/classes/TouchCamera"><strong style="border-image: none; cursor: help;">our API documentation site</strong></a>.</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">GamepadCamera</strong> - 编写了我们酷炫的“虚拟摇杆相机”的本地超级英雄David "davrous" Rousset，编写了我们的GamepadCamera。感谢David!正如你认为的Babylon.js 的GamepadCamera 是为游戏手柄特殊定制的。这个相机的工作与 Babylon.js游戏手柄、通用手柄、Xbox360系列手柄紧密相关。而更多的种类将会很快被编写。</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">Ok, 让我们新建一个GamepadCamera:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// GamepadCamera &gt;&gt; Move in your scene with gamepad controls</span>
+    <span class="hljs-comment" style="cursor: help;">// Parameters : name, position, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.GamepadCamera(<span class="hljs-string" style="cursor: help;">"Camera"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">15</span>, -<span class="hljs-number">45</span>), scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">小菜一碟.FreeCamera中强大的属性和方法也能在GamepadCamera中找到。注意<em style="cursor: help;">angularSensibility</em> 和 .<em style="cursor: help;">moveSensibility</em>属性, 与我们的DeviceOrientationCamera很像。你可以了解GamepadCamera中的所有属性和方法通过访问<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/GamepadCamera">our API documentation site</a>.</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">DeviceOrientationCamera</strong> - DeviceOrientationCamera 是一种专门为“反应设备方向运动”所设计的相机。方向设备是前后左右倾斜你的现代移动设备来控制相机或者其他场景物体（比如智能手机的重力感应）。又一次的，我们的朋友和技术大师David Catuhe为我们创建了<a href="http://blogs.msdn.com/b/eternalcoding/archive/2013/10/07/understanding-deviceorientation-events-by-creating-a-small-3d-game-with-babylon-js.aspx"><strong style="border-image: none; cursor: help;">a wonderfully-detailed blog entry</strong></a> 来告诉我们所有与之相关的内容.</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">又一次，我们使得它非常简单易用，以下是如何建立一个Babylon.js DeviceOrientationCamera:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// DeviceOrientationCamera &gt;&gt; Move in your scene with device orientation</span>
+    <span class="hljs-comment" style="cursor: help;">// Parameters : name, position, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.DeviceOrientationCamera(<span class="hljs-string" style="cursor: help;">"DevOr_camera"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">15</span>), scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">DeviceOrientationCamera 同样使用FreeCamera 作为基础，所以所有FreeCamera 中强大的属性和方法也都能在DeviceOrientationCamera中找到。DeviceOrientationCamera中有两个相当重要的属性<em style="border-image: none; cursor: help;">angularSensibility</em>和<em style="cursor: help;">moveSensibility</em>, 你可以自己探索与发现一下，还有其他的所有属性和方法都可以访问<a href="http://doc.babylonjs.com/classes/DeviceOrientationCamera"><strong style="border-image: none; cursor: help;">our API documentation site</strong></a>.</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">FollowCamera</strong> -论坛用户AlexB大方的为Babylon.js提供了好用的FollowCamera （感谢AlexB！）这种相机被特别设计用来跟随任何具有
+            <em style="border-image: none; cursor: help;">position</em>属性的场景物体...当它运动的时候 .它可以从后面、前面或者任何方向对物体进行跟踪。它跟踪的距离和移动速度同样可以被设定。</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">下面我们将展示的构造方法是从 <a style="border-image: none; cursor: help;" href="http://www.html5gamedevs.com/topic/8433-smooth-camera-follow/">Alex's FollowCamera forum thread</a> 得到的，而且正如你所见，Alex让它变得简单。以下是如何建立一个Babylon.js FollowCamera:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// FollowCamera &gt;&gt; Follow a mesh through your scene</span>
+    <span class="hljs-comment" style="cursor: help;">// Parameters : name, position, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.FollowCamera(<span class="hljs-string" style="cursor: help;">"FollowCam"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">15</span>, -<span class="hljs-number">45</span>), scene);
+    camera.target = myMeshObject; <span class="hljs-comment" style="cursor: help;">// target any mesh or object with a "position" Vector3</span>
+</code></pre>
+    <p style="border-image: none; cursor: help;">上面的代码构造了FollowCamera 并给他设置了一个必须的目标网格。但是如果你需要的话FollowCamera 还有一些更有用的属性可以设置。以下是其中的几个，以及一些示例值：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">camera.radius = <span class="hljs-number">30</span>; <span class="hljs-comment" style="cursor: help;">// 距离被跟踪的物体多远</span>
+    camera.heightOffset = <span class="hljs-number">8</span>; <span class="hljs-comment" style="cursor: help;">// 相机的位置比物体高多少</span>
+    camera.rotationOffset = <span class="hljs-number" style="cursor: help;">180</span>; <span class="hljs-comment" style="cursor: help;">//视角</span>
+    camera.cameraAcceleration = <span class="hljs-number" style="cursor: help;">0.05</span> <span class="hljs-comment" style="cursor: help;">// 跟踪速度</span>
+    camera.maxCameraSpeed = <span class="hljs-number">20</span> <span class="hljs-comment" style="cursor: help;">// 最大跟踪速度</span>
+</code></pre>
+    <p style="border-image: none; cursor: help;">还有不要忘了设置:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">scene.activeCamera = camera;
+</code></pre>
+    <p style="border-image: none; cursor: help;">现在你掌握了AlexB炫酷的 FollowCamera。探索所有其他的属性和方法从<a href="http://doc.babylonjs.com/classes/FollowCamera"><strong style="border-image: none; cursor: help;">our API documentation site</strong></a>.</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">VirtualJoysticksCamera</strong> - VirtualJoysticksCamera是一种特别设计来响应虚拟摇杆事件的相机。虚拟摇杆是位于场景所在的canvas标签之上的另一个canvas标签里的用来控制相机和其他场景物体的2D图片。这一次，我们的另一个伙伴和英雄David Rousset给我们提供了<a href="https://www.youtube.com/watch?v=53Piiy71lB0"><strong style="border-image: none; cursor: help;">视频“虚拟摇杆之旅”</strong></a>, 并且使得它容易理解。这是因为它<strong>is</strong> 简单的. 你也可以<a href="http://blogs.msdn.com/b/davrous/archive/2013/02/22/creating-an-universal-virtual-touch-joystick-working-for-all-touch-models-thanks-to-hand-js.aspx"><strong style="border-image: none; cursor: help;">阅读虚拟摇杆</strong></a>在 David的博客上.</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">通过触摸屏的触摸或者鼠标按键的点击，虚拟摇杆发生着作用。没有额外的工作给你。就像Babylon.js中的所有事物一样，我们努力让它变得简单易用，以下是如何建立一个Babylon.js VirtualJoysticksCamera:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// VirtualJoysticksCamera &gt;&gt; Move in your world with on-screen Virtual Joysticks</span>
+    <span class="hljs-comment" style="cursor: help;">// Parameters : name, position, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.VirtualJoysticksCamera(<span class="hljs-string" style="cursor: help;">"VJ_camera"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">15</span>), scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">VirtualJoysticksCamera也使用FreeCamera 作为基础。。。</p>
+    <p style="border-image: none; cursor: help;">我们有一个 <a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/How_to_use_VirtualJoysticksCamera">关于 VirtualJoysticksCamera的专门教程</a>.</p>
+    <p style="border-image: none; cursor: help;">你可以找到关于VirtualJoysticksCamera的所有属性和方法从<a href="http://doc.babylonjs.com/classes/VirtualJoysticksCamera"><strong style="border-image: none; cursor: help;">our API documentation site</strong></a>.</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">AnaglyphCamera</strong> -  AnaglyphCamera是用来支持红蓝3D眼镜的。这是Babylon.js的最新特性之一，并且确实是一个非常时髦的功能。它使用的是后处理滤波技术。现在有两种AnaglyphCamera</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">第一种是<strong style="border-image: none; cursor: help;">AnaglyphArcRotateCamera</strong>. 它的构造方法看起来是这样的:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// AnaglyphArcRotateCamera &gt;&gt; Analglyph 3D using filter-shifted ArcRotateCamera</span>
+    <span class="hljs-comment" style="cursor: help;">// 参数 : 名称、alpha、beta、半径、Vector3型的观察目标（参考前面的旋转轨道相机）、眼空间（角度）、场景</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.AnaglyphArcRotateCamera(<span class="hljs-string" style="cursor: help;">"aar_cam"</span>, -<span class="hljs-built_in" style="cursor: help;">Math</span>.PI/<span class="hljs-number">2</span>, <span class="hljs-built_in" style="cursor: help;">Math</span>.PI/<span class="hljs-number">4</span>, <span class="hljs-number">20</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3.Zero(), <span class="hljs-number" style="cursor: help;">0.033</span>, scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">第二种是 <strong style="border-image: none; cursor: help;">AnaglyphFreeCamera</strong>. 它的构造方法看起来是这样的:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="cursor: help;">// AnaglyphFreeCamera &gt;&gt; Analglyph 3D using filter-shifted FreeCamera</span>
+    <span class="hljs-comment" style="cursor: help;">// 参数 : 名称、vector3型的相机所在位置，眼空间，场景</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.AnaglyphFreeCamera(<span class="hljs-string" style="cursor: help;">"af_cam"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">15</span>), <span class="hljs-number" style="cursor: help;">0.033</span>, scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">这个 <em style="cursor: help;">eyeSpace</em>参数（也是一个可以设置的属性）设置了左眼视角和右眼视角之间的距离大小。当你戴上你的3D眼镜之后，你可能会想测试这个浮点值</p>
+    <p style="border-image: none; cursor: help;">你可以学到更多关于立体成像的知识从<a style="border-image: none; cursor: help;" href="http://en.wikipedia.org/wiki/Anaglyph_3D">Wikipedia page that explains it thoroughly</a>. </p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">VRDeviceOrientationFreeCamera</strong> - 这种<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/VRDeviceOrientationFreeCamera">虚拟现实定位相机</a>是新技术，但我们有一些相关文档。以下是构造函数:</li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.VRDeviceOrientationFreeCamera (<span class="hljs-string" style="cursor: help;">"Camera"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3 (-<span class="hljs-number" style="cursor: help;">6.7</span>, <span class="hljs-number" style="cursor: help;">1.2</span>, -<span class="hljs-number" style="cursor: help;">1.3</span>), scene, <span class="hljs-number">0</span>);
+</code></pre>
+    <p style="border-image: none; cursor: help;">这是一个 <a style="border-image: none; cursor: help;" href="http://www.babylonjs-playground.com/#DZTQH#2">playground 示例</a> - <i class="fa fa-eye" onclick="createIframe('DZTQH#2', this)"></i><br><div class="iframeContainer"></div><br> 这个示例里展示了一些用来设置相机角度的顶尖秘密技巧。它也介绍了我们的 <a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Customizing_Camera_Inputs">组合输入</a> 相机.  我们将在一段时间之后介绍组合输入相机.<p></p>
+    <p style="border-image: none; cursor: help;">VRDeviceOrientationFreeCamera 使用 FreeCamera 作为基础。。。</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">WebVRFreeCamera</strong> - 这个<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/WebVRFreeCamera">WebVRFreeCamera</a> 同样是非常新的技术。以下是构造函数:</li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-comment" style="border-image: none; cursor: help;">// WebVRFreeCamera &gt;&gt; Move in your VR scene</span>
+    <span class="hljs-comment" style="border-image: none; cursor: help;">// Parameters : name, position, scene</span>
+    <span class="hljs-keyword" style="cursor: help;">var</span> camera = <span class="hljs-keyword" style="border-image: none; cursor: help;">new</span> BABYLON.WebVRFreeCamera(<span class="hljs-string" style="border-image: none; cursor: help;">"WVR"</span>, <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">15</span>), scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">WebVRFreeCamera 使用FreeCamera 作为基础。。。</p>
+    <ul>
+        <li style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">Universal Camera</strong> -在Babylon.js2.3版中加入，正如它的名字通用相机提供了一个处理输入的通用方法。它从根本上讲是 FreeCamera + TouchCamera + GamepadCamera的组合.</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">通用相机是Babylon.js在没有任何设定情况下的默认相机，它也是你在场景中使用FPS类控制时的最佳选择。事实上，你既可以用键盘鼠标在桌面机器上控制这种相机，也可以用触摸屏在移动设备上控制这种相机，还可以使用手柄在Xbox上控制这种相机。这同一个相机可以使用对你透明的方式同时处理这三种输入。这也意味着，在一台触摸屏PC上你可以在这一台设备上同时使用这三种输入方式，如果你愿意的话;-)所有babylonjs网站上的示例都具有这种特性。给你的电脑加一个Xbox控制器，你将可以用Xbox的方式控制我们的大部分示例。</p>
+    <h2 style="border-image: none; cursor: help;"><a name="inputs" class="anchor" href="#inputs"></a>输入</h2><p style="border-image: none; cursor: help;">所有Babylon.js相机都会自动为你处理输入。。。只要你调用<em style="border-image: none; cursor: help;">attachControl</em> 方法. 然后你可以撤销这个控制通过调用<em style="border-image: none; cursor: help;">detachControl</em>方法。大部分的Babylon.js熟手使用一个两步的流程来激活和绑定一个相机:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">   <span class="hljs-comment" style="border-image: none; cursor: help;">//第一步，设置这个场景的“激活相机”。。。作为你的相机.（myCamera是一个提前定义好的相机对象）</span>
+    scene.activeCamera = myCamera;
+    <span class="hljs-comment" style="border-image: none; cursor: help;">// 然后把你的激活相机绑定到canvas上.（意为着canvas收到的所有输入由这个相机处理）</span>
+    scene.activeCamera.attachControl(canvas, noPreventDefault);
+</code></pre>
+    <p style="border-image: none; cursor: help;">一种简单的写法是这样的:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">myCamera.attachControl(canvas);
+</code></pre>
+    <p style="border-image: none; cursor: help;">默认情况下<em style="border-image: none; cursor: help;">noPreventDefault</em> 被设为false, 这意味着<em style="border-image: none; cursor: help;">preventDefault()</em> 会被自动调用对于每个canvas的点击和触摸操作（意为阻止浏览器的canvas标签对点击和触摸的默认响应）</p>
+    <h2 style="border-image: none; cursor: help;"><a name="customizing-inputs" class="anchor" href="#customizing-inputs"></a>自定义输入</h2><p style="border-image: none; cursor: help;">FreeCamera 和ArcRotateCamera 依靠使用者的输入来移动相机。如果你满足于Babylon.js 提供给你的相机，比如GamepadCamera，只要继续使用即可。</p>
+    <p style="border-image: none; cursor: help;">如果你需要通过自定义的参数来改变使用者的输入，或者自定义一个已经存在的预设相机，或者使用你自己的输入设备。这些相机有一个用来处理这些进阶情况的输入管理器。阅读<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Customizing_Camera_Inputs">customizing camera inputs</a>来学习如何在你的相机里输入.</p>
+    <h2 style="border-image: none; cursor: help;"><a name="next-step" class="anchor" href="#next-step"></a>下一步</h2><p style="border-image: none; cursor: help;">你现在已经学会了如何使用多种相机，并且学会了我们最常用的两种相机的一些进阶的输入选项。你可以选择观看你的场景的方式，你可以选择你的输入和观看设备，并且你知道如何四处移动相机。为了给你的场景更多真实感，我们接下来要学习<a href="http://doc.babylonjs.com/tutorials/Lights"><strong style="border-image: none; cursor: help;">怎样控制光照</strong></a>. 再见.</p>
+</div></div></div>
+
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<footer class="footer"><div class="footer-item"><a style="border-image: none; cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>    Forum</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>    Github</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>    Contribute</a></div></footer>
+<div style="position: static; width: 0px; height: 0px; border: none; padding: 0px; margin: 0px;"><div id="trans-tooltip"><div id="tip-left-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-top.png);"></div><div id="tip-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-top.png) repeat-x;"></div><div id="tip-right-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-top.png);"></div><div id="tip-right" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right.png) repeat-y;"></div><div id="tip-right-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-bottom.png);"></div><div id="tip-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-bottom.png) repeat-x;"></div><div id="tip-left-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-bottom.png);"></div><div id="tip-left" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left.png);"></div><div id="trans-content"></div></div><div id="tip-arrow-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-bottom.png);"></div><div id="tip-arrow-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-top.png);"></div></div>
+
+<!--@@下面是工具脚本@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<div id="div_hidden" style="display: none">
+    <div id="div_mod1">
+        <div class="div_inmod1" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px" >
+            <button onclick="ExportHtml()" style="margin-left: auto;margin-right: auto;float: left;position: relative;left: 10px">导出网页</button>
+        </div>
+    </div>
+    <div id="div_mod2">
+        <div class="div_inmod2" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid">
+                <BUTTON title="点击关闭对话框" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAABbSURBVDhPY3zw5v9/BjIAE5QmGVBHY3jXMTBGB9jEsdqIrAibQSCAETi4FK4ss4KyIADDRnQFIIBNjHqhis2p2MQwQhUGQM5DdiK6ZqxORdaAzX8gMGSSHAMDANOtJxQi19d5AAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击确定修改" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMFSURBVHjaYvz//z8DJQAgAINxcAQgCANA8MgQlRkefrUDLZM6LBQSAd3XxlxOZofYNtQTWhMWOqYVxHjVsdWY0gj/x+Iw7NqP/KByfwKIiSTrQI79/TtBXVlqV6S1hZUAK98/gAAi2gCgV0X/MTHMdrfQm1/r6Shz8drzfw/uvEoECCCW/wz/FYHB8A2o5iUOnQz//vwz4xbjnJ/soqUVoKHM0LH7PMOx0w8yGbmZNgEEEIuQCO/VX7//3fz8+I8PGwPDUxS9//6z/vj7J1VOTbCnwseY00ZcgKF853mGXQcf1DOxs8xiYPzHABBATHzM3J99HBQNuAXZVv7+808IrJMRGE5//2v85WBY5uaoNHVqmAenlbgkQ+Oeawy79j7vZ/vP0sTABIk9gABienbn+0wJBjGG7EAra0YuhnX//jEw/vn9z5VXnGVXarBBSIOrO4M4Dw9D78FLDNu2v1zF/pu5nAEp5AACAEEAvv8DBjAZ5u70+2RxSUoEBw3+H8fX4mUiKg1hdlc6FEoiMwD4/vMAn8nQAK6t6bgA+v1dAAf89/wE+gD9BvkA/wf8AAIAQQC+/wMQMCHw7e73HRUcCDNXMDwBCBn3DlM2LgUqDyMA7vzpALHU0wCxquzRAfIBWQUFAuwD/QQABf0GAAb7CQAG+QoAAgBBAL7/AxAvIv/99AX78gHvWy8nFwEwFiQAA/8DAO/96gC/3dYArqXx4P/tAU0GBwHgBfwGAAb8CAAI+QwACPYPAAn0EAACiFlIQ5uB9Q/H4y+f/1nxq35V4mFnYfj0/xXD6Sf3GLYu/f7m91OWACaO31f+M/+DeJoRGPEgzPQPjAECiInjFzsD5z+2n4zP+LaePv2e4TnjHYaLr+4z7Fz668uv21wxzMwMp/ElMIAAYmL+y84Awhz/2Be9PsP98MTt5wxHVzH/+n5ZIBuoeSehFAoQQMwSakbAKGVmYGJk/M70jUPszW0eix/XeesYmP9M+8/2h+Ef82+G/yzADAT2AiOGAQABxEhpdgYIMABQrSEzlY7wIwAAAABJRU5ErkJggg==") no-repeat;border: 0px;vertical-align:top' onclick="ChangeValue();DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击恢复上一历史状态" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMiSURBVHjaYvz//z8DJQAggFhABCNjD5D8A8T/gBygECszA8OvvwwMTP8txJUFZv3lYuF4++GnOyMTw/3///4x/Aep42dj+H8xgwEggJiwGvvrryiQ7PYL1Ty6YYW/rp2ppPT/t9+E/v34zfD/z18UpQABxIKh+f9fJxFR3gmdXXa6ibE6DIzMTAy/fv39wfDzz1cGLhaQc4FqEMoBAgjJgP9AmX/Fzi6qTTMmO3PyKIowLLn+nyFI5Q8D86+/PGwsTC1MHMwfGFiYWBhYGFh/MTHeBWqqAwggRlAgMjJ2gdzdm5FuWjR1kiPD+fdsDG2HGRgEWX4xzPH5x3Dj1nuGZ6+/M7CxAe0Aop9Au1rnXWTYN9ufESCAoC74W5qXa140cZILw6qbjAxLLvxn+An0LzvLd4apB38zcHGwA73CwvDt408GdsY/DNH2ogzKktzgwAAIILABpsZS9e3tdgwrbjEyLDj7n4Hj/y8G1t8/GF58+M4w5+53hh9ffzD8+Pyd4dPHrwwCbH8YrFU4GP7+/Qe2GiAASWSUAgAIg1CJdf+71tYWLUrKb32gPoDUIsLrdAJOM04gnSENjGaY9iHWlTU2cuUfk7oCCGzAyVNPuhsbj9W0ttoxfH3/h2HR0a8M/37+YhAAhoGXJisDO9D5//9wMHz5zMHAyfyPQUyAjYEZop8BIIDABvz7x9TY1n5ECphGktrbrBik2H8xVK14x8DP+4+hMUCW4eWbnwyvP/5gYGbiAcbgf4a7z78xPH79nRmkFyCAoIHI9Ifh/7+0jo4jr+7ce1c8baId67JsKYbFu54zfPzxn6Gi7czvnVvuHmQU5fwMjELm/8wMbD9YGR+AdAIEEFI6YAKG6v/KNauunT975mVbf7+tcneiHMP3n/8Yvv/++/nrtz85DN9+32QA2csCdD8PRCtAAGFJysyr7t/74BoYun1uWt4RhqcvvzOwc7KwAz3Nw/D3PzgdQMMPDAACCJqQuiEZCZxGgbKsQNNBaf7/f28FXZGpP9mZGF+8/OrMyMR45z/Qyv8sQHXcwIA9n8EAEECMlGZngAADALCEL2yqmxZQAAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="ReloadValue();DeleteWindow();" type=submit></BUTTON>
+            </div>
+            <textarea class="div_inmod2_content" style="width: 100%;height: 98px;overflow-x: hidden;margin:0;border: 0;padding:0" onchange=""></textarea>
+        </div>
+    </div>
+</div>
+<script src="../JS/MYLIB/MIN/Events.min.js"></script>
+<script src="../JS/MYLIB/MIN/FileText.min.js"></script>
+<script src="../JS/MYLIB/MIN/View.min.js"></script>
+<script>
+    var bbl_current_obj;
+    var bbl_style_temp;
+    var bbl_int_count2=0;
+    var bbl_arr_history=[];
+    window.onload=function()
+    {
+        delete_div("div_ExportHtml");
+        Open_div("","div_ExportHtml",100,80,0,0);
+        if(true)
+            return;
+        var div_ExportHtml=document.getElementById("div_ExportHtml");
+        div_ExportHtml.innerHTML=document.getElementById("div_mod1").innerHTML;
+        div_ExportHtml.style.position="fixed";
+        div_ExportHtml.style.right="0px";
+        div_ExportHtml.style.top="300px";
+        //div_ExportHtml.style.float="right";
+        var int_count=0;//为每一个可调整标签设置不同的tid属性
+        var arr_tags=["p","a","span","h1","h2","h3","h4","h5","li","td","th","code","strong","em"];
+        var leng=arr_tags.length;
+        for(var i=0;i<leng;i++)//对于每一种标签
+        {
+            var objs=document.getElementsByTagName(arr_tags[i]);
+            var leng2=objs.length;
+            for(var j=0;j<leng2;j++)//对于每一个标签
+            {
+                var children=objs[j].childNodes;
+                var leng3=children.length;
+                for(var k=0;k<leng3;k++)//寻找文本节点
+                {
+                    if(children[k].nodeName=="#text"&&children[k].textContent.Trim().length>2)
+                    {
+                        objs[j].tid="tid"+int_count;
+                        objs[j].style.cursor="help";
+                        objs[j].onmouseover=function()
+                        {
+                            bbl_style_temp=this.style.border;
+                            this.style.border="2px solid rgb(59, 203, 249)";
+                            bbl_current_obj=objs[j];
+                        }
+                        objs[j].onmouseout=function()
+                        {
+                            this.style.border=bbl_style_temp;
+                        }
+                        objs[j].onclick=function(){
+                            var evt=evt||window.event;
+                            cancelEvent(evt);
+                            cancelPropagation(evt);
+                            //alert(this.textContent);
+                            var arr_child=this.childNodes;
+                            var leng4=arr_child.length;
+                            //首先删除所有已经存在的对话框
+                            for(var l=0;l<bbl_int_count2;l++)
+                            {
+                                delete_div("div_inmod2_"+l);
+                            }
+                            bbl_int_count2=0;
+                            for(var l=0;l<leng4;l++)//对于其中的每一个文本节点，弹出修改对话框
+                            {
+                                if(arr_child[l].nodeName=="#text"&&arr_child[l].textContent.Trim().length>2)
+                                {
+                                    Open_div(this,"div_inmod2_"+bbl_int_count2,240,120,0+bbl_int_count2*250,0);
+                                    var div_inmod2=document.getElementById("div_inmod2_"+bbl_int_count2);//取出新添加的元素
+                                    div_inmod2.ttid=this.getAttribute("tid")?this.getAttribute("tid"):this.tid;//把被选择标签的全局标记交给弹出框
+                                    div_inmod2.tobj=this;
+                                    div_inmod2.textnum=l;//在文本框中记录，这个文本框对应的是标签的第几个子节点
+                                    div_inmod2.innerHTML=document.getElementById("div_mod2").innerHTML;
+                                    con_getElementsByClassName("div_inmod2_content",div_inmod2)[0].innerHTML=arr_child[l].textContent;//填入原有值，考虑标签嵌套问题//#text型标签没有innerhtml属性！！
+                                    bbl_int_count2++;//记下有多少个，后面删除所有对话框时使用
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    function DeleteWindow()
+    {//只删除掉点击关闭的这一个标签
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var str_id=obj.parentNode.parentNode.parentNode.id;
+        delete_div(str_id);
+    }
+    //写入修改后的标签值，并写入日志
+    function ChangeValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        //document.getElementsByTagName()
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var obj_text=obj.parentNode.parentNode.getElementsByTagName("textarea")[0];//输入的文本框
+        if(obj_text.innerHTML.trim().length<1)
+        {
+            alert("修改后的文本过短");
+        }
+        else {
+            var tobj = div_inmod2.getAttribute("tobj") ? div_inmod2.getAttribute("tobj") : div_inmod2.tobj;//取得该输入框对应的标签
+            var ttid = div_inmod2.getAttribute("tid") ? div_inmod2.getAttribute("tid") : div_inmod2.tid;//
+            var textnum = div_inmod2.getAttribute("textnum") ? div_inmod2.getAttribute("textnum") : div_inmod2.textnum;
+            //写日志
+            var arr_temp = [];
+            arr_temp.push(ttid + "&" + textnum);
+            arr_temp.push(tobj.childNodes[textnum].textContent);
+            bbl_arr_history.push(arr_temp);
+            //改值
+            tobj.childNodes[textnum].textContent = obj_text.innerHTML;
+        }
+    }
+    //根据日志恢复标签内容
+    function ReloadValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var tobj=div_inmod2.getAttribute("tobj")?div_inmod2.getAttribute("tobj"):div_inmod2.tobj;//取得该输入框对应的标签
+        var ttid=div_inmod2.getAttribute("tid")?div_inmod2.getAttribute("tid"):div_inmod2.tid;//
+        var textnum=div_inmod2.getAttribute("textnum")?div_inmod2.getAttribute("textnum"):div_inmod2.textnum;
+
+
+        var flag=0;//0表示没有找到，对应的日志记录
+        var leng=bbl_arr_history.length;
+        for(var i=leng-1;i>=0;i--)
+        {
+            var str=ttid+"&"+textnum;
+            if(bbl_arr_history[i][0]==str)//找到新的这一条
+            {
+                tobj.childNodes[textnum].textContent=bbl_arr_history[i][1];
+                bbl_arr_history.splice(i,1);//将日志里的这一条删除
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+        {
+            alert("没有日志记录！");
+        }
+    }
+    //以html格式导出网页
+    function ExportHtml()
+    {
+        DownloadText(MakeDateStr()+document.title,("<!DOCTYPE html><html>"+document.getElementsByTagName("html")[0].innerHTML+"</html>"));
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>009Basic_Collisions</title>
+    <link href="../CSS/normalize.min.css"  rel="stylesheet">
+    <link href="../CSS/slideout.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/font-awesome.min.css"  rel="stylesheet">
+    <link href="../CSS/perfect-scrollbar.min.css"  rel="stylesheet">
+    <link href="../CSS/main.css"  rel="stylesheet">
+</head>
+<body>
+<!--@@下面是翻译正文@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<nav id="menu"></nav><nav class="nav-main"><!-- Hamburger menu : displayed only in small screens-->
+    <i class="fa fa-bars" id="mobilemenu"></i><!-- this button only shows on mobile version of a "class" page-->
+    <div class="banner">
+        <div class="menu">
+            <div class="do-not-hover" id="home"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/">Babylon.js | DOCUMENTATION</a></div>
+            <div class="item" id="whatsnew"><a style="cursor: help;" href="http://doc.babylonjs.com/whats-new">What's new</a></div>
+            <div class="item" id="general"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/generals">General</a></div>
+            <div class="item active" id="tutorials"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials">Tutorials</a></div>
+            <div class="item" id="overview"><a style="cursor: help;" href="http://doc.babylonjs.com/overviews">Overviews</a></div>
+            <div class="item" id="exporters"><a style="cursor: help;" href="http://doc.babylonjs.com/exporters">Exporters</a></div>
+            <div class="item" id="extensions"><a style="cursor: help;" href="http://doc.babylonjs.com/extensions">Extensions</a></div>
+            <div class="item" id="classes"><a style="cursor: help;" href="http://doc.babylonjs.com/classes">Classes</a></div>
+            <div class="item" id="playground"><a style="cursor: help;" href="http://doc.babylonjs.com/playground">Playground</a></div></div>
+        <div class="more">
+            <div class="searchbar">
+                <form action="/search" method="get"><input name="q" type="text" placeholder="Search..." value=""><button type="submit"><i class="fa fa-search"></i></button></form></div></div></div></nav>
+<div id="wrapper">
+    <div class="statics-banner">
+        <h1 style="border-image: none; cursor: help;">教程</h1></div>
+    <div class="horizontal-separator"></div>
+    <div class="static-content">
+        <h1 style="border-image: none; cursor: help;">相机、网格碰撞和重力</h1><br>
+        <div class="contentTable">
+            <div class="tocHeader"><span class="tocTitle" style="border-image: none; cursor: help;"><i class="tocIcon fa fa-book"></i>内容列表</span><span class="tocToggle"><i class="fa fa-arrow-up"></i></span></div>
+            <div class="tocContent">
+                <ul>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#how-can-i-do-this">怎么做 ?</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#web-worker-based-collision-system-since-21">基于网页运算器的碰撞系统 (从 2.1版开始)</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#arcrotatecamera">弧形旋转相机</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#next-step">下一步</a></li></ul></div></div>
+        <div id="staticContent">
+            <p style="border-image: none; cursor: help;">你曾经玩过FPS（第一人称射击）游戏吗？在这个教程中，我们模拟相同的相机运动：相机在地面上，和地面相碰撞，并且可能与场景中的任何物体碰撞。</p>
+            <p><img alt="Elements" src="../IMAGE/06-10/09-2.png"></p>
+            <p><em style="border-image: none; cursor: help;">最终的效果</em></p>
+            <h2 style="border-image: none; cursor: help;"><a name="how-can-i-do-this" class="anchor" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#how-can-i-do-this"></a>怎么做 ?</h2>
+            <p style="border-image: none; cursor: help;">为了复制这种运动，我们只需要简单的三步:</p>
+            <p><strong style="border-image: none; cursor: help;">1 - 定义并且应用重力</strong></p>
+            <p style="border-image: none; cursor: help;">第一件要做的事是定义我们的重力向量，定义重力。在一个类似地球的经典世界里，重力的方向是向下的也就是沿着Y轴的负方向，但是我们可以自由改变它！</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+</code></pre>
+            <p style="border-image: none; cursor: help;">重力可以被应用在你在前面的代码里定义的任何一个相机上.</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">camera.applyGravity = true;
+</code></pre>
+            <p><strong style="border-image: none; cursor: help;">2 - 定义一个椭球面</strong></p>
+            <p style="border-image: none; cursor: help;">下一个重要的步骤是定义一个包围我们的相机的椭球面。这个椭球面代表着我么的玩家的大小：当一个网格与这个椭球面接触时，一个碰撞事件将会被触发，阻止我们的相机和网格靠得太近。</p>
+            <p><img alt="Ellipsoid" src="../IMAGE/06-10/09-1.jpg"></p>
+            <p style="border-image: none; cursor: help;">这个<em style="border-image: none; cursor: help;">椭球面</em>属性在Babylonjs相机上的尺寸默认是（0.5,1,0.5），但是改变这个值可以让你更高、更大、更小、更瘦，这些都取决于在这些轴上的调整。在下面的例子中，我们将让我们的相机的椭圆面比默认的高一些：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">//Set the ellipsoid around the camera (e.g. your player's size)
+    camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+</code></pre>
+            <p><strong style="border-image: none; cursor: help;">3 - 应用碰撞</strong></p>
+            <p style="border-image: none; cursor: help;">一旦你完成了前面的那些设定，我们的最后一步就是声明我们对场景中的碰撞检测感兴趣：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">// Enable Collisions
+    scene.collisionsEnabled = true;
+    camera.checkCollisions = true;
+</code></pre>
+            <p style="border-image: none; cursor: help;">然后声明哪些网格可以与我们的相机相撞:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">ground.checkCollisions = true;
+    box.checkCollisions = true;
+</code></pre>
+            <p style="border-image: none; cursor: help;">就是这样! 非常简单!</p>
+            <p style="border-image: none; cursor: help;">你可以测试在这个教程中使用的场景。。。通过访问Babylonjs的<a href="http://www.babylonjs-playground.com/#4HUQQ"><strong style="border-image: none; cursor: help;">playground
+                demo</strong></a> - <i class="fa fa-eye" onclick="createIframe('4HUQQ', this)"></i><br>
+            <div class="iframeContainer"></div><br>.
+            <p></p>
+            <p style="border-image: none; cursor: help;">现在，你的相机将会沿着y轴下落知道碰到地面。并且，你的相机在距离箱子太近的时候将会碰撞。</p>
+            <p><strong style="border-image: none; cursor: help;">4 -物体与物体之间的碰撞</strong></p>
+            <p style="border-image: none; cursor: help;">你也可以在网格上做同样的事通过设置
+                <em style="border-image: none; cursor: help;">mesh.ellipsoid</em>属性和使用<em style="border-image: none; cursor: help;">mesh.moveWithCollisions(velocity)</em>函数。这个函数将试着按设定的速度移动网格并将检查当前的网格和其他激活了碰撞检测的网格之间是否有碰撞发生</p>
+            <p style="border-image: none; cursor: help;">你也可以使用<em style="border-image: none; cursor: help;">mesh.ellipsoidOffset</em>属性来移动网格上的椭球面（默认情况下椭球面是以网格为中心的）</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">var speedCharacter = 8;
+    var gravity = 0.15;
+    var character = Your mesh;
+
+    character.ellipsoid = new BABYLON.Vector3(0.5, 1.0, 0.5);
+    character.ellipsoidOffset = new BABYLON.Vector3(0, 1.0, 0);
+
+    var forwards = new BABYLON.Vector3(parseFloat(Math.sin(character.rotation.y)) / speedCharacter, gravity, parseFloat(Math.cos(character.rotation.y)) / speedCharacter);
+    forwards.negate();
+    character.moveWithCollisions(forwards);
+    // or
+    var backwards = new BABYLON.Vector3(parseFloat(Math.sin(character.rotation.y)) / speedCharacter, -gravity, parseFloat(Math.cos(character.rotation.y)) / speedCharacter);
+    character.moveWithCollisions(backwards);
+</code></pre>
+            <p style="border-image: none; cursor: help;"> Dad72提供的示例: <a href="http://www.babylon.actifgames.com/moveCharacter/"><strong style="border-image: none; cursor: help;">在重力和碰撞下移动角色</strong></a></p>
+            <h2 style="border-image: none; cursor: help;"><a name="web-worker-based-collision-system-since-21" class="anchor" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#web-worker-based-collision-system-since-21"></a>基于网页运算器的碰撞系统(从 2.1版开始)</h2>
+            <p style="border-image: none; cursor: help;">BabylonJS 2.1允许使用者将碰撞计算移动到一个外部的网页运算器中以获得更佳的渲染时间。这个运算器被整合在一个“单框架文件”中，并且不需要开发者做出任何改变。场景现在有了一个新的标志（默认都是false）</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">scene.workerCollisions = true|false
+</code></pre>
+            <p style="border-image: none; cursor: help;">将这个标志设为true将在后台启动运算器。然后这个运算器将会收到相机和网格发来的碰撞计算请求。设为false将会按照以前的方法处理碰撞。（这相当于在浏览器的原有进程外额外启动一个后台进程专门对碰撞进行异步计算，更充分的发挥多核cpu性能，为浏览器进程中的计算节省时间）</p>
+            <p style="border-image: none; cursor: help;">想要了解更多关于运算器整合的信息请访问Raanan Weber的博客:</p>
+            <ul>
+                <li><a style="border-image: none; cursor: help;" href="https://blog.raananweber.com/2015/05/26/collisions-using-workers-for-babylonjs/">https://blog.raananweber.com/2015/05/26/collisions-using-workers-for-babylonjs/</a></li>
+                <li><a style="border-image: none; cursor: help;" href="https://blog.raananweber.com/2015/06/06/collisions-using-workers-for-babylonjs-part-2/">https://blog.raananweber.com/2015/06/06/collisions-using-workers-for-babylonjs-part-2/</a></li></ul>
+            <h2 style="border-image: none; cursor: help;"><a name="arcrotatecamera" class="anchor" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#arcrotatecamera"></a>弧形旋转相机</h2>
+            <p style="border-image: none; cursor: help;">弧形旋转相机同样可以进行碰撞检测，但是它不再沿着障碍物的表面滑动，而是在发生碰撞时停止。</p>
+            <p style="border-image: none; cursor: help;">想要激活碰撞，只需要设置 <code style="border-image: none; cursor: help;">camera.checkCollisions = true</code>.你可以通过以下的代码来定义发生碰撞的半径:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">camera.collisionRadius = new BABYLON.Vector3(0.5, 0.5, 0.5)
+</code></pre>
+            <h2 style="border-image: none; cursor: help;"><a name="next-step" class="anchor" href="http://doc.babylonjs.com/tutorials/Cameras,_Mesh_Collisions_and_Gravity#next-step"></a>下一步</h2>
+            <p style="border-image: none; cursor: help;">伟大的成就，现在你已经可以开发一个真正的FPS游戏了！但是也许你会好奇一个网格在何时与另一个网格相撞？很好，应为这就是我们的目的在<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Intersect_Collisions_-_mesh">下一个教程</a>.</p></div></div>
+</div>
+
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<footer class="footer"><div class="footer-item"><a style="border-image: none; cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>    Forum</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>    Github</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>    Contribute</a></div></footer>
+<div style="position: static; width: 0px; height: 0px; border: none; padding: 0px; margin: 0px;"><div id="trans-tooltip"><div id="tip-left-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-top.png);"></div><div id="tip-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-top.png) repeat-x;"></div><div id="tip-right-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-top.png);"></div><div id="tip-right" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right.png) repeat-y;"></div><div id="tip-right-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-bottom.png);"></div><div id="tip-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-bottom.png) repeat-x;"></div><div id="tip-left-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-bottom.png);"></div><div id="tip-left" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left.png);"></div><div id="trans-content"></div></div><div id="tip-arrow-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-bottom.png);"></div><div id="tip-arrow-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-top.png);"></div></div>
+
+<!--@@下面是工具脚本@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<div id="div_hidden" style="display: none">
+    <div id="div_mod1">
+        <div class="div_inmod1" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px" >
+            <button onclick="ExportHtml()" style="margin-left: auto;margin-right: auto;float: left;position: relative;left: 10px">导出网页</button>
+        </div>
+    </div>
+    <div id="div_mod2">
+        <div class="div_inmod2" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid">
+                <BUTTON title="点击关闭对话框" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAABbSURBVDhPY3zw5v9/BjIAE5QmGVBHY3jXMTBGB9jEsdqIrAibQSCAETi4FK4ss4KyIADDRnQFIIBNjHqhis2p2MQwQhUGQM5DdiK6ZqxORdaAzX8gMGSSHAMDANOtJxQi19d5AAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击确定修改" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMFSURBVHjaYvz//z8DJQAgAINxcAQgCANA8MgQlRkefrUDLZM6LBQSAd3XxlxOZofYNtQTWhMWOqYVxHjVsdWY0gj/x+Iw7NqP/KByfwKIiSTrQI79/TtBXVlqV6S1hZUAK98/gAAi2gCgV0X/MTHMdrfQm1/r6Shz8drzfw/uvEoECCCW/wz/FYHB8A2o5iUOnQz//vwz4xbjnJ/soqUVoKHM0LH7PMOx0w8yGbmZNgEEEIuQCO/VX7//3fz8+I8PGwPDUxS9//6z/vj7J1VOTbCnwseY00ZcgKF853mGXQcf1DOxs8xiYPzHABBATHzM3J99HBQNuAXZVv7+808IrJMRGE5//2v85WBY5uaoNHVqmAenlbgkQ+Oeawy79j7vZ/vP0sTABIk9gABienbn+0wJBjGG7EAra0YuhnX//jEw/vn9z5VXnGVXarBBSIOrO4M4Dw9D78FLDNu2v1zF/pu5nAEp5AACAEEAvv8DBjAZ5u70+2RxSUoEBw3+H8fX4mUiKg1hdlc6FEoiMwD4/vMAn8nQAK6t6bgA+v1dAAf89/wE+gD9BvkA/wf8AAIAQQC+/wMQMCHw7e73HRUcCDNXMDwBCBn3DlM2LgUqDyMA7vzpALHU0wCxquzRAfIBWQUFAuwD/QQABf0GAAb7CQAG+QoAAgBBAL7/AxAvIv/99AX78gHvWy8nFwEwFiQAA/8DAO/96gC/3dYArqXx4P/tAU0GBwHgBfwGAAb8CAAI+QwACPYPAAn0EAACiFlIQ5uB9Q/H4y+f/1nxq35V4mFnYfj0/xXD6Sf3GLYu/f7m91OWACaO31f+M/+DeJoRGPEgzPQPjAECiInjFzsD5z+2n4zP+LaePv2e4TnjHYaLr+4z7Fz668uv21wxzMwMp/ElMIAAYmL+y84Awhz/2Be9PsP98MTt5wxHVzH/+n5ZIBuoeSehFAoQQMwSakbAKGVmYGJk/M70jUPszW0eix/XeesYmP9M+8/2h+Ef82+G/yzADAT2AiOGAQABxEhpdgYIMABQrSEzlY7wIwAAAABJRU5ErkJggg==") no-repeat;border: 0px;vertical-align:top' onclick="ChangeValue();DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击恢复上一历史状态" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMiSURBVHjaYvz//z8DJQAggFhABCNjD5D8A8T/gBygECszA8OvvwwMTP8txJUFZv3lYuF4++GnOyMTw/3///4x/Aep42dj+H8xgwEggJiwGvvrryiQ7PYL1Ty6YYW/rp2ppPT/t9+E/v34zfD/z18UpQABxIKh+f9fJxFR3gmdXXa6ibE6DIzMTAy/fv39wfDzz1cGLhaQc4FqEMoBAgjJgP9AmX/Fzi6qTTMmO3PyKIowLLn+nyFI5Q8D86+/PGwsTC1MHMwfGFiYWBhYGFh/MTHeBWqqAwggRlAgMjJ2gdzdm5FuWjR1kiPD+fdsDG2HGRgEWX4xzPH5x3Dj1nuGZ6+/M7CxAe0Aop9Au1rnXWTYN9ufESCAoC74W5qXa140cZILw6qbjAxLLvxn+An0LzvLd4apB38zcHGwA73CwvDt408GdsY/DNH2ogzKktzgwAAIILABpsZS9e3tdgwrbjEyLDj7n4Hj/y8G1t8/GF58+M4w5+53hh9ffzD8+Pyd4dPHrwwCbH8YrFU4GP7+/Qe2GiAASWSUAgAIg1CJdf+71tYWLUrKb32gPoDUIsLrdAJOM04gnSENjGaY9iHWlTU2cuUfk7oCCGzAyVNPuhsbj9W0ttoxfH3/h2HR0a8M/37+YhAAhoGXJisDO9D5//9wMHz5zMHAyfyPQUyAjYEZop8BIIDABvz7x9TY1n5ECphGktrbrBik2H8xVK14x8DP+4+hMUCW4eWbnwyvP/5gYGbiAcbgf4a7z78xPH79nRmkFyCAoIHI9Ifh/7+0jo4jr+7ce1c8baId67JsKYbFu54zfPzxn6Gi7czvnVvuHmQU5fwMjELm/8wMbD9YGR+AdAIEEFI6YAKG6v/KNauunT975mVbf7+tcneiHMP3n/8Yvv/++/nrtz85DN9+32QA2csCdD8PRCtAAGFJysyr7t/74BoYun1uWt4RhqcvvzOwc7KwAz3Nw/D3PzgdQMMPDAACCJqQuiEZCZxGgbKsQNNBaf7/f28FXZGpP9mZGF+8/OrMyMR45z/Qyv8sQHXcwIA9n8EAEECMlGZngAADALCEL2yqmxZQAAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="ReloadValue();DeleteWindow();" type=submit></BUTTON>
+            </div>
+            <textarea class="div_inmod2_content" style="width: 100%;height: 98px;overflow-x: hidden;margin:0;border: 0;padding:0" onchange=""></textarea>
+        </div>
+    </div>
+</div>
+<script src="../JS/MYLIB/MIN/Events.min.js"></script>
+<script src="../JS/MYLIB/MIN/FileText.min.js"></script>
+<script src="../JS/MYLIB/MIN/View.min.js"></script>
+<script>
+    var bbl_current_obj;
+    var bbl_style_temp;
+    var bbl_int_count2=0;
+    var bbl_arr_history=[];
+    window.onload=function()
+    {
+        delete_div("div_ExportHtml");
+        Open_div("","div_ExportHtml",100,80,0,0);
+        if(true)
+            return;
+        var div_ExportHtml=document.getElementById("div_ExportHtml");
+        div_ExportHtml.innerHTML=document.getElementById("div_mod1").innerHTML;
+        div_ExportHtml.style.position="fixed";
+        div_ExportHtml.style.right="0px";
+        div_ExportHtml.style.top="300px";
+        //div_ExportHtml.style.float="right";
+        var int_count=0;//为每一个可调整标签设置不同的tid属性
+        var arr_tags=["p","a","span","h1","h2","h3","h4","h5","li","td","th","code","strong","em"];
+        var leng=arr_tags.length;
+        for(var i=0;i<leng;i++)//对于每一种标签
+        {
+            var objs=document.getElementsByTagName(arr_tags[i]);
+            var leng2=objs.length;
+            for(var j=0;j<leng2;j++)//对于每一个标签
+            {
+                var children=objs[j].childNodes;
+                var leng3=children.length;
+                for(var k=0;k<leng3;k++)//寻找文本节点
+                {
+                    if(children[k].nodeName=="#text"&&children[k].textContent.Trim().length>2)
+                    {
+                        objs[j].tid="tid"+int_count;
+                        objs[j].style.cursor="help";
+                        objs[j].onmouseover=function()
+                        {
+                            bbl_style_temp=this.style.border;
+                            this.style.border="2px solid rgb(59, 203, 249)";
+                            bbl_current_obj=objs[j];
+                        }
+                        objs[j].onmouseout=function()
+                        {
+                            this.style.border=bbl_style_temp;
+                        }
+                        objs[j].onclick=function(){
+                            var evt=evt||window.event;
+                            cancelEvent(evt);
+                            cancelPropagation(evt);
+                            //alert(this.textContent);
+                            var arr_child=this.childNodes;
+                            var leng4=arr_child.length;
+                            //首先删除所有已经存在的对话框
+                            for(var l=0;l<bbl_int_count2;l++)
+                            {
+                                delete_div("div_inmod2_"+l);
+                            }
+                            bbl_int_count2=0;
+                            for(var l=0;l<leng4;l++)//对于其中的每一个文本节点，弹出修改对话框
+                            {
+                                if(arr_child[l].nodeName=="#text"&&arr_child[l].textContent.Trim().length>2)
+                                {
+                                    Open_div(this,"div_inmod2_"+bbl_int_count2,240,120,0+bbl_int_count2*250,0);
+                                    var div_inmod2=document.getElementById("div_inmod2_"+bbl_int_count2);//取出新添加的元素
+                                    div_inmod2.ttid=this.getAttribute("tid")?this.getAttribute("tid"):this.tid;//把被选择标签的全局标记交给弹出框
+                                    div_inmod2.tobj=this;
+                                    div_inmod2.textnum=l;//在文本框中记录，这个文本框对应的是标签的第几个子节点
+                                    div_inmod2.innerHTML=document.getElementById("div_mod2").innerHTML;
+                                    con_getElementsByClassName("div_inmod2_content",div_inmod2)[0].innerHTML=arr_child[l].textContent;//填入原有值，考虑标签嵌套问题//#text型标签没有innerhtml属性！！
+                                    bbl_int_count2++;//记下有多少个，后面删除所有对话框时使用
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    function DeleteWindow()
+    {//只删除掉点击关闭的这一个标签
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var str_id=obj.parentNode.parentNode.parentNode.id;
+        delete_div(str_id);
+    }
+    //写入修改后的标签值，并写入日志
+    function ChangeValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        //document.getElementsByTagName()
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var obj_text=obj.parentNode.parentNode.getElementsByTagName("textarea")[0];//输入的文本框
+        if(obj_text.innerHTML.trim().length<1)
+        {
+            alert("修改后的文本过短");
+        }
+        else {
+            var tobj = div_inmod2.getAttribute("tobj") ? div_inmod2.getAttribute("tobj") : div_inmod2.tobj;//取得该输入框对应的标签
+            var ttid = div_inmod2.getAttribute("tid") ? div_inmod2.getAttribute("tid") : div_inmod2.tid;//
+            var textnum = div_inmod2.getAttribute("textnum") ? div_inmod2.getAttribute("textnum") : div_inmod2.textnum;
+            //写日志
+            var arr_temp = [];
+            arr_temp.push(ttid + "&" + textnum);
+            arr_temp.push(tobj.childNodes[textnum].textContent);
+            bbl_arr_history.push(arr_temp);
+            //改值
+            tobj.childNodes[textnum].textContent = obj_text.innerHTML;
+        }
+    }
+    //根据日志恢复标签内容
+    function ReloadValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var tobj=div_inmod2.getAttribute("tobj")?div_inmod2.getAttribute("tobj"):div_inmod2.tobj;//取得该输入框对应的标签
+        var ttid=div_inmod2.getAttribute("tid")?div_inmod2.getAttribute("tid"):div_inmod2.tid;//
+        var textnum=div_inmod2.getAttribute("textnum")?div_inmod2.getAttribute("textnum"):div_inmod2.textnum;
+
+
+        var flag=0;//0表示没有找到，对应的日志记录
+        var leng=bbl_arr_history.length;
+        for(var i=leng-1;i>=0;i--)
+        {
+            var str=ttid+"&"+textnum;
+            if(bbl_arr_history[i][0]==str)//找到新的这一条
+            {
+                tobj.childNodes[textnum].textContent=bbl_arr_history[i][1];
+                bbl_arr_history.splice(i,1);//将日志里的这一条删除
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+        {
+            alert("没有日志记录！");
+        }
+    }
+    //以html格式导出网页
+    function ExportHtml()
+    {
+        DownloadText(MakeDateStr()+document.title,("<!DOCTYPE html><html>"+document.getElementsByTagName("html")[0].innerHTML+"</html>"));
+    }
+</script>
+</body>
+</html>

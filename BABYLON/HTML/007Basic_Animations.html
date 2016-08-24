@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>007Basic_Animations</title>
+    <link href="../CSS/normalize.min.css"  rel="stylesheet">
+    <link href="../CSS/slideout.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/font-awesome.min.css"  rel="stylesheet">
+    <link href="../CSS/perfect-scrollbar.min.css"  rel="stylesheet">
+    <link href="../CSS/main.css"  rel="stylesheet">
+</head>
+<body>
+<!--@@下面是翻译正文@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<nav id="menu"></nav><nav class="nav-main"><!-- Hamburger menu : displayed only in small screens-->
+    <i class="fa fa-bars" id="mobilemenu"></i><!-- this button only shows on mobile version of a "class" page-->
+    <div class="banner">
+        <div class="menu">
+            <div class="do-not-hover" id="home"><a style="cursor: help;" href="http://doc.babylonjs.com/">Babylon.js | DOCUMENTATION</a></div>
+            <div class="item" id="whatsnew"><a style="cursor: help;" href="http://doc.babylonjs.com/whats-new">What's new</a></div>
+            <div class="item" id="general"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/generals">General</a></div>
+            <div class="item active" id="tutorials"><a style="cursor: help;" href="http://doc.babylonjs.com/tutorials">Tutorials</a></div>
+            <div class="item" id="overview"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/overviews">Overviews</a></div>
+            <div class="item" id="exporters"><a style="cursor: help;" href="http://doc.babylonjs.com/exporters">Exporters</a></div>
+            <div class="item" id="extensions"><a style="cursor: help;" href="http://doc.babylonjs.com/extensions">Extensions</a></div>
+            <div class="item" id="classes"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes">Classes</a></div>
+            <div class="item" id="playground"><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/playground">Playground</a></div></div>
+        <div class="more">
+            <div class="searchbar">
+                <form action="/search" method="get"><input name="q" type="text" placeholder="Search..." value=""><button type="submit"><i class="fa fa-search"></i></button></form></div></div></div></nav>
+<div id="wrapper">
+<div class="statics-banner">
+    <h1 style="border-image: none; cursor: help;">教程</h1></div>
+<div class="horizontal-separator"></div>
+<div class="static-content">
+<h1 style="border-image: none; cursor: help;">动画</h1><br>
+<div class="contentTable">
+    <div class="tocHeader"><span class="tocTitle" style="border-image: none; cursor: help;"><i class="tocIcon fa fa-book"></i>内容列表</span><span class="tocToggle"><i class="fa fa-arrow-up"></i></span></div>
+    <div class="tocContent">
+        <ul>
+            <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#animation">动画</a>
+                <ul>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#basic-animation">基本动画</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#controlling-animations">控制动画</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#helper-function">辅助功能</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#animation-blending">动画合成</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#easing-functions">宽松的功能</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#complex-animation">复杂动画</a></li>
+                    <li><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Animations#attach-events-to-animations">把事件绑定到动画</a></li></ul></li></ul></div></div>
+<div id="staticContent">
+<h1 style="border-image: none; cursor: help;"><a name="animation" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#animation"></a>动画</h1>
+<p style="border-image: none; cursor: help;">你的场景看起来越来越好了，但是它一直是静态的。为了给它带来活力，我们将学习怎样让你的电脑按照你选择的方式移动你的网格。</p>
+<p><img alt="Elements" src="../IMAGE/06-10/07.png"></p>
+<p><em style="border-image: none; cursor: help;">最终效果</em></p>
+<p style="border-image: none; cursor: help;">有两种基本方式在您的场景中处理动画。第一种是定义一系列关键帧并定义你的物体在每个关键帧时的状态。第二种则适用于更复杂的动画，在运行时改变动画代码。</p>
+<h2 style="border-image: none; cursor: help;"><a name="basic-animation" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#basic-animation"></a>基本动画</h2>
+<p style="border-image: none; cursor: help;">Babylonjs中的动画基于一种叫做“动画”的对象。一个动画是由一些属性和一系列关键帧定义的。每个关键帧都代表了动画在设定的关键时刻的值。</p>
+<p style="border-image: none; cursor: help;">为了完成今天的动画场景，我们开始建立我们的环境：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">function createScene() {
+    //这里。。。像以前一样是你的基本场景代码: [scene, light, camera]
+
+    //Create a box
+    var box1 = BABYLON.Mesh.CreateBox("Box1", 10.0, scene);
+    box1.position.x = -20;
+</code></pre>
+<p style="border-image: none; cursor: help;">我们的目标是：移动“立方体1”。首先，建立我们的动画对象：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">var animationBox = new BABYLON.Animation("myAnimation", "scaling.x", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+</code></pre>
+<p style="border-image: none; cursor: help;">参数里包含了许多信息:</p>
+<p style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">参数1</strong> - 动画的名字，没什么特别的.</p>
+<p style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">参数 2</strong> - 相关的属性。这可以是任意的网格属性，取决于你想要改变哪个属性。在这里我们想在x轴上缩放一个物体，所以这个属性是“scaling.x”。</p>
+<p style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">参数3</strong> - 美妙请求的帧数：规定了动画中可能的最大帧数.</p>
+<p style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">参数 4</strong> -  变化类型。在这里你决定并输入将要被改变的是什么类型的值：他可能是一个浮点数（比如一个运动），也可能是一个向量（比如一个方向），或者是一个四元组。可以取的值是：</p>
+<ul>
+    <li><code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONTYPE_FLOAT</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONTYPE_VECTOR2</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONTYPE_VECTOR3</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONTYPE_QUATERNION</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONTYPE_MATRIX</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONTYPE_COLOR3</code></li></ul>
+<p style="border-image: none; cursor: help;"><strong style="border-image: none; cursor: help;">参数 5</strong> - 最后，你必须决定并输入这个动画在达到其“上限”后的行为种类（比如继续执行、重新开始或者在最后一个关键值处停止等等）</p>
+<ul>
+    <li style="border-image: none; cursor: help;">使用以前的值并在其基础上增长:
+        <code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONLOOPMODE_RELATIVE</code></li>
+    <li style="border-image: none; cursor: help;">使用初始值重新开始:
+        <code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE</code></li>
+    <li style="border-image: none; cursor: help;">保持最终的值不变:
+        <code style="border-image: none; cursor: help;">BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT</code></li></ul>
+<p style="border-image: none; cursor: help;">既然我们已经有了动画对象，接下来该讨论这些值是怎样变化的。在我们的案例中，我们想要缩放我们的立方体，但是使用一种非线性的方式：在它变窄时变化的更快，在它变宽时变化的更慢。所以：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">// 一个存储了所有动画关键帧的数组
+    var keys = [];
+
+    //在第0帧，缩放的值是1
+    keys.push({
+    frame: 0,
+    value: 1
+    });
+
+    //在第20帧，缩放的值是0.2
+    keys.push({
+    frame: 20,
+    value: 0.2
+    });
+
+    //在第100帧时，缩放的值是1
+    keys.push({
+    frame: 100,
+    value: 1
+    });
+</code></pre>
+<p style="border-image: none; cursor: help;">接着，两个重要的步骤:</p>
+<ul>
+    <li style="border-image: none; cursor: help;">将动画数组加入到动画对象中:</li></ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">animationBox.setKeys(keys);
+</code></pre>
+<ul>
+    <li style="border-image: none; cursor: help;">把动画对象和立方体关联起来:</li></ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">box1.animations.push(animationBox);
+</code></pre>
+<p style="border-image: none; cursor: help;">最后，你可以通过一行代码来启动动画，在你程序中的任意时刻。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">scene.beginAnimation(box1, 0, 100, true);
+</code></pre>
+<p><strong style="border-image: none; cursor: help;">scene.beginAnimation方法的参数:</strong></p>
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th style="border-image: none; cursor: help;">名称</th>
+        <th style="border-image: none; cursor: help;">类型</th>
+        <th style="border-image: none; cursor: help;">描述</th></tr></thead>
+    <tbody>
+    <tr>
+        <td></td>
+        <td style="border-image: none; cursor: help;">目标</td>
+        <td style="border-image: none; cursor: help;">任意</td>
+        <td style="border-image: none; cursor: help;">启动动画的目标对象</td></tr>
+    <tr>
+        <td></td>
+        <td style="border-image: none; cursor: help;">起始</td>
+        <td style="border-image: none; cursor: help;">数字</td>
+        <td style="border-image: none; cursor: help;">起始帧</td></tr>
+    <tr>
+        <td></td>
+        <td>to</td>
+        <td style="border-image: none; cursor: help;">数字</td>
+        <td style="border-image: none; cursor: help;">截止帧</td></tr>
+    <tr>
+        <td style="border-image: none; cursor: help;">可选</td>
+        <td style="border-image: none; cursor: help;">循环</td>
+        <td style="border-image: none; cursor: help;">布尔值</td>
+        <td style="border-image: none; cursor: help;">如果为true，这个动画将会循环（取决于BABYLON.Animation.ANIMATIONLOOPMODE）</td></tr>
+    <tr>
+        <td style="border-image: none; cursor: help;">可选</td>
+        <td style="border-image: none; cursor: help;">速度比</td>
+        <td style="border-image: none; cursor: help;">数字</td>
+        <td style="border-image: none; cursor: help;">默认 : 1. 动画的速度比（动画的原始速度乘以这个数字）</td></tr>
+    <tr>
+        <td style="border-image: none; cursor: help;">可选</td>
+        <td style="border-image: none; cursor: help;">回调函数</td>
+        <td style="border-image: none; cursor: help;">() =&gt; void</td>
+        <td style="border-image: none; cursor: help;">动画结束时调用的函数（同样取决于BABYLON.Animation.ANIMATIONLOOPMODE）</td></tr>
+    <tr>
+        <td style="border-image: none; cursor: help;">可选</td>
+        <td style="border-image: none; cursor: help;">animatable
+            （动画特征）</td>
+        <td><a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/Animatable">Animatable</a></td>
+        <td style="border-image: none; cursor: help;">一个可选的动画句柄?</td></tr></tbody></table>
+<hr>
+
+<p style="border-image: none; cursor: help;">这个方法返回一个<code style="border-image: none; cursor: help;">BABYLON.Animatable</code> 对象（上文提到的动画对象是BABYLON.Animation），你可以使用这个动画句柄对象获取到（和box1关联的）某个特定动画对象（比如使用）
+    <code style="border-image: none; cursor: help;">getAnimationByTargetProperty</code> 方法).</p>
+<p style="border-image: none; cursor: help;">这个<code style="border-image: none; cursor: help;">BABYLON.Animatable</code>对象也支持下列方法:</p>
+<ul>
+    <li><code style="border-image: none; cursor: help;">pause()</code></li>
+    <li><code style="border-image: none; cursor: help;">restart()</code></li>
+    <li><code style="border-image: none; cursor: help;">stop()</code></li>
+    <li><code style="border-image: none; cursor: help;">reset()</code></li></ul>
+<p style="border-image: none; cursor: help;">通过将动画对象设置到一个引用，例如一个变量来控制前面的动画:（这里的newAnimation 是 BABYLON.Animatable对象）</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">var newAnimation = scene.beginAnimation(box1, 0, 100, true);
+</code></pre>
+<p style="border-image: none; cursor: help;">然后可以暂停它:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">newAnimation.pause();
+</code></pre>
+<p style="border-image: none; cursor: help;">这些命令将对Animatable's ._animations 数组中的每一个animation 对象起作用。你也可以获取到当前运行的<code style="border-image: none; cursor: help;">BABYLON.Animatable</code> 对象通过使用
+    <code style="border-image: none; cursor: help;">scene.getAnimatableByTarget()</code>作用于目标对象（box1）.</p>
+<p style="border-image: none; cursor: help;">你做到了!我们现在完成了box1的x轴缩放动画。也许现在你想要为box1.scaling.y做一个动画，并且肆意的移动box1.不要犹豫去把多个动画组合到一个网格对象上。。。通过建立更多的对象动画并把它们push到这个网格对象的
+    <em style="border-image: none; cursor: help;">animation</em> 属性里. ;)</p>
+<h2 style="border-image: none; cursor: help;"><a name="controlling-animations" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#controlling-animations"></a>控制动画</h2>
+<p style="border-image: none; cursor: help;">每个动画对象都有一个属性叫做<code style="border-image: none; cursor: help;">currentFrame</code> 指明了当前动画对象的关键值.</p>
+<p style="border-image: none; cursor: help;">为了建立更高级的关键帧动画，你也可以自己定义在两个关键帧之间插值（interpolate ）的方法。默认情况下这些方法是这样的：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">BABYLON.Animation.prototype.floatInterpolateFunction = function (startValue, endValue, gradient) {
+    return startValue + (endValue - startValue) * gradient;
+    };
+
+    BABYLON.Animation.prototype.quaternionInterpolateFunction = function (startValue, endValue, gradient) {
+    return BABYLON.Quaternion.Slerp(startValue, endValue, gradient);
+    };
+
+    BABYLON.Animation.prototype.vector3InterpolateFunction = function (startValue, endValue, gradient) {
+    return BABYLON.Vector3.Lerp(startValue, endValue, gradient);
+    };
+</code></pre>
+<h2 style="border-image: none; cursor: help;"><a name="helper-function" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#helper-function"></a>辅助功能</h2>
+<p style="border-image: none; cursor: help;">你可以使用一个扩展功能来快速建立动画:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">Animation.CreateAndStartAnimation = function(name, mesh, tartgetProperty, framePerSecond, totalFrame, from, to, loopMode);
+</code></pre>
+<p style="border-image: none; cursor: help;">为了能够使用这个方法，你需要知道 :</p>
+<ul>
+    <li style="border-image: none; cursor: help;">你的动画需要具有预定义的关键帧（只会生成两个关键帧：<strong style="border-image: none; cursor: help;">开始</strong> 和<strong style="border-image: none; cursor: help;">截止</strong>)</li>
+    <li style="border-image: none; cursor: help;">这种动画只能应用于<strong style="border-image: none; cursor: help;">抽象网格</strong> 对象.</li>
+    <li style="border-image: none; cursor: help;">这个动画在调用上述方法后立即执行.</li></ul>
+<p style="border-image: none; cursor: help;">这里是一个直接简单实用
+    <strong style="border-image: none; cursor: help;">CreateAndStartAnimation()</strong>方法的例子 :</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">BABYLON.Animation.CreateAndStartAnimation('boxscale', box1, 'scaling.x', 30, 120, 1.0, 1.5);
+</code></pre>
+<p style="border-image: none; cursor: help;">快速并且容易. :)</p>
+<h2 style="border-image: none; cursor: help;"><a name="animation-blending" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#animation-blending"></a>动画合成</h2>
+<p style="border-image: none; cursor: help;">在Babylon.js 2.3+版本中,你可以在地洞动画时带上
+    <em style="border-image: none; cursor: help;">enableBlending</em> = true.  这个合成的动画将会从物体当前的状态开始变化。这个功能在控制行走的角色时将会有用，或者用来响应输入设备带来的值变化。</p>
+<p style="border-image: none; cursor: help;">在下面的playground示例中，每次你点击FPS标记时，新的动画都将和立方体当前的位置合成。</p>
+<p><a style="border-image: none; cursor: help;" href="http://www.babylonjs-playground.com/#2BLI9T#2">http://www.babylonjs-playground.com/#2BLI9T#2</a>
+    - <i class="fa fa-eye" onclick="createIframe('2BLI9T#2', this)"></i><br>
+<div class="iframeContainer"></div><br>
+<p></p>
+<p style="border-image: none; cursor: help;">虽然这个playg示例只是合成同样的动画到它自身上，但通常，一个不同的动画将会合成到原动画之中，比如一个行走的角色开始奔跑。</p>
+<h2 style="border-image: none; cursor: help;"><a name="easing-functions" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#easing-functions"></a>平滑函数</h2>
+<p style="border-image: none; cursor: help;">你可以给你的动画添加一些行为，通过使用“平滑函数”。如果你想要更多关于平滑函数的信息，这里是一些有用的链接：（平滑函数决定了两关键帧之间插值的方法，默认情况下使用的是“线性插值”方法，即第0帧时在0位置第10帧时在10位置，则第1帧在1位置、第2帧在2位置依次平分，使用平滑函数的“非线性插值”则是使用预制的函数方法算出每一帧的插值位置）</p>
+<ul>
+    <li><a style="border-image: none; cursor: help;" href="http://msdn.microsoft.com/en-us/library/ee308751.aspx">MSDN平滑函数文档</a></li>
+    <li><a style="border-image: none; cursor: help;" href="http://easings.net/fr">平滑函数“欺骗单”</a></li></ul>
+<p style="border-image: none; cursor: help;">Babylonjs实现了这些平滑函数来允许你将自定义的数学公式应用到你的动画中。</p>
+<p style="border-image: none; cursor: help;">这里是你可以使用的预定义的平滑函数 : </p>
+<ul>
+    <li><code style="border-image: none; cursor: help;">BABYLON.CircleEase()</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.BackEase(amplitude)</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.BounceEase(bounces, bounciness)</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.CubicEase()</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.ElasticEase(oscillations, springiness)</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.ExponentialEase(exponent)</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.PowerEase(power)</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.QuadraticEase()</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.QuarticEase()</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.QuinticEase()</code></li>
+    <li><code style="border-image: none; cursor: help;">BABYLON.SineEase()</code></li></ul>
+<p style="border-image: none; cursor: help;">你可以使用<strong style="border-image: none; cursor: help;">EasingMode</strong>属性来设置平滑函数的行为，也就是改变动画的插值方式。这里有三种可能的EasingMode 的值。</p>
+<ul>
+    <li style="border-image: none; cursor: help;"><code style="border-image: none; cursor: help;">BABYLON.EasingFunction.EASINGMODE_EASEIN</code> : 插值遵循平滑函数相关的数学公式。</li>
+    <li style="border-image: none; cursor: help;"><code style="border-image: none; cursor: help;">BABYLON.EasingFunction.EASINGMODE_EASEOUT</code> : 按照平滑函数相关的数学公式输出值的负值插值（？）</li>
+    <li style="border-image: none; cursor: help;"><code style="border-image: none; cursor: help;">BABYLON.EasingFunction.EASINGMODE_EASEINOUT</code> : 前一半按公式插值，后一半按公式的负值插值.</li></ul>
+<p style="border-image: none; cursor: help;">这是一个直观的例子使得一个圆环按照
+    <code style="border-image: none; cursor: help;">CirleEase</code> 平滑函数移动 :</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">//创建一个每秒30帧的向量动画
+    var animationTorus = new BABYLON.Animation("torusEasingAnimation", "position", 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+    // 定义圆环的目标位置
+    var nextPos = torus.position.add(new BABYLON.Vector3(-80, 0, 0));
+
+    // 动画关键帧
+    var keysTorus = [];
+    keysTorus.push({ frame: 0, value: torus.position });
+    keysTorus.push({ frame: 120, value: nextPos });
+    animationTorus.setKeys(keysTorus);
+
+    // 建立一个平滑函数
+    var easingFunction = new BABYLON.CircleEase();
+
+    // 每一个平滑函数都可以在三种模式中选择
+    easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+
+    // 把平滑函数加到动画里
+    animationTorus.setEasingFunction(easingFunction);
+
+    // 把这个动画加到圆环的动画列表里    torus.animations.push(animationTorus);
+
+    //最后，启动圆环上的动画，在0到120帧之间循环
+    scene.beginAnimation(torus, 0, 120, true);
+</code></pre>
+<p style="border-image: none; cursor: help;">你也可以使用贝塞尔曲线来作为平滑函数，通过使用
+    <strong style="border-image: none; cursor: help;">BezierCurveEase(x1, y1, x2, y2)</strong> 方法。为此，这里有一个创建曲线算法的好参考 : <a style="border-image: none; cursor: help;" href="http://cubic-bezier.com/">http://cubic-bezier.com/</a></p>
+<p style="border-image: none; cursor: help;">这是一个非常炫酷的使用贝塞尔曲线算法的例子 :</p>
+<p><img alt="" src="../IMAGE/06-10/bezier.jpg"></p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">var bezierEase = new BABYLON.BezierCurveEase(0.32, -0.73, 0.69, 1.59);
+</code></pre>
+<p style="border-image: none; cursor: help;">最后, 你可以扩展<strong style="border-image: none; cursor: help;">平滑函数</strong>来建立你自己的平滑函数，比如这样:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">var FunnyEase = (function (_super) {
+    __extends(FunnyEase, _super);
+    function FunnyEase() {
+    _super.apply(this, arguments);
+    ;}
+    FunnyEase.prototype.easeInCore = function (gradient) {
+    // Here is the core method you should change to make your own Easing Function
+    // Gradient is the percent of value change
+    return Math.pow(Math.pow(gradient, 4), gradient);
+
+    };
+    return FunnyEase;
+    })(BABYLON.EasingFunction);
+</code></pre>
+<p style="border-image: none; cursor: help;">你可以找到一个平滑曲线行为的完整例子，在playground中: <a href="http://babylonjs-playground.azurewebsites.net/?20"><strong style="border-image: none; cursor: help;">Easing function
+    playground</strong></a></p>
+<h2 style="border-image: none; cursor: help;"><a name="complex-animation" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#complex-animation"></a>复杂动画</h2>
+<p style="border-image: none; cursor: help;">复杂动画功能让你可以在动画的每一帧里选择一切。这些在运行时计算的代码必须放置在这个方法中：</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">scene.registerBeforeRender(function () {
+    //Your code here
+    });
+</code></pre>
+<p style="border-image: none; cursor: help;">这个功能在游戏之类的复杂动画里将会非常有用，在那里角色必须根据多个参数决定如何移动。</p>
+<p style="border-image: none; cursor: help;">不要犹豫是否能把所有这些种类的动画合并在一起。没问题，它非常给力.</p>
+<p style="border-image: none; cursor: help;">不要忘了<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/">访问我们的API文档</a>来了解更多关于<a href="http://doc.babylonjs.com/classes/Animation"><strong style="border-image: none; cursor: help;">Babylon.js
+    Animation</strong></a>和<a href="http://doc.babylonjs.com/classes/Animatable"><strong style="border-image: none; cursor: help;">Babylon.js
+    Animatable</strong></a>的课程.</p>
+<h2 style="border-image: none; cursor: help;"><a name="attach-events-to-animations" class="anchor" href="http://doc.babylonjs.com/tutorials/Animations#attach-events-to-animations"></a>把事件绑定到动画上</h2>
+<p style="border-image: none; cursor: help;">从Babylonsj2.3版开始，你可以把
+    <a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/classes/AnimationEvent">动画事件</a>绑定到动画的某些帧上.</p>
+<p style="border-image: none; cursor: help;">一个动画事件是一个将会在设定的帧被调用的方法.</p>
+<p style="border-image: none; cursor: help;">做这件事是非常简单的:</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">// 建立一个动画事件需要三个参数:
+    // - 触发事件的帧
+    // - 执行的行为
+    // - 一个布尔值说明这个事件是否只执行一次（默认为false）
+    var event1 = new BABYLON.AnimationEvent(50, function() { console.log("Yeah!"); }, true);
+    //把事件绑定到动画上
+    animation.addEvent(event1);
+</code></pre>
+<p style="border-image: none; cursor: help;">就是这样!</p>
+<p><strong style="border-image: none; cursor: help;">下一步</strong></p>
+<p style="border-image: none; cursor: help;">你的场景现在变得具有活力了，并且你所有的网格都可以向着所有方向移动！体会一下在不同物体上尝试不同动画的自由，然后回来学习<a href="http://doc.babylonjs.com/tutorials/Sprites"><strong style="border-image: none; cursor: help;">精灵</strong></a>.</p></div></div>
+</div>
+
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<footer class="footer"><div class="footer-item"><a style="border-image: none; cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>    Forum</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>    Github</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>    Contribute</a></div></footer>
+<div style="position: static; width: 0px; height: 0px; border: none; padding: 0px; margin: 0px;"><div id="trans-tooltip"><div id="tip-left-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-top.png);"></div><div id="tip-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-top.png) repeat-x;"></div><div id="tip-right-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-top.png);"></div><div id="tip-right" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right.png) repeat-y;"></div><div id="tip-right-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-bottom.png);"></div><div id="tip-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-bottom.png) repeat-x;"></div><div id="tip-left-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-bottom.png);"></div><div id="tip-left" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left.png);"></div><div id="trans-content"></div></div><div id="tip-arrow-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-bottom.png);"></div><div id="tip-arrow-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-top.png);"></div></div>
+
+<!--@@下面是工具脚本@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<div id="div_hidden" style="display: none">
+    <div id="div_mod1">
+        <div class="div_inmod1" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px" >
+            <button onclick="ExportHtml()" style="margin-left: auto;margin-right: auto;float: left;position: relative;left: 10px">导出网页</button>
+        </div>
+    </div>
+    <div id="div_mod2">
+        <div class="div_inmod2" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid">
+                <BUTTON title="点击关闭对话框" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAABbSURBVDhPY3zw5v9/BjIAE5QmGVBHY3jXMTBGB9jEsdqIrAibQSCAETi4FK4ss4KyIADDRnQFIIBNjHqhis2p2MQwQhUGQM5DdiK6ZqxORdaAzX8gMGSSHAMDANOtJxQi19d5AAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击确定修改" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMFSURBVHjaYvz//z8DJQAgAINxcAQgCANA8MgQlRkefrUDLZM6LBQSAd3XxlxOZofYNtQTWhMWOqYVxHjVsdWY0gj/x+Iw7NqP/KByfwKIiSTrQI79/TtBXVlqV6S1hZUAK98/gAAi2gCgV0X/MTHMdrfQm1/r6Shz8drzfw/uvEoECCCW/wz/FYHB8A2o5iUOnQz//vwz4xbjnJ/soqUVoKHM0LH7PMOx0w8yGbmZNgEEEIuQCO/VX7//3fz8+I8PGwPDUxS9//6z/vj7J1VOTbCnwseY00ZcgKF853mGXQcf1DOxs8xiYPzHABBATHzM3J99HBQNuAXZVv7+808IrJMRGE5//2v85WBY5uaoNHVqmAenlbgkQ+Oeawy79j7vZ/vP0sTABIk9gABienbn+0wJBjGG7EAra0YuhnX//jEw/vn9z5VXnGVXarBBSIOrO4M4Dw9D78FLDNu2v1zF/pu5nAEp5AACAEEAvv8DBjAZ5u70+2RxSUoEBw3+H8fX4mUiKg1hdlc6FEoiMwD4/vMAn8nQAK6t6bgA+v1dAAf89/wE+gD9BvkA/wf8AAIAQQC+/wMQMCHw7e73HRUcCDNXMDwBCBn3DlM2LgUqDyMA7vzpALHU0wCxquzRAfIBWQUFAuwD/QQABf0GAAb7CQAG+QoAAgBBAL7/AxAvIv/99AX78gHvWy8nFwEwFiQAA/8DAO/96gC/3dYArqXx4P/tAU0GBwHgBfwGAAb8CAAI+QwACPYPAAn0EAACiFlIQ5uB9Q/H4y+f/1nxq35V4mFnYfj0/xXD6Sf3GLYu/f7m91OWACaO31f+M/+DeJoRGPEgzPQPjAECiInjFzsD5z+2n4zP+LaePv2e4TnjHYaLr+4z7Fz668uv21wxzMwMp/ElMIAAYmL+y84Awhz/2Be9PsP98MTt5wxHVzH/+n5ZIBuoeSehFAoQQMwSakbAKGVmYGJk/M70jUPszW0eix/XeesYmP9M+8/2h+Ef82+G/yzADAT2AiOGAQABxEhpdgYIMABQrSEzlY7wIwAAAABJRU5ErkJggg==") no-repeat;border: 0px;vertical-align:top' onclick="ChangeValue();DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击恢复上一历史状态" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMiSURBVHjaYvz//z8DJQAggFhABCNjD5D8A8T/gBygECszA8OvvwwMTP8txJUFZv3lYuF4++GnOyMTw/3///4x/Aep42dj+H8xgwEggJiwGvvrryiQ7PYL1Ty6YYW/rp2ppPT/t9+E/v34zfD/z18UpQABxIKh+f9fJxFR3gmdXXa6ibE6DIzMTAy/fv39wfDzz1cGLhaQc4FqEMoBAgjJgP9AmX/Fzi6qTTMmO3PyKIowLLn+nyFI5Q8D86+/PGwsTC1MHMwfGFiYWBhYGFh/MTHeBWqqAwggRlAgMjJ2gdzdm5FuWjR1kiPD+fdsDG2HGRgEWX4xzPH5x3Dj1nuGZ6+/M7CxAe0Aop9Au1rnXWTYN9ufESCAoC74W5qXa140cZILw6qbjAxLLvxn+An0LzvLd4apB38zcHGwA73CwvDt408GdsY/DNH2ogzKktzgwAAIILABpsZS9e3tdgwrbjEyLDj7n4Hj/y8G1t8/GF58+M4w5+53hh9ffzD8+Pyd4dPHrwwCbH8YrFU4GP7+/Qe2GiAASWSUAgAIg1CJdf+71tYWLUrKb32gPoDUIsLrdAJOM04gnSENjGaY9iHWlTU2cuUfk7oCCGzAyVNPuhsbj9W0ttoxfH3/h2HR0a8M/37+YhAAhoGXJisDO9D5//9wMHz5zMHAyfyPQUyAjYEZop8BIIDABvz7x9TY1n5ECphGktrbrBik2H8xVK14x8DP+4+hMUCW4eWbnwyvP/5gYGbiAcbgf4a7z78xPH79nRmkFyCAoIHI9Ifh/7+0jo4jr+7ce1c8baId67JsKYbFu54zfPzxn6Gi7czvnVvuHmQU5fwMjELm/8wMbD9YGR+AdAIEEFI6YAKG6v/KNauunT975mVbf7+tcneiHMP3n/8Yvv/++/nrtz85DN9+32QA2csCdD8PRCtAAGFJysyr7t/74BoYun1uWt4RhqcvvzOwc7KwAz3Nw/D3PzgdQMMPDAACCJqQuiEZCZxGgbKsQNNBaf7/f28FXZGpP9mZGF+8/OrMyMR45z/Qyv8sQHXcwIA9n8EAEECMlGZngAADALCEL2yqmxZQAAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="ReloadValue();DeleteWindow();" type=submit></BUTTON>
+            </div>
+            <textarea class="div_inmod2_content" style="width: 100%;height: 98px;overflow-x: hidden;margin:0;border: 0;padding:0" onchange=""></textarea>
+        </div>
+    </div>
+</div>
+<script src="../JS/MYLIB/MIN/Events.min.js"></script>
+<script src="../JS/MYLIB/MIN/FileText.min.js"></script>
+<script src="../JS/MYLIB/MIN/View.min.js"></script>
+<script>
+    var bbl_current_obj;
+    var bbl_style_temp;
+    var bbl_int_count2=0;
+    var bbl_arr_history=[];
+    window.onload=function()
+    {
+        delete_div("div_ExportHtml");
+        Open_div("","div_ExportHtml",100,80,0,0);
+        if(true)
+            return;
+        var div_ExportHtml=document.getElementById("div_ExportHtml");
+        div_ExportHtml.innerHTML=document.getElementById("div_mod1").innerHTML;
+        div_ExportHtml.style.position="fixed";
+        div_ExportHtml.style.right="0px";
+        div_ExportHtml.style.top="300px";
+        //div_ExportHtml.style.float="right";
+        var int_count=0;//为每一个可调整标签设置不同的tid属性
+        var arr_tags=["p","a","span","h1","h2","h3","h4","h5","li","td","th","code","strong","em"];
+        var leng=arr_tags.length;
+        for(var i=0;i<leng;i++)//对于每一种标签
+        {
+            var objs=document.getElementsByTagName(arr_tags[i]);
+            var leng2=objs.length;
+            for(var j=0;j<leng2;j++)//对于每一个标签
+            {
+                var children=objs[j].childNodes;
+                var leng3=children.length;
+                for(var k=0;k<leng3;k++)//寻找文本节点
+                {
+                    if(children[k].nodeName=="#text"&&children[k].textContent.Trim().length>2)
+                    {
+                        objs[j].tid="tid"+int_count;
+                        objs[j].style.cursor="help";
+                        objs[j].onmouseover=function()
+                        {
+                            bbl_style_temp=this.style.border;
+                            this.style.border="2px solid rgb(59, 203, 249)";
+                            bbl_current_obj=objs[j];
+                        }
+                        objs[j].onmouseout=function()
+                        {
+                            this.style.border=bbl_style_temp;
+                        }
+                        objs[j].onclick=function(){
+                            var evt=evt||window.event;
+                            cancelEvent(evt);
+                            cancelPropagation(evt);
+                            //alert(this.textContent);
+                            var arr_child=this.childNodes;
+                            var leng4=arr_child.length;
+                            //首先删除所有已经存在的对话框
+                            for(var l=0;l<bbl_int_count2;l++)
+                            {
+                                delete_div("div_inmod2_"+l);
+                            }
+                            bbl_int_count2=0;
+                            for(var l=0;l<leng4;l++)//对于其中的每一个文本节点，弹出修改对话框
+                            {
+                                if(arr_child[l].nodeName=="#text"&&arr_child[l].textContent.Trim().length>2)
+                                {
+                                    Open_div(this,"div_inmod2_"+bbl_int_count2,240,120,0+bbl_int_count2*250,0);
+                                    var div_inmod2=document.getElementById("div_inmod2_"+bbl_int_count2);//取出新添加的元素
+                                    div_inmod2.ttid=this.getAttribute("tid")?this.getAttribute("tid"):this.tid;//把被选择标签的全局标记交给弹出框
+                                    div_inmod2.tobj=this;
+                                    div_inmod2.textnum=l;//在文本框中记录，这个文本框对应的是标签的第几个子节点
+                                    div_inmod2.innerHTML=document.getElementById("div_mod2").innerHTML;
+                                    con_getElementsByClassName("div_inmod2_content",div_inmod2)[0].innerHTML=arr_child[l].textContent;//填入原有值，考虑标签嵌套问题//#text型标签没有innerhtml属性！！
+                                    bbl_int_count2++;//记下有多少个，后面删除所有对话框时使用
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    function DeleteWindow()
+    {//只删除掉点击关闭的这一个标签
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var str_id=obj.parentNode.parentNode.parentNode.id;
+        delete_div(str_id);
+    }
+    //写入修改后的标签值，并写入日志
+    function ChangeValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        //document.getElementsByTagName()
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var obj_text=obj.parentNode.parentNode.getElementsByTagName("textarea")[0];//输入的文本框
+        if(obj_text.innerHTML.trim().length<1)
+        {
+            alert("修改后的文本过短");
+        }
+        else {
+            var tobj = div_inmod2.getAttribute("tobj") ? div_inmod2.getAttribute("tobj") : div_inmod2.tobj;//取得该输入框对应的标签
+            var ttid = div_inmod2.getAttribute("tid") ? div_inmod2.getAttribute("tid") : div_inmod2.tid;//
+            var textnum = div_inmod2.getAttribute("textnum") ? div_inmod2.getAttribute("textnum") : div_inmod2.textnum;
+            //写日志
+            var arr_temp = [];
+            arr_temp.push(ttid + "&" + textnum);
+            arr_temp.push(tobj.childNodes[textnum].textContent);
+            bbl_arr_history.push(arr_temp);
+            //改值
+            tobj.childNodes[textnum].textContent = obj_text.innerHTML;
+        }
+    }
+    //根据日志恢复标签内容
+    function ReloadValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var tobj=div_inmod2.getAttribute("tobj")?div_inmod2.getAttribute("tobj"):div_inmod2.tobj;//取得该输入框对应的标签
+        var ttid=div_inmod2.getAttribute("tid")?div_inmod2.getAttribute("tid"):div_inmod2.tid;//
+        var textnum=div_inmod2.getAttribute("textnum")?div_inmod2.getAttribute("textnum"):div_inmod2.textnum;
+
+
+        var flag=0;//0表示没有找到，对应的日志记录
+        var leng=bbl_arr_history.length;
+        for(var i=leng-1;i>=0;i--)
+        {
+            var str=ttid+"&"+textnum;
+            if(bbl_arr_history[i][0]==str)//找到新的这一条
+            {
+                tobj.childNodes[textnum].textContent=bbl_arr_history[i][1];
+                bbl_arr_history.splice(i,1);//将日志里的这一条删除
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+        {
+            alert("没有日志记录！");
+        }
+    }
+    //以html格式导出网页
+    function ExportHtml()
+    {
+        DownloadText(MakeDateStr()+document.title,("<!DOCTYPE html><html>"+document.getElementsByTagName("html")[0].innerHTML+"</html>"));
+    }
+</script>
+
+</body>
+</html>

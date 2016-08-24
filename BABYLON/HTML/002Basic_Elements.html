@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>002Basic_Elements</title>
+    <link href="../CSS/normalize.min.css"  rel="stylesheet">
+    <link href="../CSS/slideout.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/github.css"  rel="stylesheet">
+    <link href="../CSS/font-awesome.min.css"  rel="stylesheet">
+    <link href="../CSS/perfect-scrollbar.min.css"  rel="stylesheet">
+    <link href="../CSS/main.css"  rel="stylesheet">
+</head>
+<body>
+<!--@@下面是翻译正文@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<nav class=" slideout-menu slideout-menu slideout-menu slideout-menu" id="menu"><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a><div class="searchbar-mobile searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div><a style="cursor: help;" href="/"><i class="fa fa-home"></i>Home</a><a style="cursor: help;" href="/whats-new"><i class="fa fa-file-text-o"></i>What's new?</a><a style="cursor: help;" href="/generals"><i class="fa fa-book"></i>Generals</a><a style="cursor: help;" href="/tutorials"><i class="fa fa-cogs"></i>Tutorials</a><a style="cursor: help;" href="/overviews"><i class="fa fa-book"></i>Overviews</a><a style="cursor: help;" href="/exporters"><i class="fa fa-rocket"></i>Exporters</a><a style="cursor: help;" href="/extensions"><i class="fa fa-wrench"></i>Extensions</a><a style="cursor: help;" href="/classes"><i class="fa fa-files-o"></i>Classes</a><a style="cursor: help;" href="/playground"><i class="fa fa-cubes"></i>Playground</a><a style="cursor: help;" href="http://www.babylonjs.com" target="_blank"><i class="fa fa-play"></i>babylonjs.com</a><a style="cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>Github</a><a style="cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>Contribute</a><a style="cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>Forum</a></nav>
+<nav class="nav-main"><!-- Hamburger menu : displayed only in small screens--><i class="fa fa-bars" id="mobilemenu"></i><!-- this button only shows on mobile version of a "class" page--><div class="banner"><div class="menu"><div class="do-not-hover" id="home"><a style="cursor: help;" href="/">Babylon.js | DOCUMENTATION</a></div><div class="item" id="whatsnew"><a style="border-image: none; cursor: help;" href="/whats-new">What's new</a></div><div class="item" id="general"><a style="border-image: none; cursor: help;" href="/generals">General</a></div><div class="item active" id="tutorials"><a style="cursor: help;" href="/tutorials">Tutorials</a></div><div class="item" id="overview"><a style="border-image: none; cursor: help;" href="/overviews">Overviews</a></div><div class="item" id="exporters"><a style="border-image: none; cursor: help;" href="/exporters">Exporters</a></div><div class="item" id="extensions"><a style="border-image: none; cursor: help;" href="/extensions">Extensions</a></div><div class="item" id="classes"><a style="border-image: none; cursor: help;" href="/classes">Classes</a></div><div class="item" id="playground"><a style="border-image: none; cursor: help;" href="/playground">Playground</a></div></div><div class="more"><div class="searchbar"><form action="/search" method="get"><input name="q" type="text" placeholder="Search..."><button type="submit"><i class="fa fa-search"></i></button></form></div></div></div></nav>
+<div class=" slideout-panel slideout-panel slideout-panel slideout-panel" id="wrapper"><div class="statics-banner"><h1 style="border-image: none; cursor: help;">教程</h1></div><div class="horizontal-separator"></div><div class="static-content"><h1 style="border-image: none; cursor: help;">研究基本元素</h1><br><div class="contentTable"><div class="tocHeader"><span class="tocTitle" style="border-image: none; cursor: help;"><i class="tocIcon fa fa-book"></i>内容列表</span><span class="tocToggle"><i class="fa fa-arrow-up"></i></span></div><div class="tocContent"><ul>
+    <li><a style="border-image: none; cursor: help;" href="#introduction">介绍</a></li>
+    <li><a style="border-image: none; cursor: help;" href="#how-can-i-do-this">怎样做 ?</a><ul>
+        <li><a style="border-image: none; cursor: help;" href="#updatable">可修改的</a></li>
+        <li><a style="border-image: none; cursor: help;" href="#side-orientation">边的朝向</a><ul>
+            <li><a style="border-image: none; cursor: help;" href="#more-basic-elements-grounds">更基本的元素——平面</a></li>
+        </ul>
+        </li>
+    </ul>
+    </li>
+    <li><a style="border-image: none; cursor: help;" href="#wrapping-up">总结</a></li>
+    <li><a style="border-image: none; cursor: help;" href="#next-step">下一步</a></li>
+</ul>
+</div></div><div id="staticContent"><h2 style="border-image: none; cursor: help;"><a name="introduction" class="anchor" href="#introduction"></a>简介</h2><p style="border-image: none; cursor: help;">在这篇教程中，我们讲学习怎样使用Babyl.js建立基础图形元素，比如立方体、球体、和平面。</p>
+    <p><img alt="Elements" src="../IMAGE/tut02pic.jpg"></p>
+    <p><a href="http://babylonjs-playground.azurewebsites.net/?2"><strong style="border-image: none; cursor: help;">Playground 示例场景2 - 七种基本形状/ 网格</strong></a></p>
+    <h2 style="border-image: none; cursor: help;"><a name="how-can-i-do-this" class="anchor" href="#how-can-i-do-this"></a>怎样做出这个场景?</h2><p style="border-image: none; cursor: help;">一个简单的开始使用基本图形元素的方法是访问<a href="http://babylonjs-playground.azurewebsites.net/?2"><strong style="border-image: none; cursor: help;">Playground 示例场景02</strong></a>。你可能希望使用顶部菜单中的'Get .zip'选项。你将在那个zip中得到index.html文件，它包含了创建这些基本图形元素所需的所有内容。请记住这个连接，我们以后将会讨论更多关于它的事。</p>
+    <p style="border-image: none; cursor: help;">我确定你已经阅读了<a href="http://doc.babylonjs.com/generals/A_Babylon.js_Primer"><strong style="border-image: none; cursor: help;">Babylon.js Primer</strong></a> 以及<a href="http://doc.babylonjs.com/tutorials/Creating_a_Basic_Scene"><strong style="border-image: none; cursor: help;">上一篇教程</strong></a>，因此你知道如何创建场景文件。所以我们不会在这里讨论那些内容，我们将一步一步的研究<a href="http://babylonjs-playground.azurewebsites.net/?2"><strong style="border-image: none; cursor: help;">Playground 示例场景02</strong></a>。在一个新的选项卡或窗口中打开那个连接，然后回到这里，让我们开始</p>
+    <p style="border-image: none; cursor: help;">从立方体开始，我们建立一系列的基本图形元素，然后在createScene方法的结尾部分对它们进行定位（让它们上下排列）。现在让我们来研究其中的每一个基本形状/网格。</p>
+    <ul>
+        <li><p><strong style="border-image: none; cursor: help;">建立立方体</strong></p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> box = BABYLON.Mesh.CreateBox(<span class="hljs-string" style="cursor: help;">"box"</span>, <span class="hljs-number" style="cursor: help;">6.0</span>, scene, <span class="hljs-literal" style="border-image: none; cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+            <p style="border-image: none; cursor: help;">参数：网格对象名称，立方体的尺寸，网格所在的场景，是否可以更新？（如果这个网格在后面必须变化）和非必须的属性‘边的朝向’（在稍后详细介绍）。其中最后两个参数可以忽略，如果你只需要默认的行为。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> box = BABYLON.Mesh.CreateBox(<span class="hljs-string" style="border-image: none; cursor: help;">"box"</span>, <span class="hljs-number" style="cursor: help;">6.0</span>, scene);
+</code></pre>
+        </li>
+        <li><p><strong style="border-image: none; cursor: help;">建立球体</strong></p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> sphere = BABYLON.Mesh.CreateSphere(<span class="hljs-string" style="cursor: help;">"sphere"</span>, <span class="hljs-number" style="cursor: help;">10.0</span>, <span class="hljs-number" style="cursor: help;">10.0</span>, scene, <span class="hljs-literal" style="cursor: help;">false</span>,  BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+            <p style="border-image: none; cursor: help;">参数：名称，圆弧细分度（更高的细节或者相反），尺寸，网格所在的场景，是否可以更新？边的朝向。其中后两个参数可以省略。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> sphere = BABYLON.Mesh.CreateSphere(<span class="hljs-string" style="cursor: help;">"sphere"</span>, <span class="hljs-number" style="border-image: none; cursor: help;">10.0</span>, <span class="hljs-number" style="cursor: help;">10.0</span>, scene);
+</code></pre>
+            <p style="border-image: none; cursor: help;">注意把分段数调整为尺寸大小 ;)</p>
+        </li>
+        <li><p><strong style="border-image: none; cursor: help;">建立平面</strong></p>
+        </li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> plane = BABYLON.Mesh.CreatePlane(<span class="hljs-string" style="border-image: none; cursor: help;">"plane"</span>, <span class="hljs-number" style="cursor: help;">10.0</span>, scene, <span class="hljs-literal" style="border-image: none; cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数：名称，尺寸，网格所在的场景，是否可以更新？边的朝向。其中后两个参数可以省略。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> plane = BABYLON.Mesh.CreatePlane(<span class="hljs-string" style="cursor: help;">"plane"</span>, <span class="hljs-number" style="border-image: none; cursor: help;">10.0</span>, scene);
+</code></pre>
+    <ul>
+        <li><p><strong style="border-image: none; cursor: help;">建立一个圆盘（或者一个正多边形）</strong></p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> disc = BABYLON.Mesh.CreateDisc(<span class="hljs-string" style="cursor: help;">"disc"</span>, <span class="hljs-number">5</span>, <span class="hljs-number">30</span>, scene, <span class="hljs-literal" style="cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+            <p style="border-image: none; cursor: help;">参数：名称，半径，边数，场景，是否可修改，边朝向。最后两个参数可以省略。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> disc = BABYLON.Mesh.CreateDisc(<span class="hljs-string" style="border-image: none; cursor: help;">"disc"</span>, <span class="hljs-number">5</span>, <span class="hljs-number">30</span>, scene);
+</code></pre>
+            <p style="border-image: none; cursor: help;">通过调整<em style="border-image: none; cursor: help;">边数</em>值，你可以获得一些正多边形<br>3 获得一个三角形,<br>4 一个四边形,<br>5 一个五边形,<br>6 一个六边形, 7 一个七边型, 8 一个八变形, 等等.</p>
+        </li>
+        <li><p><strong style="border-image: none; cursor: help;">建立一个圆柱体</strong></p>
+        </li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> cylinder = BABYLON.Mesh.CreateCylinder(<span class="hljs-string" style="cursor: help;">"cylinder"</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">1</span>, scene, <span class="hljs-literal" style="cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数：名称，高度，顶部直径，底部直径，边数，高度细分（指椎体情况下的光滑度？），场景，是否可修改，边朝向，最后两个参数可以省略。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> cylinder = BABYLON.Mesh.CreateCylinder(<span class="hljs-string" style="cursor: help;">"cylinder"</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">1</span>, scene);
+</code></pre>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">建立一个环面</strong></li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> torus = BABYLON.Mesh.CreateTorus(<span class="hljs-string" style="cursor: help;">"torus"</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10</span>, scene, <span class="hljs-literal" style="cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数：名称，直径，厚度，细分度，场景，是否可修改，边朝向。最后两个参数可以省略。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> torus = BABYLON.Mesh.CreateTorus(<span class="hljs-string" style="cursor: help;">"torus"</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10</span>, scene);
+</code></pre>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">建立一个“管结”</strong></li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> knot = BABYLON.Mesh.CreateTorusKnot(<span class="hljs-string" style="cursor: help;">"knot"</span>, <span class="hljs-number">2</span>, <span class="hljs-number" style="cursor: help;">0.5</span>, <span class="hljs-number" style="cursor: help;">128</span>, <span class="hljs-number">64</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, scene, <span class="hljs-literal" style="cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数：名称，半径，“管”，“径向段数”，“管段数”，p，q，场景，是否可修改，边朝向，最后两个参数可以省略。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> knot = BABYLON.Mesh.CreateTorusKnot(<span class="hljs-string" style="cursor: help;">"knot"</span>, <span class="hljs-number">2</span>, <span class="hljs-number" style="cursor: help;">0.5</span>, <span class="hljs-number" style="cursor: help;">128</span>, <span class="hljs-number">64</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">你可以了解更多关于管节的知识通过<a href="http://en.wikipedia.org/wiki/Torus_knot"><strong style="border-image: none; cursor: help;">这里</strong></a>.</p>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">建立一个线网格</strong></li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> lines = BABYLON.Mesh.CreateLines(<span class="hljs-string" style="cursor: help;">"lines"</span>, [
+    <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(-<span class="hljs-number">10</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>),
+    <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">10</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>),
+    <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">10</span>),
+    <span class="hljs-keyword" style="cursor: help;">new</span> BABYLON.Vector3(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">10</span>)
+    ], scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数：名称，[用逗号分隔的向量]，场景（在WebGL中向量和点的区别是很模糊的，有的时候向量单纯表示方向，有的时候向量表示空间点相对于原点的位置）</p>
+    <p style="border-image: none; cursor: help;">我可以解释这个线网格构造器是如何工作的，但是我认为你只通过阅读上面的示例代码就可以理解它是如何工作的。注意那两个中括号，他们表示了一个数组，这是JavaScript的一种独特的数据类型。其中的第一个vector3对象是画线的起始点，然后一个逗号，然后下一个vector3位置。你可以加入任意多的点，但是请注意最后一个vector3的后面没有逗号。请用类似的方法构造你自己vector3数组。</p>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">建立一个虚线网格</strong></li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> dashedlines = BABYLON.Mesh.CreateDashedLines(<span class="hljs-string" style="cursor: help;">"dashedLines"</span>, [v1, v2, ... vn], dashSize, gapSize, dashNb, scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数：名称，vector3数组，短实线尺寸，空白尺寸，短实线数，场景<br>像上面的线网格一样，一条沿着vector3的线将会被绘制出来。<em style="border-image: none; cursor: help;">？</em> 它将试着在每两个连续的点之间的线段上分出“短实线数”段的虚线<br><em style="border-image: none; cursor: help;">短实线尺寸</em>和<em style="border-image: none; cursor: help;">空白尺寸</em> 是一个相对的比例  </p>
+    <p style="border-image: none; cursor: help;">你也可能产生兴趣在我们的新<a style="border-image: none; cursor: help;" href="http://doc.babylonjs.com/tutorials/Mesh_CreateXXX_Methods_With_Options_Parameter#linesystem">线系统</a>.</p>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">建立一个带状物</strong></li>
+    </ul>
+    <p style="border-image: none; cursor: help;">带状物是什么?  </p>
+    <p style="border-image: none; cursor: help;">首先，想象一系列连续的点定义了一条路径<br>然后，想象另一系列连续的点定义了另一条路径。<br>现在，如果你通过交叉使用两条路径上的点构建三角形，  就像穿鞋带一样，你就得到了一个带状物。（这个与Three.js中的“三角形带”定义不同）</p>
+    <p style="border-image: none; cursor: help;">你的路径没有必要并行，<br>它们甚至不需要在同一个平面内。无论你怎样设定，这个带状物都会忠实的按照设定的路径生成。</p>
+    <p style="border-image: none; cursor: help;">现在，想象一下，你不只有两条路径，而是有多条连续的路径。<br>这样生成的完整的带状物将是由其中的所有的路径组成的面连接起来组成的面。（就像被风吹动的旗帜）</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> ribbon = BABYLON.Mesh.CreateRibbon(<span class="hljs-string" style="cursor: help;">"ribbon"</span>, [path1, path2, ..., pathn], <span class="hljs-literal" style="border-image: none; cursor: help;">false</span>, <span class="hljs-literal" style="cursor: help;">false</span>, <span class="hljs-number">0</span>, scene, <span class="hljs-literal" style="cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数：名称，路径数组，‘关闭数组’，‘关闭路径’，‘偏移’，场景，是否可修改，边朝向。</p>
+    <ul>
+        <li style="border-image: none; cursor: help;">名称：一个字符串，是你给这个形状起的名字。</li>
+        <li style="border-image: none; cursor: help;">路径数组：一个由路径组成的数组，其中的每一条路径是由<em style="border-image: none; cursor: help;">Vector3</em>组成的数组。你至少需要一个路径来组成一个带状物，并且每个路径必须包含至少四个<em style="border-image: none; cursor: help;">Vector3</em>,</li>
+        <li style="border-image: none; cursor: help;">（是否）关闭数组：布尔类型，如果为真，则第一条路径和最后一条路径之间也要连成三角形带。<em style="border-image: none; cursor: help;">。</em>,</li>
+        <li style="border-image: none; cursor: help;">（是否）关闭路径：布尔类型，如果为真，则每一个<em style="border-image: none; cursor: help;">路径</em>的最后一个点要和该路径的第一个点连起来。</li>
+        <li style="border-image: none; cursor: help;">偏移 : 整数(默认是一半的<em style="border-image: none; cursor: help;">路径</em> 尺寸) 只在<em style="border-image: none; cursor: help;">路径数组</em>只含有一条路径时生效。这时的带状物将由单路径上的每一点加上偏移量组成的路径和原路径组合而成。如果<em style="border-image: none; cursor: help;">路径数组</em>中含有多条路径，则这个参数将被忽略。</li>
+        <li style="border-image: none; cursor: help;">场景 : 当前的场景对象,</li>
+        <li style="border-image: none; cursor: help;">是否可修改 : 布尔值，表示这个带状物后期是否可被修改。</li>
+        <li style="border-image: none; cursor: help;">边朝向 : 绘制面的哪一边，可取值：BABYLON.Mesh.FRONTSIDE / BACKSIDE / DOUBLESIDE / DEFAULT（分别表示：只绘制正面，只绘制背面，两面都绘制，默认）</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">使用默认行为时最后两个参数可以忽略 :</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> ribbon = BABYLON.Mesh.CreateRibbon(<span class="hljs-string" style="border-image: none; cursor: help;">"ribbon"</span>, [path1, path2, ..., pathn], <span class="hljs-literal" style="cursor: help;">false</span>, <span class="hljs-literal" style="cursor: help;">false</span>, <span class="hljs-number">0</span>, scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">如果你需要关于如何使用这个方法的更多细节，你可以阅读<a href="http://doc.babylonjs.com/tutorials/Parametric_Shapes"><strong style="border-image: none; cursor: help;">参数化形状</strong></a>部分。</p>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;"> 建立一个管状物</strong></li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> tube = BABYLON.Mesh.CreateTube(<span class="hljs-string" style="border-image: none; cursor: help;">"tube"</span>, [V1, V2, ..., Vn], radius, tesselation, radiusFunction, cap, scene, <span class="hljs-literal" style="cursor: help;">false</span>, BABYLON.Mesh.DEFAULTSIDE);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数 : 名称，路径，半径，曲面细分度，可选的半径函数，帽子，场景，是否可修改，边朝向。</p>
+    <ul>
+        <li style="border-image: none; cursor: help;">名称 : 字符串，管状网格的名称，</li>
+        <li style="border-image: none; cursor: help;">路径 : 一个由连续的Vector3组成的数组, 最少有两个Vector3,</li>
+        <li style="border-image: none; cursor: help;">半径 : 数字类型,管的半径,在 <em style="border-image: none; cursor: help;">半径函数</em>参数为空时使用，<em style="border-image: none; cursor: help;">？</em>,</li>
+        <li style="border-image: none; cursor: help;">曲面细分度 : 管状物的径向分段数，</li>
+        <li style="border-image: none; cursor: help;">半径函数 : <em style="border-image: none; cursor: help;">可选的</em>, 一个返回半径值的javascript函数。这个参数可以为<em style="border-image: none; cursor: help;">null</em>,</li>
+        <li style="border-image: none; cursor: help;">帽子 : 可取值：BABYLON.Mesh.NO_CAP, BABYLON.Mesh.CAP_START, BABYLON.Mesh.CAP_END, BABYLON.Mesh.CAP_ALL, （应该是指管状物是否封口） </li>
+        <li style="border-image: none; cursor: help;">是否可修改 : 布尔值，表示这个带状物后期是否可被修改。</li>
+        <li style="border-image: none; cursor: help;">边朝向：正面、背面或者双面。</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">使用默认行为时最后两个参数可以忽略 :</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> tube = BABYLON.Mesh.CreateTube(<span class="hljs-string" style="border-image: none; cursor: help;">"tube"</span>, [V1, V2, ..., Vn], radius, tesselation, radiusFunction, cap, scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">管状物也可以被当做<a href="http://doc.babylonjs.com/tutorials/Parametric_Shapes"><strong style="border-image: none; cursor: help;">参数化形状</strong></a>使用，通过设置半径函数。</p>
+    <h4 style="border-image: none; cursor: help;"><a name="updatable" class="anchor" href="#updatable"></a>是否可修改</h4><p style="border-image: none; cursor: help;">这个出现在每一个网格建立方法中的参数，表示网格是否可以在建立之后被修改。<br>如果为false（默认值），这个网格的数据将只向GPU发送一次。<br>如果为true，这个网格的数据将在每一帧刷新时被重新计算并发送到GPU。</p>
+    <h4 style="border-image: none; cursor: help;"><a name="side-orientation" class="anchor" href="#side-orientation"></a>边朝向</h4><p style="border-image: none; cursor: help;">在一个网格对象被建立时，一个边朝向取向被赋予它。<br>边朝向被用来设置网格每一面的可见性和/或光反射性。（只绘制一面可以节省性能）<br>这个参数有四个可能的值 :  </p>
+    <ul>
+        <li style="border-image: none; cursor: help;">BABYLON.Mesh.FRONTSIDE,</li>
+        <li style="border-image: none; cursor: help;">BABYLON.Mesh.BACKSIDE,</li>
+        <li style="border-image: none; cursor: help;">BABYLON.Mesh.DOUBLESIDE,</li>
+        <li style="border-image: none; cursor: help;">BABYLON.Mesh.DEFAULT which is the default value and equals FRONTSIDE currently.</li>
+    </ul>
+    <p style="border-image: none; cursor: help;">这个参数是可选的. 如果没有选, 则使用默认值.</p>
+    <p><em style="border-image: none; cursor: help;">(我们假设材质的backFaceCulling 属性被默认启用了)</em>  </p>
+    <p style="border-image: none; cursor: help;">例如,想象你建立了一个基本形状比如立方体，球体或者一个平面，并且你没有给他设置材质。<br>如果你移动到平面的后面或者移动到立方体或球体的里面，你将发现这些面不再可见了：Babylon.js的网格通常是默认使用<em style="border-image: none; cursor: help;">FRONTSIDE</em>的。这意味着每一面都只能在前面看<br>在这里尝试一下 : <a style="border-image: none; cursor: help;" href="http://www.babylonjs-playground.com/#14RNAU#4">http://www.babylonjs-playground.com/#14RNAU#4</a> - <i class="fa fa-eye" onclick="createIframe('14RNAU#4', this)"></i><br><div class="iframeContainer"></div><br>  <p></p>
+    <p style="border-image: none; cursor: help;">如果你为你的网格设置一个测试材质，并设置 <em style="border-image: none; cursor: help;">material.backFaceCulling = false;</em>, 然后设置好光照，你将发现图形的背面和里面变得可见，但是不能反射光线。原因在于：默认的边朝向仍然是<em style="border-image: none; cursor: help;">FRONTSIDE</em>.<br><em style="border-image: none; cursor: help;">(你可以覆盖材质的<em style="border-image: none; cursor: help;">backFaceCulling</em>属性通过设置<em style="border-image: none; cursor: help;">sideOrientation</em>属性)（注意“网格”指由三角形或四边形构成的形状，“纹理”则是指在形状表面附着的贴图，“材质”指平面对光照的反射程度）</em></p>
+    <p style="border-image: none; cursor: help;">现在，只通过改变 <em style="border-image: none; cursor: help;">sideOrientation</em>参数为<em style="border-image: none; cursor: help;">BABYLON.Mesh.BACKSIDE</em>.  (同时移除测试材质.)  你将只能看见图形的背面和里面。<br>在这里尝试一下 : <a style="border-image: none; cursor: help;" href="http://www.babylonjs-playground.com/#14RNAU#5">http://www.babylonjs-playground.com/#14RNAU#5</a> - <i class="fa fa-eye" onclick="createIframe('14RNAU#5', this)"></i><br><div class="iframeContainer"></div><br><p></p>
+    <p style="border-image: none; cursor: help;">如果你给网格设置了材质，你将发现现在光线只在图形的背面和里面反射<br><em style="border-image: none; cursor: help;">(你可以覆盖材质的 <em style="border-image: none; cursor: help;">backFaceCulling</em> 属性通过设置网格的<em style="border-image: none; cursor: help;">sideOrientation</em>属性)</em></p>
+    <p style="border-image: none; cursor: help;">最后，修改网格的<em style="border-image: none; cursor: help;">sideOrientation</em> 参数为<em style="border-image: none; cursor: help;">BABYLON.Mesh.DOUBLESIDE</em>.<br>像你预计的一样，现在这个网格的两面都是可见的。并且如果你给他设置一个材质，网格的两面都将可以反射光。<br>在这里尝试一下 : <a style="border-image: none; cursor: help;" href="http://www.babylonjs-playground.com/#14RNAU#6">http://www.babylonjs-playground.com/#14RNAU#6</a> - <i class="fa fa-eye" onclick="createIframe('14RNAU#6', this)"></i><br><div class="iframeContainer"></div><br>   <p></p>
+    <p style="border-image: none; cursor: help;">那么为什么不一直使用<em style="border-image: none; cursor: help;">BABYLON.Mesh.DOUBLESIDE</em> 作为默认值呢?  </p>
+    <p style="border-image: none; cursor: help;">因为这是将对网格每个表面的顶点进行两次创建。从另一方面讲，你的网格的负载将增大一倍。<br><em style="border-image: none; cursor: help;">(最好不要取消<em style="border-image: none; cursor: help;">backFaceCulling</em> 通过设置<em style="border-image: none; cursor: help;">BABYLON.Mesh.DOUBLESIDE</em>值)</em></p>
+    <h3 style="border-image: none; cursor: help;"><a name="more-basic-elements-grounds" class="anchor" href="#more-basic-elements-grounds"></a>更多的基本图形元素 - 地面</h3><p style="border-image: none; cursor: help;">到现在，我们已经讨论了在<a href="http://babylonjs-playground.azurewebsites.net/?2"><strong style="border-image: none; cursor: help;">Playground示例场景02</strong></a>中的所有图形元素, 但是仍然有几个重要的网格形状（基本图形元素）没有没包括在这个示例场景中。它们是在Babylon.js中建立“地面”的各种方法。让我们来看一下: </p>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">建立一个地面</strong></li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> ground = BABYLON.Mesh.CreateGround(<span class="hljs-string" style="border-image: none; cursor: help;">"ground"</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>, <span class="hljs-number">2</span>, scene);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数: 名称，宽度，深度，细分度，场景</p>
+    <p style="border-image: none; cursor: help;">我们在<a href="http://www.babylonjs-playground.com/?1"><strong style="border-image: none; cursor: help;">Playground 示例场景01</strong></a>中使用过一次CreateGround 构造函数，你可以点击链接重温那个示例。</p>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">通过“高度图”建立地面</strong></li>
+    </ul>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;"><span class="hljs-keyword" style="cursor: help;">var</span> ground = BABYLON.Mesh.CreateGroundFromHeightMap(<span class="hljs-string" style="border-image: none; cursor: help;">"ground"</span>, <span class="hljs-string" style="border-image: none; cursor: help;">"heightmap.jpg"</span>, <span class="hljs-number" style="border-image: none; cursor: help;">200</span>, <span class="hljs-number" style="border-image: none; cursor: help;">200</span>, <span class="hljs-number" style="border-image: none; cursor: help;">250</span>, <span class="hljs-number">0</span>, <span class="hljs-number">10</span>, scene, <span class="hljs-literal" style="cursor: help;">false</span>, successCallback);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数: 名称，高度图的文件路径，宽度，深度，细分度，最小高度，最大高度，场景，是否可修改，成功后的回调方法</p>
+    <p style="border-image: none; cursor: help;">高度图地面并不复杂，但是我们计划专门编写一篇教程来更详细的介绍这个Babylon.js的重要特性。请看这个连接<a href="http://doc.babylonjs.com/tutorials/Height_Map"><strong style="border-image: none; cursor: help;">HeightMap 教程</strong></a> 去学习更多关于高度图地面的知识。</p>
+    <ul>
+        <li><strong style="border-image: none; cursor: help;">建立一个“平铺”地面</strong></li>
+    </ul>
+    <p style="border-image: none; cursor: help;">感谢论坛用户Kostar111提供的这个方便的平铺地面构造方法。下面是建立一个平铺地面所需的基本代码。</p>
+<pre><code class="lang-javascript hljs" style="border-image: none; cursor: help;">
+    <span class="hljs-keyword" style="cursor: help;">var</span> precision = {
+    <span class="hljs-string" style="cursor: help;">"w"</span> : <span class="hljs-number">2</span>,
+    <span class="hljs-string" style="border-image: none; cursor: help;">"h"</span> : <span class="hljs-number">2</span>
+    };
+    <span class="hljs-keyword" style="border-image: none; cursor: help;">var</span> subdivisions = {
+    <span class="hljs-string" style="border-image: none; cursor: help;">'h'</span> : <span class="hljs-number">8</span>,
+    <span class="hljs-string" style="border-image: none; cursor: help;">'w'</span> : <span class="hljs-number">8</span>
+    };
+    <span class="hljs-keyword" style="cursor: help;">var</span> tiledGround = BABYLON.Mesh.CreateTiledGround(<span class="hljs-string" style="border-image: none; cursor: help;">"Tiled Ground"</span>, -<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, subdivisions, precision, scene, <span class="hljs-literal" style="border-image: none; cursor: help;">false</span>);
+</code></pre>
+    <p style="border-image: none; cursor: help;">参数: 名称，xmin，zmin，xmax，zmax，地块数，一个地块内的细分度，场景，是否可修改。</p>
+    <p style="border-image: none; cursor: help;">Kostar111 大方的给我们提供了一个非常好的平铺地面的使用教程。 <a href="http://makina-corpus.com/blog/metier/how-to-use-multimaterials-with-a-tiled-ground-in-babylonjs"><strong style="border-image: none; cursor: help;">点击这里</strong></a>来学习他。在那个连接中Kostar111 周到的解释了平铺地面是怎样工作的，并且提供了一些Babylon.js Playground 中的非常好的使用例子。</p>
+    <h2 style="border-image: none; cursor: help;"><a name="wrapping-up" class="anchor" href="#wrapping-up"></a>总结</h2>
+    <p style="border-image: none; cursor: help;">就是这样!现在你了解了我们所有的基本图形，以及它们的一些使用方法。保持关注这部分教程以了解最近会添加的新的基本图形元素，你可以在<a href="http://doc.babylonjs.com/tutorials/Mesh_CreateXXX_Methods_With_Options_Parameter"><strong style="border-image: none; cursor: help;">这里</strong></a>了解所有网格构造方法的参数.如果可以，请你自由的想象你自己的基本图形元素，并把你的想法在论坛上分享，帮助我们的基本图形库继续成长。  </p>
+    <h2 style="border-image: none; cursor: help;"><a name="next-step" class="anchor" href="#next-step"></a>下一步</h2><hr>
+    <p style="border-image: none; cursor: help;">我们发现，我们需要一点“定位”来确保我们的基本图形元素一个一个的位于它们所应该在的位置上，现在让我们来学习更多关于位置和移动的知识。准备好了？当然！（事实上作者说错了，关于位置和移动的教程是第六篇，下一篇教程讲的是材质）<a href="http://doc.babylonjs.com/tutorials/Materials"><strong style="border-image: none; cursor: help;">点击这里进入下一篇教程。</strong></a></p>
+    </div></div>
+</div>
+
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<footer class="footer"><div class="footer-item"><a style="border-image: none; cursor: help;" href="http://www.html5gamedevs.com/forum/16-babylonjs" target="_blank"><i class="fa fa-html5"></i>    Forum</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Babylon.js" target="_blank"><i class="fa fa-github"></i>    Github</a></div><div class="footer-item"><a style="border-image: none; cursor: help;" href="https://github.com/BabylonJS/Documentation" target="_blank"><i class="fa fa-code-fork"></i>    Contribute</a></div></footer>
+<div style="position: static; width: 0px; height: 0px; border: none; padding: 0px; margin: 0px;"><div id="trans-tooltip"><div id="tip-left-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-top.png);"></div><div id="tip-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-top.png) repeat-x;"></div><div id="tip-right-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-top.png);"></div><div id="tip-right" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right.png) repeat-y;"></div><div id="tip-right-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-right-bottom.png);"></div><div id="tip-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-bottom.png) repeat-x;"></div><div id="tip-left-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left-bottom.png);"></div><div id="tip-left" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-left.png);"></div><div id="trans-content"></div></div><div id="tip-arrow-bottom" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-bottom.png);"></div><div id="tip-arrow-top" style="background: url(chrome-extension://ikkbfngojljohpekonpldkamedehakni/imgs/map/tip-arrow-top.png);"></div></div>
+
+<!--@@下面是工具脚本@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+<div id="div_hidden" style="display: none">
+    <div id="div_mod1">
+        <div class="div_inmod1" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px" >
+            <button onclick="ExportHtml()" style="margin-left: auto;margin-right: auto;float: left;position: relative;left: 10px">导出网页</button>
+        </div>
+    </div>
+    <div id="div_mod2">
+        <div class="div_inmod2" style="width: 100%;height: 100%;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid">
+                <BUTTON title="点击关闭对话框" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAABbSURBVDhPY3zw5v9/BjIAE5QmGVBHY3jXMTBGB9jEsdqIrAibQSCAETi4FK4ss4KyIADDRnQFIIBNjHqhis2p2MQwQhUGQM5DdiK6ZqxORdaAzX8gMGSSHAMDANOtJxQi19d5AAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击确定修改" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMFSURBVHjaYvz//z8DJQAgAINxcAQgCANA8MgQlRkefrUDLZM6LBQSAd3XxlxOZofYNtQTWhMWOqYVxHjVsdWY0gj/x+Iw7NqP/KByfwKIiSTrQI79/TtBXVlqV6S1hZUAK98/gAAi2gCgV0X/MTHMdrfQm1/r6Shz8drzfw/uvEoECCCW/wz/FYHB8A2o5iUOnQz//vwz4xbjnJ/soqUVoKHM0LH7PMOx0w8yGbmZNgEEEIuQCO/VX7//3fz8+I8PGwPDUxS9//6z/vj7J1VOTbCnwseY00ZcgKF853mGXQcf1DOxs8xiYPzHABBATHzM3J99HBQNuAXZVv7+808IrJMRGE5//2v85WBY5uaoNHVqmAenlbgkQ+Oeawy79j7vZ/vP0sTABIk9gABienbn+0wJBjGG7EAra0YuhnX//jEw/vn9z5VXnGVXarBBSIOrO4M4Dw9D78FLDNu2v1zF/pu5nAEp5AACAEEAvv8DBjAZ5u70+2RxSUoEBw3+H8fX4mUiKg1hdlc6FEoiMwD4/vMAn8nQAK6t6bgA+v1dAAf89/wE+gD9BvkA/wf8AAIAQQC+/wMQMCHw7e73HRUcCDNXMDwBCBn3DlM2LgUqDyMA7vzpALHU0wCxquzRAfIBWQUFAuwD/QQABf0GAAb7CQAG+QoAAgBBAL7/AxAvIv/99AX78gHvWy8nFwEwFiQAA/8DAO/96gC/3dYArqXx4P/tAU0GBwHgBfwGAAb8CAAI+QwACPYPAAn0EAACiFlIQ5uB9Q/H4y+f/1nxq35V4mFnYfj0/xXD6Sf3GLYu/f7m91OWACaO31f+M/+DeJoRGPEgzPQPjAECiInjFzsD5z+2n4zP+LaePv2e4TnjHYaLr+4z7Fz668uv21wxzMwMp/ElMIAAYmL+y84Awhz/2Be9PsP98MTt5wxHVzH/+n5ZIBuoeSehFAoQQMwSakbAKGVmYGJk/M70jUPszW0eix/XeesYmP9M+8/2h+Ef82+G/yzADAT2AiOGAQABxEhpdgYIMABQrSEzlY7wIwAAAABJRU5ErkJggg==") no-repeat;border: 0px;vertical-align:top' onclick="ChangeValue();DeleteWindow();" type=submit></BUTTON>
+                <BUTTON title="点击恢复上一历史状态" style='float:right;aposition:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAMiSURBVHjaYvz//z8DJQAggFhABCNjD5D8A8T/gBygECszA8OvvwwMTP8txJUFZv3lYuF4++GnOyMTw/3///4x/Aep42dj+H8xgwEggJiwGvvrryiQ7PYL1Ty6YYW/rp2ppPT/t9+E/v34zfD/z18UpQABxIKh+f9fJxFR3gmdXXa6ibE6DIzMTAy/fv39wfDzz1cGLhaQc4FqEMoBAgjJgP9AmX/Fzi6qTTMmO3PyKIowLLn+nyFI5Q8D86+/PGwsTC1MHMwfGFiYWBhYGFh/MTHeBWqqAwggRlAgMjJ2gdzdm5FuWjR1kiPD+fdsDG2HGRgEWX4xzPH5x3Dj1nuGZ6+/M7CxAe0Aop9Au1rnXWTYN9ufESCAoC74W5qXa140cZILw6qbjAxLLvxn+An0LzvLd4apB38zcHGwA73CwvDt408GdsY/DNH2ogzKktzgwAAIILABpsZS9e3tdgwrbjEyLDj7n4Hj/y8G1t8/GF58+M4w5+53hh9ffzD8+Pyd4dPHrwwCbH8YrFU4GP7+/Qe2GiAASWSUAgAIg1CJdf+71tYWLUrKb32gPoDUIsLrdAJOM04gnSENjGaY9iHWlTU2cuUfk7oCCGzAyVNPuhsbj9W0ttoxfH3/h2HR0a8M/37+YhAAhoGXJisDO9D5//9wMHz5zMHAyfyPQUyAjYEZop8BIIDABvz7x9TY1n5ECphGktrbrBik2H8xVK14x8DP+4+hMUCW4eWbnwyvP/5gYGbiAcbgf4a7z78xPH79nRmkFyCAoIHI9Ifh/7+0jo4jr+7ce1c8baId67JsKYbFu54zfPzxn6Gi7czvnVvuHmQU5fwMjELm/8wMbD9YGR+AdAIEEFI6YAKG6v/KNauunT975mVbf7+tcneiHMP3n/8Yvv/++/nrtz85DN9+32QA2csCdD8PRCtAAGFJysyr7t/74BoYun1uWt4RhqcvvzOwc7KwAz3Nw/D3PzgdQMMPDAACCJqQuiEZCZxGgbKsQNNBaf7/f28FXZGpP9mZGF+8/OrMyMR45z/Qyv8sQHXcwIA9n8EAEECMlGZngAADALCEL2yqmxZQAAAAAElFTkSuQmCC") no-repeat;border: 0px;vertical-align:top' onclick="ReloadValue();DeleteWindow();" type=submit></BUTTON>
+            </div>
+            <textarea class="div_inmod2_content" style="width: 100%;height: 98px;overflow-x: hidden;margin:0;border: 0;padding:0" onchange=""></textarea>
+        </div>
+    </div>
+</div>
+<script src="../JS/MYLIB/MIN/Events.min.js"></script>
+<script src="../JS/MYLIB/MIN/FileText.min.js"></script>
+<script src="../JS/MYLIB/MIN/View.min.js"></script>
+<script>
+    var bbl_current_obj;
+    var bbl_style_temp;
+    var bbl_int_count2=0;
+    var bbl_arr_history=[];
+    window.onload=function()
+    {
+        delete_div("div_ExportHtml");
+        Open_div("","div_ExportHtml",100,80,0,0);
+        if(true)
+            return;
+        var div_ExportHtml=document.getElementById("div_ExportHtml");
+        div_ExportHtml.innerHTML=document.getElementById("div_mod1").innerHTML;
+        div_ExportHtml.style.position="fixed";
+        div_ExportHtml.style.right="0px";
+        div_ExportHtml.style.top="300px";
+        //div_ExportHtml.style.float="right";
+        var int_count=0;//为每一个可调整标签设置不同的tid属性
+        var arr_tags=["p","a","span","h1","h2","h3","h4","h5","li","td","th","code","strong","em"];
+        var leng=arr_tags.length;
+        for(var i=0;i<leng;i++)//对于每一种标签
+        {
+            var objs=document.getElementsByTagName(arr_tags[i]);
+            var leng2=objs.length;
+            for(var j=0;j<leng2;j++)//对于每一个标签
+            {
+                var children=objs[j].childNodes;
+                var leng3=children.length;
+                for(var k=0;k<leng3;k++)//寻找文本节点
+                {
+                    if(children[k].nodeName=="#text"&&children[k].textContent.Trim().length>2)
+                    {
+                        objs[j].tid="tid"+int_count;
+                        objs[j].style.cursor="help";
+                        objs[j].onmouseover=function()
+                        {
+                            bbl_style_temp=this.style.border;
+                            this.style.border="2px solid rgb(59, 203, 249)";
+                            bbl_current_obj=objs[j];
+                        }
+                        objs[j].onmouseout=function()
+                        {
+                            this.style.border=bbl_style_temp;
+                        }
+                        objs[j].onclick=function(){
+                            var evt=evt||window.event;
+                            cancelEvent(evt);
+                            cancelPropagation(evt);
+                            //alert(this.textContent);
+                            var arr_child=this.childNodes;
+                            var leng4=arr_child.length;
+                            //首先删除所有已经存在的对话框
+                            for(var l=0;l<bbl_int_count2;l++)
+                            {
+                                delete_div("div_inmod2_"+l);
+                            }
+                            bbl_int_count2=0;
+                            for(var l=0;l<leng4;l++)//对于其中的每一个文本节点，弹出修改对话框
+                            {
+                                if(arr_child[l].nodeName=="#text"&&arr_child[l].textContent.Trim().length>2)
+                                {
+                                    Open_div(this,"div_inmod2_"+bbl_int_count2,240,120,0+bbl_int_count2*250,0);
+                                    var div_inmod2=document.getElementById("div_inmod2_"+bbl_int_count2);//取出新添加的元素
+                                    div_inmod2.ttid=this.getAttribute("tid")?this.getAttribute("tid"):this.tid;//把被选择标签的全局标记交给弹出框
+                                    div_inmod2.tobj=this;
+                                    div_inmod2.textnum=l;//在文本框中记录，这个文本框对应的是标签的第几个子节点
+                                    div_inmod2.innerHTML=document.getElementById("div_mod2").innerHTML;
+                                    con_getElementsByClassName("div_inmod2_content",div_inmod2)[0].innerHTML=arr_child[l].textContent;//填入原有值，考虑标签嵌套问题//#text型标签没有innerhtml属性！！
+                                    bbl_int_count2++;//记下有多少个，后面删除所有对话框时使用
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    function DeleteWindow()
+    {//只删除掉点击关闭的这一个标签
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var str_id=obj.parentNode.parentNode.parentNode.id;
+        delete_div(str_id);
+    }
+    //写入修改后的标签值，并写入日志
+    function ChangeValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        //document.getElementsByTagName()
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var obj_text=obj.parentNode.parentNode.getElementsByTagName("textarea")[0];//输入的文本框
+        if(obj_text.innerHTML.trim().length<1)
+        {
+            alert("修改后的文本过短");
+        }
+        else {
+            var tobj = div_inmod2.getAttribute("tobj") ? div_inmod2.getAttribute("tobj") : div_inmod2.tobj;//取得该输入框对应的标签
+            var ttid = div_inmod2.getAttribute("tid") ? div_inmod2.getAttribute("tid") : div_inmod2.tid;//
+            var textnum = div_inmod2.getAttribute("textnum") ? div_inmod2.getAttribute("textnum") : div_inmod2.textnum;
+            //写日志
+            var arr_temp = [];
+            arr_temp.push(ttid + "&" + textnum);
+            arr_temp.push(tobj.childNodes[textnum].textContent);
+            bbl_arr_history.push(arr_temp);
+            //改值
+            tobj.childNodes[textnum].textContent = obj_text.innerHTML;
+        }
+    }
+    //根据日志恢复标签内容
+    function ReloadValue()
+    {
+        var evt=evt||window.event;
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var div_inmod2=obj.parentNode.parentNode.parentNode;
+        var tobj=div_inmod2.getAttribute("tobj")?div_inmod2.getAttribute("tobj"):div_inmod2.tobj;//取得该输入框对应的标签
+        var ttid=div_inmod2.getAttribute("tid")?div_inmod2.getAttribute("tid"):div_inmod2.tid;//
+        var textnum=div_inmod2.getAttribute("textnum")?div_inmod2.getAttribute("textnum"):div_inmod2.textnum;
+
+
+        var flag=0;//0表示没有找到，对应的日志记录
+        var leng=bbl_arr_history.length;
+        for(var i=leng-1;i>=0;i--)
+        {
+            var str=ttid+"&"+textnum;
+            if(bbl_arr_history[i][0]==str)//找到新的这一条
+            {
+                tobj.childNodes[textnum].textContent=bbl_arr_history[i][1];
+                bbl_arr_history.splice(i,1);//将日志里的这一条删除
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+        {
+            alert("没有日志记录！");
+        }
+    }
+    //以html格式导出网页
+    function ExportHtml()
+    {
+        DownloadText(MakeDateStr()+document.title,("<!DOCTYPE html><html>"+document.getElementsByTagName("html")[0].innerHTML+"</html>"));
+    }
+</script>
+</body>
+</html>
