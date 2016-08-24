@@ -1,0 +1,1149 @@
+@import url( //fonts.googleapis.com/css?family=Roboto:700,400,300 );
+@import url( //fonts.googleapis.com/css?family=Open+Sans:600,400,300 );
+@import url( //fonts.googleapis.com/css?family=Inconsolata );
+html {
+	box-sizing: border-box;
+}
+* {
+	box-sizing: inherit;
+}
+*::after {
+	box-sizing: inherit;
+}
+*::before {
+	box-sizing: inherit;
+}
+h1 {
+	color: rgb(0, 174, 239); font-family: "Open Sans"; font-weight: normal;
+}
+h2 {
+	font-family: "Open Sans"; font-weight: normal;
+}
+h3 {
+	font-family: "Open Sans"; font-weight: 300;
+}
+a {
+	color: rgb(0, 174, 239); text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+body {
+	margin: 0px; padding: 0px; width: 100%; height: 100%; font-family: "Roboto"; font-weight: 300; -ms-overflow-y: scroll;
+}
+code {
+	font-family: "Inconsolata";
+}
+.hidden {
+	display: none !important;
+}
+.horizontal-separator {
+	margin: 0px auto 20px; width: 80%; height: 0px; font-size: 0px; border-top-color: rgb(0, 174, 239); border-top-width: 1px; border-top-style: solid;
+}
+::selection {
+	color: rgb(220, 220, 220); background-color: rgb(0, 174, 239);
+}
+.no-text-selection {
+	-ms-user-select: none; -webkit-user-select: none; -moz-user-select: none; user-select: none;
+}
+#wrapper {
+	margin-bottom: 40px; background-color: white;
+}
+p {
+	-ms-word-wrap: break-word; max-width: 100%;
+}
+.iframeContainer {
+	margin: auto; width: 50%; height: 450px; display: none; min-width: 450px;
+}
+.iframeContainer iframe {
+	height: 100%; max-height: 450px; min-width: 450px;
+}
+.fa-eye {
+	cursor: pointer;
+}
+.fa-eye:hover {
+	color: rgb(0, 174, 239); text-decoration: underline;
+}
+.v-align {
+	top: 50%; position: relative; transform: translateY(-50%); -webkit-transform: translateY(-50%); -moz-transform: translateY(-50%); -o-transform: translateY(-50%);
+}
+.nav-main {
+	width: 100%; height: 50px; font-family: "Open Sans"; background-color: rgb(220, 220, 220);
+}
+.nav-main #mobilemenu {
+	padding: 12px; left: 5px; color: white; font-size: 1.4em; display: none; position: absolute; z-index: 2;
+}
+.nav-main #mobilemenu:hover {
+	cursor: pointer;
+}
+.nav-main #goBackToClassList {
+	padding: 12px; left: 45px; color: white; font-size: 1.4em; display: none; position: absolute; z-index: 2;
+}
+.nav-main #goBackToClassList:hover {
+	cursor: pointer;
+}
+.nav-main .banner {
+	width: 100%; height: 50px; display: flex; background-color: rgb(34, 44, 55);
+}
+.nav-main .banner .menu {
+	width: 80%; height: 50px; display: flex; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none; user-select: none;
+}
+.nav-main .banner .menu > div {
+	padding: 0px 5px; height: 50px; text-align: center; line-height: 50px; font-size: 1em;
+}
+.nav-main .banner .menu > div.active {
+	background-color: rgb(24, 34, 45);
+}
+.nav-main .banner .menu > div:not(.do-not-hover):hover {
+	transition:0.2s ease-in; background-color: rgb(24, 34, 45); -webkit-transition: all 0.2s ease-in; -moz-transition: all 0.2s ease-in;
+}
+.nav-main .banner .menu > div:first-child {
+	width: 300px; color: white; cursor: pointer; max-width: 300px;
+}
+.nav-main .banner .menu > div:first-child a {
+	width: 100%; color: white; display: inline-block;
+}
+.nav-main .banner .menu > div:first-child a:hover {
+	text-decoration: none;
+}
+.nav-main .banner .menu .item {
+	width: 130px; text-transform: uppercase; font-size: 0.9em; cursor: pointer;
+}
+.nav-main .banner .menu .item a {
+	width: 100%; text-align: center; color: white; text-decoration: none; display: inline-block;
+}
+.nav-main .banner .more {
+	width: 20%; height: 50px; display: flex; justify-content: flex-end; align-items: center; -webkit-box-pack: end; -moz-box-pack: end; box-pack: end; -webkit-justify-content: flex-end; -moz-justify-content: flex-end; -ms-justify-content: flex-end; -o-justify-content: flex-end; -webkit-box-align: center; -moz-box-align: center; box-align: center; -webkit-align-items: center; -moz-align-items: center; -ms-align-items: center; -o-align-items: center;
+}
+.nav-main .banner .more .searchbar {
+	margin: 0px 0px 0px 5px; width: 250px; height: 50px; display: flex; align-items: center; background-color: white; -webkit-box-align: center; -moz-box-align: center; box-align: center; -webkit-align-items: center; -moz-align-items: center; -ms-align-items: center; -o-align-items: center;
+}
+.nav-main .banner .more .searchbar input {
+	border: currentColor; border-image: none; width: 200px; height: 30px; margin-left: 10px; background-color: transparent;
+}
+.nav-main .banner .more .searchbar input:focus {
+	outline: 0px; border: currentColor; border-image: none;
+}
+.nav-main .banner .more .searchbar input:invalid {
+	border: 3px solid black; border-image: none;
+}
+.nav-main .banner .more .searchbar button {
+	background: none; border: currentColor; border-image: none; font-size: 1.3em; cursor: pointer;
+}
+.nav-main .banner .more .forward {
+	padding: 0px 15px; display: flex; cursor: pointer; justify-content: space-between; align-items: center; -webkit-box-pack: justify; -moz-box-pack: justify; box-pack: justify; -webkit-justify-content: space-between; -moz-justify-content: space-between; -ms-justify-content: space-between; -o-justify-content: space-between; -webkit-box-align: center; -moz-box-align: center; box-align: center; -webkit-align-items: center; -moz-align-items: center; -ms-align-items: center; -o-align-items: center;
+}
+.nav-main .banner .more .forward a {
+	color: black;
+}
+.nav-main .banner .more .forward i {
+	color: white; margin-left: 15px;
+}
+.footer {
+	left: 0px; width: 100%; height: 40px; bottom: 0px; font-size: 0.8em; display: flex; position: fixed; z-index: 2; justify-content: center; align-content: center; background-color: rgb(220, 220, 220);
+}
+.footer .footer-item {
+	width: auto; height: 40px !important; text-align: center; margin-right: 2.35%; vertical-align: middle; float: left; display: block;
+}
+.footer :last-child.footer-item {
+	margin-right: 0px;
+}
+.footer .footer-item a {
+	padding: 12px; height: 40px !important; color: rgb(51, 51, 51); display: inline-block;
+}
+.footer .footer-item a:visited {
+	color: rgb(51, 51, 51);
+}
+.footer .footer-item a:hover {
+	color: white;
+}
+.footer .footer-item:hover {
+	transition:0.2s ease-in; background-color: rgb(0, 174, 239); -webkit-transition: all 0.2s ease-in; -moz-transition: all 0.2s ease-in;
+}
+#versionsList {
+	margin: 10px 0px 25px; width: 100%; text-align: center;
+}
+#versionsList .selectedVersion {
+	margin: 5px 10px; color: rgb(0, 174, 239); font-size: 1.4em; font-weight: 400;
+}
+#versionsList a {
+	margin: 0px 5px;
+}
+#classes_classesListByTag {
+	margin-right: auto; margin-left: auto; max-width: 80%;
+}
+#classes_classesListByTag::after {
+	clear: both; display: table; content: "";
+}
+#classes_classesListByTag .category {
+	margin: 5px 0px; padding: 0px; width: 100%; -ms-user-select: none; -webkit-user-select: none; -moz-user-select: none; user-select: none;
+}
+#classes_classesListByTag .category .categoryTitle {
+	padding: 3px; border: 1px solid white; border-image: none; height: auto; cursor: pointer;
+}
+#classes_classesListByTag .category .categoryTitle:hover {
+	border: 1px solid rgb(193, 193, 193); border-image: none;
+}
+#classes_classesListByTag .category .categoryTitle h3 {
+	margin: 0px; padding: 5px; color: rgb(255, 255, 255); background-color: rgb(0, 174, 239);
+}
+#classes_classesListByTag .category .categoryList {
+	padding: 8px 40px; width: 100%; display: none;
+}
+#classes_classesListByTag .category .categoryList li {
+	color: rgb(220, 220, 220); font-size: 1.4em; list-style-type: square;
+}
+#classes_classesListByTag .category .categoryList li a {
+	color: rgb(0, 0, 0); font-size: 0.75em;
+}
+#classes_classesListByTag .category .categoryList li a:hover {
+	color: rgb(0, 174, 239); text-decoration: underline;
+}
+#alphaFilter {
+	margin: 10px auto; width: 90%; text-align: center;
+}
+#tagFilter {
+	margin: 10px auto; width: 90%; text-align: center;
+}
+#alphaFilter input {
+	text-align: center;
+}
+#tagFilter input {
+	text-align: center;
+}
+#classes_classesListByAlpha {
+	margin-right: auto; margin-left: auto; max-width: 80%; column-count: 4; -webkit-column-count: 4; -moz-column-count: 4;
+}
+#classes_classesListByAlpha::after {
+	clear: both; display: table; content: "";
+}
+#classes_classesListByAlpha a {
+	margin: 5px 4px; padding: 3px; width: 100%; color: rgb(51, 51, 51); text-decoration: none; display: inline-block;
+}
+#classes_classesListByAlpha a:hover {
+	color: white; text-decoration: underline; background-color: rgb(0, 174, 239);
+}
+.sorts {
+	width: 100%; text-align: center;
+}
+.sorts .order {
+	margin: 4px 4px 15px; padding: 4px; border-radius: 3px; text-align: center; color: white; font-size: 0.8em; display: inline-block; cursor: pointer; background-color: rgb(155, 155, 155);
+}
+.sorts .selectedOrder {
+	background-color: rgb(0, 174, 239);
+}
+.classBarResize {
+	left: 300px; top: 50px; width: 3px; bottom: 40px; border-left-color: rgb(155, 155, 155); border-left-width: 1px; border-left-style: solid; position: absolute; z-index: 3; cursor: col-resize;
+}
+.classBar {
+	margin: 0px; left: 0px; top: 50px; width: 300px; bottom: 40px; color: rgb(51, 51, 51); position: absolute; z-index: 2; -ms-overflow-x: hidden; -ms-overflow-y: auto; background-color: rgb(249, 249, 249);
+}
+.classBar #classes_classesListByAlpha {
+	width: 100%; margin-left: 30px;
+}
+.classBar .classesTitle {
+	padding: 10px; width: 100%; text-align: center; color: rgb(238, 238, 238); margin-bottom: 10px; background-color: rgb(51, 51, 51);
+}
+.classBar .class {
+	padding: 5px 0px 5px 10px; color: rgb(51, 51, 51); font-size: 1em; display: block;
+}
+.classBar .class:hover {
+	color: white; background-color: rgb(155, 155, 155);
+}
+.classContent {
+	margin: 0px 0px 0px 300px; padding: 20px; top: 50px; width: calc(100% - 300px); height: auto; bottom: 40px; position: absolute; z-index: 10; -ms-overflow-x: auto; -ms-overflow-y: auto;
+}
+.classContent #classTitle {
+	margin-right: auto; margin-left: auto; border-bottom-color: rgb(0, 174, 239); border-bottom-width: 1px; border-bottom-style: solid; max-width: 100%;
+}
+.classContent #classTitle::after {
+	clear: both; display: table; content: "";
+}
+.classContent #classTitle h1 {
+	width: 48.82%; padding-bottom: 2px; font-size: 1.7em; margin-top: 5px; margin-right: 2.35%; margin-bottom: 15px; float: left; display: block;
+}
+.classContent #classTitle h1:last-child {
+	margin-right: 0px;
+}
+.classContent #classTitle #selectList {
+	width: 48.82%; height: 34px; text-align: right; overflow: hidden; margin-top: 5px; margin-right: 2.35%; float: left; display: block;
+}
+.classContent #classTitle :last-child#selectList {
+	margin-right: 0px;
+}
+.classContent #classTitle #selectList #methodsList {
+	width: 100%; height: 34px; font-size: 1.2em;
+}
+.classContent #classTitle #selectList #methodsList option {
+	padding: 8px;
+}
+.classContent #classTitle #selectList #methodsList .cat {
+	padding: 8px 5px; color: rgb(245, 245, 245); font-weight: 300; background-color: rgb(45, 45, 45);
+}
+.classContent #classTags {
+	margin-top: 10px;
+}
+.classContent #classTags .classTag {
+	margin: 5px; padding: 5px; border-radius: 3px; color: white; font-size: 0.8em; background-color: rgb(0, 174, 239);
+}
+.classContent #classTags .classTag:hover {
+	text-decoration: none;
+}
+.classContent #classMd hr {
+	visibility: hidden;
+}
+.classContent #classMd h2 {
+	padding-bottom: 2px; margin-top: 25px; border-bottom-color: rgb(220, 220, 220); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.classContent #classMd h3 {
+	font-weight: 600;
+}
+.classContent #classMd h2 a {
+	margin: 0px 5px;
+}
+.classContent #classMd h3 a {
+	margin: 0px 5px;
+}
+.classContent #classMd h2 a.invisible.permalink {
+	visibility: hidden;
+}
+.classContent #classMd h3 a.invisible.permalink {
+	visibility: hidden;
+}
+.classContent #classMd h4 {
+	font-weight: 600; margin-left: 15px;
+}
+.classContent #classMd table {
+	text-align: left; margin-left: 10px; -ms-overflow-x: scroll; max-width: 100%;
+}
+.classContent #classMd table thead tr {
+	background-color: rgb(241, 241, 241);
+}
+.classContent #classMd table thead tr th {
+	padding: 6px 11px; border: 2px solid rgb(220, 220, 220); border-image: none;
+}
+.classContent #classMd table tbody tr td {
+	padding: 6px 11px; border: 2px solid rgb(220, 220, 220); border-image: none;
+}
+.classContent #classMd table tbody tr:nth-child(2n) {
+	background-color: rgb(248, 248, 248);
+}
+.classContent #classMd p {
+	margin-left: 15px;
+}
+.sidemenu#classes_classesListByTag {
+	width: 100%;
+}
+.sideClassesListByAlpha#classes_classesListByAlpha {
+	column-count: 1; -webkit-column-count: 1; -moz-column-count: 1;
+}
+.sideClassesListByAlpha#classes_classesListByAlpha a {
+	margin: 2px 65px 2px 0px;
+}
+.sideClassesListByAlpha#classes_classesListByAlpha .selected {
+	color: whitesmoke; background-color: rgb(0, 174, 239);
+}
+.highlighted {
+	background-color: rgb(248, 238, 199);
+}
+.bigimage {
+	margin: 100px auto 20px; width: 80%; max-width: 400px;
+}
+.bigimage img {
+	width: 100%;
+}
+.presentation-header {
+	margin-right: auto; margin-left: auto; max-width: 100%;
+}
+.presentation-header::after {
+	clear: both; display: table; content: "";
+}
+.presentation-header .presentation-img {
+	width: 100%; height: 1px; background-color: rgb(220, 220, 220);
+}
+.presentation-header .bjs-moto {
+	text-align: center; font-size: 1em; font-weight: normal;
+}
+.selection-toggle {
+	background-color: rgb(220, 220, 220) !important;
+}
+.toggle-selected {
+	background-color: rgb(24, 34, 45) !important;
+}
+.bjs-components {
+	margin-right: auto; margin-left: auto; max-width: 80%;
+}
+.bjs-components::after {
+	clear: both; display: table; content: "";
+}
+.bjs-components .bjs-component {
+	padding: 0px 50px; width: 31.76%; margin-right: 2.35%; float: left; display: block;
+}
+.bjs-components :last-child.bjs-component {
+	margin-right: 0px;
+}
+.bjs-components .bjs-component h1 {
+	text-align: center;
+}
+.bjs-components .bjs-component p {
+	text-align: justify;
+}
+.bjs-demo {
+	width: 100%;
+}
+.bjs-demo h1 {
+	text-align: center;
+}
+.bjs-demo #demo-item {
+	margin: 10px auto; width: 400px; height: 250px; text-align: center; position: relative; cursor: pointer; max-width: 100%;
+}
+.bjs-demo #demo-item .demo-img {
+	max-width: 100%;
+}
+.getting-started {
+	margin-right: auto; margin-left: auto; max-width: 80%;
+}
+.getting-started::after {
+	clear: both; display: table; content: "";
+}
+.getting-started h1 {
+	text-align: center;
+}
+.hljs {
+	background: rgb(240, 240, 240); padding-left: 15px; border-left-color: rgb(0, 174, 239); border-left-width: 5px; border-left-style: solid;
+}
+.whats-new-banner {
+	padding: 10px 0px; text-align: center; background-image: url("../IMAGE/pattern_ban_1.png"); background-repeat: repeat;
+}
+#whats-new {
+	line-height: 25px; margin-right: auto; margin-left: auto; max-width: 80%;
+}
+#whats-new::after {
+	clear: both; display: table; content: "";
+}
+#whats-new ul {
+	list-style-type: none;
+}
+#whats-new ul li ul li {
+	list-style-type: square;
+}
+@media screen and (max-width:960px)
+{
+#whats-new {
+	margin-right: auto; margin-left: auto; -ms-word-wrap: break-word; max-width: 90%;
+}
+#whats-new::after {
+	clear: both; display: table; content: "";
+}
+#whats-new ul {
+	margin: 0px; padding: 0px 10px;
+}
+.whats-new-banner {
+	padding-top: 50px;
+}
+}
+.statics-banner {
+	padding: 10px 0px; text-align: center; background-image: url("../IMAGE/pattern_ban_1.png"); background-repeat: repeat;
+}
+.statics-banner h1::first-letter {
+	text-transform: uppercase;
+}
+.statics-content {
+	margin-right: auto; margin-left: auto; max-width: 80%;
+}
+.statics-content::after {
+	clear: both; display: table; content: "";
+}
+.statics-content .tagList {
+	margin: auto; width: 80%; display: flex; position: relative; flex-wrap: wrap; justify-content: center; align-items: stretch; align-content: stretch;
+}
+.statics-content .tagList .tagWrapper {
+	margin: 10px 5px 5px; display: flex; flex-wrap: wrap; justify-content: center; background-color: transparent;
+}
+.statics-content .tagList .tagWrapper .tag {
+	padding: 5px; border-radius: 3px; border: 0px currentColor; border-image: none; cursor: pointer; background-color: darkgray;
+}
+.statics-content .tagList .tagWrapper .tag .tagImage {
+	margin: 0px auto; width: 100%; display: block; max-height: 65%;
+}
+.statics-content .tagList .tagWrapper .tag .tagImage img {
+	width: 100%;
+}
+.statics-content .tagList .tagWrapper .tag .tagDescriptionWrapper {
+	color: whitesmoke; background-color: transparent;
+}
+.statics-content .tagList .tagWrapper .tag .tagDescriptionWrapper .tagTitle {
+	margin: 0px; font-family: "Roboto"; font-size: 0.8em; font-weight: 300;
+}
+.statics-content .tagList .tagWrapper .active {
+	background-color: rgb(0, 174, 239);
+}
+.statics-content .fileList {
+	margin-right: auto; margin-left: auto; max-width: 70%; counter-reset: files;
+}
+.statics-content .fileList::after {
+	clear: both; display: table; content: "";
+}
+.statics-content .fileList .emptyList {
+	text-align: center;
+}
+.statics-content .fileList .fileTitle {
+	background: rgb(235, 235, 235); margin: 3px 0px; padding: 0px 10px; transition:0.2s; width: 100%; border-left-color: rgb(80, 80, 80); border-left-width: 4px; border-left-style: solid; display: inline-flex; cursor: pointer; align-items: center;
+}
+.statics-content .fileList .fileTitle:hover {
+	background: rgb(220, 220, 220);
+}
+.statics-content .fileList .fileTitle .fileNumber {
+	color: rgb(80, 80, 80); font-weight: bold; margin-right: 15px;
+}
+.statics-content .fileList .fileTitle .fileNumber::before {
+	content: counter(files); counter-increment: files;
+}
+.statics-content .fileList .fileTitle a {
+	padding: 10px; flex:1 1 auto; color: rgb(51, 51, 51); text-decoration: none;
+}
+.statics-content .fileList .fileTitle a .inline-tags {
+	margin: 0px; padding: 0px; right: 24px; clear: right; float: right; display: inline-block;
+}
+.statics-content .fileList .fileTitle a .inline-tags .inline-tag {
+	padding: 0px 4px; border-radius: 4px; color: rgb(150, 150, 150); text-decoration: none; margin-left: 8px; display: inline-block; position: relative;
+}
+.statics-content .fileList .fileTitle a:hover .tag {
+	color: rgb(0, 174, 239); background-color: whitesmoke;
+}
+.statics-content .fileList .fileTitle h3:hover {
+	color: rgb(220, 220, 220); text-decoration: underline; background-color: rgb(0, 174, 239);
+}
+.statics-content .fileList .01_Play_Pen {
+	border-left-color: rgb(138, 171, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Standard {
+	border-left-color: rgb(138, 171, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .3DSMax {
+	border-left-color: rgb(138, 171, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Loaders {
+	border-left-color: rgb(138, 171, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Essentials {
+	border-left-color: rgb(138, 171, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .01_Play_Pen .fileNumber {
+	color: rgb(138, 171, 53);
+}
+.statics-content .fileList .Standard .fileNumber {
+	color: rgb(138, 171, 53);
+}
+.statics-content .fileList .3DSMax .fileNumber {
+	color: rgb(138, 171, 53);
+}
+.statics-content .fileList .Loaders .fileNumber {
+	color: rgb(138, 171, 53);
+}
+.statics-content .fileList .Essentials .fileNumber {
+	color: rgb(138, 171, 53);
+}
+.statics-content .fileList .02_Mid_Level {
+	border-left-color: rgb(252, 170, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .PBR {
+	border-left-color: rgb(252, 170, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Blender {
+	border-left-color: rgb(252, 170, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .BabylonHx {
+	border-left-color: rgb(252, 170, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .General {
+	border-left-color: rgb(252, 170, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .02_Mid_Level .fileNumber {
+	color: rgb(252, 170, 53);
+}
+.statics-content .fileList .PBR .fileNumber {
+	color: rgb(252, 170, 53);
+}
+.statics-content .fileList .Blender .fileNumber {
+	color: rgb(252, 170, 53);
+}
+.statics-content .fileList .BabylonHx .fileNumber {
+	color: rgb(252, 170, 53);
+}
+.statics-content .fileList .General .fileNumber {
+	color: rgb(252, 170, 53);
+}
+.statics-content .fileList .03_Advanced {
+	border-left-color: rgb(231, 75, 59); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Cheetah3D {
+	border-left-color: rgb(231, 75, 59); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .MaterialsLibrary {
+	border-left-color: rgb(231, 75, 59); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .03_Advanced .fileNumber {
+	color: rgb(231, 75, 59);
+}
+.statics-content .fileList .Cheetah3D .fileNumber {
+	color: rgb(231, 75, 59);
+}
+.statics-content .fileList .MaterialsLibrary .fileNumber {
+	color: rgb(231, 75, 59);
+}
+.statics-content .fileList .Videos {
+	border-left-color: rgb(122, 79, 193); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Canvas2D {
+	border-left-color: rgb(122, 79, 193); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Unity {
+	border-left-color: rgb(122, 79, 193); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .POV {
+	border-left-color: rgb(122, 79, 193); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Videos .fileNumber {
+	color: rgb(122, 79, 193);
+}
+.statics-content .fileList .Canvas2D .fileNumber {
+	color: rgb(122, 79, 193);
+}
+.statics-content .fileList .Unity .fileNumber {
+	color: rgb(122, 79, 193);
+}
+.statics-content .fileList .POV .fileNumber {
+	color: rgb(122, 79, 193);
+}
+.statics-content .fileList .bGUI {
+	border-left-color: rgb(60, 174, 222); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .bGUI .fileNumber {
+	color: rgb(60, 174, 222);
+}
+.statics-content .fileList .Tree_Generators {
+	border-left-color: rgb(216, 81, 53); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Tree_Generators .fileNumber {
+	color: rgb(216, 81, 53);
+}
+.statics-content .fileList .Editor {
+	border-left-color: rgb(197, 109, 184); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .Editor .fileNumber {
+	color: rgb(197, 109, 184);
+}
+.statics-content .fileList .CastorGUI {
+	border-left-color: rgb(109, 176, 42); border-left-width: 4px; border-left-style: solid;
+}
+.statics-content .fileList .CastorGUI .fileNumber {
+	color: rgb(109, 176, 42);
+}
+.static-content {
+	margin-right: auto; margin-left: auto; max-width: 80%;
+}
+.static-content::after {
+	clear: both; display: table; content: "";
+}
+.static-content img {
+	max-width: 100%;
+}
+.static-content iframe {
+	width: 100%;
+}
+.static-content table {
+	width: 60%; text-align: left; margin-left: 0px;
+}
+.static-content table thead tr {
+	background-color: rgb(241, 241, 241);
+}
+.static-content table thead tr th {
+	padding: 3px 11px; border: 2px solid rgb(220, 220, 220); border-image: none;
+}
+.static-content table tr {
+	height: 35px;
+}
+.static-content table td {
+	padding: 3px 11px; border: 2px solid rgb(220, 220, 220); border-image: none;
+}
+.static-content table tr:nth-child(2n) {
+	background-color: rgb(248, 248, 248);
+}
+.static-content .contentTable {
+	padding: 1px 0px; background-color: whitesmoke;
+}
+.static-content .contentTable .tocHeader {
+	padding: 10px;
+}
+.static-content .contentTable .tocHeader .tocTitle .tocIcon {
+	margin: 0px 10px;
+}
+.static-content .contentTable .tocHeader .tocToggle {
+	cursor: pointer;
+}
+.static-content .contentTable .tocHeader .tocToggle i {
+	padding: 10px; margin-top: -10px; float: right;
+}
+.static-content .contentTable .tocContent ul {
+	list-style-type: decimal;
+}
+.static-content .contentTable .tocContent ul li {
+	padding: 5px 0px;
+}
+.search-content {
+	padding-bottom: 30px; margin-right: auto; margin-left: auto; max-width: 80%;
+}
+.search-content::after {
+	clear: both; display: table; content: "";
+}
+.search-content .searchHeader {
+	text-align: center; margin-bottom: 30px; border-bottom-color: rgba(0, 0, 0, 0.08); border-bottom-width: 2px; border-bottom-style: solid;
+}
+.search-content .searchHeader h2 {
+	margin: 0px; padding: 20px 0px;
+}
+.search-content .errorMessage {
+	text-align: center; font-style: italic;
+}
+.search-content .pageChangeWrapper {
+	flex-flow:row wrap; display: flex; justify-content: space-around;
+}
+.search-content .pageChangeWrapper .pageChangeLink {
+	padding: 3px 7px; border-radius: 3px; border: 1px solid rgb(0, 174, 239); border-image: none;
+}
+.search-content .pageChangeWrapper .pageChangeLink:hover {
+	color: whitesmoke; text-decoration: none; background-color: rgb(0, 174, 239);
+}
+.search-content .filters {
+	margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center;
+}
+.search-content .filters .basicFilter {
+	margin: 5px; padding: 3px 7px; border-radius: 3px; font-size: 0.9em; cursor: pointer;
+}
+.search-content .filters .enabled.basicFilter {
+	color: whitesmoke; background-color: rgb(0, 174, 239);
+}
+.search-content .filters .disabled.basicFilter {
+	color: whitesmoke; background-color: darkgrey;
+}
+.search-content .result {
+	margin: 15px 0px;
+}
+.search-content .result .resultTitle {
+	margin: 0px; font-size: 1.1em;
+}
+.searchplayground-content {
+	padding-bottom: 30px; margin-right: auto; margin-left: auto; max-width: 80%;
+}
+.searchplayground-content::after {
+	clear: both; display: table; content: "";
+}
+.searchplayground-content #intro {
+	margin: 8px; text-align: center;
+}
+.searchplayground-content .searchplaygroundbar {
+	width: 100%; text-align: center;
+}
+.searchplayground-content .searchplaygroundbar form {
+	margin: 30px auto; border-radius: 20px; width: 250px; height: 30px; background-color: white;
+}
+.searchplayground-content .searchplaygroundbar form input {
+	padding: 8px; border-radius: 20px; border: 1px solid rgb(220, 220, 220); border-image: none; width: 200px; height: 34px; margin-left: 10px; background-color: transparent;
+}
+.searchplayground-content .searchplaygroundbar form input:focus {
+	outline: 0px; border: 1px solid rgb(220, 220, 220); border-image: none;
+}
+.searchplayground-content .searchplaygroundbar form button {
+	background: none; border: currentColor; border-image: none; font-size: 1.3em; cursor: pointer;
+}
+.searchplayground-content .searchHeader {
+	text-align: center; margin-bottom: 30px; border-bottom-color: rgba(0, 0, 0, 0.08); border-bottom-width: 2px; border-bottom-style: solid;
+}
+.searchplayground-content .searchHeader h2 {
+	margin: 0px; padding: 20px 0px;
+}
+.searchplayground-content .pageChangeWrapper {
+	flex-flow:row wrap; display: flex; justify-content: space-around;
+}
+.searchplayground-content .pageChangeWrapper .pageChangeLink {
+	padding: 3px 7px; border-radius: 3px; border: 1px solid rgb(0, 174, 239); border-image: none;
+}
+.searchplayground-content .pageChangeWrapper .pageChangeLink:hover {
+	color: whitesmoke; text-decoration: none; background-color: rgb(0, 174, 239);
+}
+.searchplayground-content .filters {
+	margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center;
+}
+.searchplayground-content .filters .basicFilter {
+	margin: 5px; padding: 3px 7px; border-radius: 3px; font-size: 0.9em; cursor: pointer;
+}
+.searchplayground-content .filters .enabled.basicFilter {
+	color: whitesmoke; background-color: rgb(0, 174, 239);
+}
+.searchplayground-content .filters .disabled.basicFilter {
+	color: whitesmoke; background-color: darkgrey;
+}
+.searchplayground-content .result {
+	background: rgb(235, 235, 235); margin: 3px 0px; padding: 10px 5px; transition:0.2s; width: 100%; border-left-color: rgb(0, 174, 239); border-left-width: 4px; border-left-style: solid; display: inline-flex; cursor: pointer; align-items: center;
+}
+.searchplayground-content .result .resultTitle {
+	margin: 0px; width: 100%; color: black; padding-left: 10px; font-family: "Roboto"; font-size: 1.1em; font-weight: 300;
+}
+.searchplayground-content .result .resultTitle .version {
+	right: 24px; color: rgb(150, 150, 150); padding-left: 8px; clear: right; float: right; display: inline-block; position: relative;
+}
+.searchplayground-content .result pre {
+	margin-left: 30px;
+}
+.error#wrapper {
+	height: 100%; text-align: center; cursor: pointer; background-color: white;
+}
+.error#wrapper .error_message {
+	margin: 0px; color: rgb(0, 174, 239); font-family: "Open Sans"; font-size: 18.1em;
+}
+.error#wrapper .errorBaseline {
+	font-family: "Open Sans"; font-size: 1.7em; margin-bottom: 50px;
+}
+.error#wrapper .redirectWrapper {
+	margin-right: auto; margin-bottom: 60px; margin-left: auto; display: flex; max-width: 80%; justify-content: space-around;
+}
+.error#wrapper .redirectWrapper::after {
+	clear: both; display: table; content: "";
+}
+.error#wrapper .redirectWrapper .error_choice {
+	flex:1 1 auto;
+}
+.error#wrapper .error_link {
+	text-decoration: underline;
+}
+.error#wrapper a {
+	padding: 15px; color: black;
+}
+.error#wrapper a:hover {
+	color: white; background-color: rgb(0, 174, 239);
+}
+.error#wrapper a i {
+	margin: 0px 15px;
+}
+.error#wrapper .error_choice_mobile {
+	display: none;
+}
+.slideout-menu {
+	font-family: "Roboto"; margin-top: 50px; display: none; z-index: 0; background-color: rgb(51, 51, 51);
+}
+.slideout-menu .searchbar-mobile {
+	margin: 10px; border-radius: 20px; width: 230px; height: 30px; display: flex; align-items: center; background-color: white; -webkit-box-align: center; -moz-box-align: center; box-align: center; -webkit-align-items: center; -moz-align-items: center; -ms-align-items: center; -o-align-items: center;
+}
+.slideout-menu .searchbar-mobile input {
+	border: currentColor; border-image: none; width: 177px; height: 30px; margin-left: 10px; background-color: transparent;
+}
+.slideout-menu .searchbar-mobile input:focus {
+	outline: 0px; border: currentColor; border-image: none;
+}
+.slideout-menu .searchbar-mobile button {
+	background: none; border: currentColor; border-image: none; font-size: 1.2em; cursor: pointer;
+}
+.slideout-menu .searchbar-mobile i {
+	right: 10px; font-size: 1.2em; position: relative; cursor: pointer; background-color: transparent;
+}
+.slideout-menu a {
+	margin: 0px; padding: 10px 0px 10px 10px; color: rgb(246, 246, 246); text-transform: uppercase; letter-spacing: 2px; border-bottom-color: rgb(45, 45, 45); border-bottom-width: 1px; border-bottom-style: solid; display: block;
+}
+.slideout-menu a:first-of-type {
+	border-top-color: rgb(45, 45, 45); border-top-width: 1px; border-top-style: solid;
+}
+.slideout-menu a.active {
+	color: rgb(246, 246, 246); background-color: rgb(0, 174, 239);
+}
+.slideout-menu a.active i {
+	color: rgb(246, 246, 246);
+}
+.slideout-menu a i {
+	color: rgb(0, 174, 239); padding-right: 10px;
+}
+.slideout-menu .links {
+	margin-top: 50px;
+}
+.slideout-menu .links a {
+	text-transform: none;
+}
+.slideout-menu .links i {
+	color: rgb(246, 246, 246);
+}
+@media screen and (max-width:1280px)
+{
+.nav-main .banner .menu {
+	width: 80%;
+}
+.nav-main .banner .menu > div {
+	font-size: 0.8em;
+}
+.nav-main .banner .menu .item {
+	font-size: 0.8em;
+}
+.nav-main .banner .more {
+	width: 20%;
+}
+.nav-main .banner .more .forward {
+	display: none;
+}
+.nav-main .banner .more .searchbar input {
+	width: 77%;
+}
+.bigimage {
+	margin: 10px auto; width: 95%; max-width: 400px;
+}
+}
+@media screen and (max-width:960px)
+{
+.nav-main {
+	position: fixed; z-index: 5;
+}
+.nav-main #mobilemenu {
+	display: block !important;
+}
+.nav-main #goBackToClassList {
+	display: block !important;
+}
+.nav-main .banner .menu {
+	width: 100%;
+}
+.nav-main .banner .menu #home {
+	width: 100%; text-align: center; padding-left: 50px; max-width: 100%;
+}
+.nav-main .banner .menu .homeClassMobile#home {
+	padding-left: 70px;
+}
+.nav-main .banner .menu .item {
+	display: none;
+}
+.nav-main .banner .more {
+	display: none;
+}
+.presentation-header {
+	padding-top: 50px;
+}
+#wrapper {
+	margin-bottom: 0px;
+}
+.footer {
+	display: none;
+}
+.bjs-components {
+	padding: 0px; margin-right: auto; margin-left: auto; max-width: 95%;
+}
+.bjs-components::after {
+	clear: both; display: table; content: "";
+}
+.bjs-components .bjs-component {
+	padding: 0px; width: 100%; margin-right: 4.82%; float: left; display: block;
+}
+.bjs-components :last-child.bjs-component {
+	margin-right: 0px;
+}
+.getting-started {
+	padding: 0px; margin-right: auto; margin-left: auto; max-width: 95%;
+}
+.getting-started::after {
+	clear: both; display: table; content: "";
+}
+}
+@media screen and (max-width:1350px)
+{
+.nav-main .banner .menu > div {
+	font-size: 0.8em;
+}
+}
+@media screen and (max-width:1100px)
+{
+.nav-main .banner .menu > div {
+	font-size: 0.65em;
+}
+}
+@media screen and (max-width:960px)
+{
+#whats-new {
+	margin-right: auto; margin-left: auto; -ms-word-wrap: break-word; max-width: 90%;
+}
+#whats-new::after {
+	clear: both; display: table; content: "";
+}
+#whats-new ul {
+	margin: 0px; padding: 0px 10px;
+}
+.whats-new-banner {
+	padding-top: 50px;
+}
+}
+@media screen and (max-width:960px)
+{
+.classBar {
+	display: none;
+}
+#resizeBar {
+	display: none;
+}
+.classContent {
+	margin: 0px; top: 0px; width: 100%; bottom: 0px; padding-top: 50px; position: inherit;
+}
+.classContent #classTitle h1 {
+	width: 100%; margin-right: 4.82%; margin-bottom: 0px; float: left; display: block;
+}
+.classContent #classTitle h1:last-child {
+	margin-right: 0px;
+}
+.classContent #classTitle #selectList {
+	margin: 10px 0px; width: 100%; float: left; display: block;
+}
+.classContent #classTitle :last-child#selectList {
+	margin-right: 0px;
+}
+.classContent #classMd h2 a {
+	margin: 0px; padding: 0px;
+}
+.classContent #classMd h3 a {
+	margin: 0px; padding: 0px;
+}
+.classContent #classMd h2 a.permalink {
+	display: none;
+}
+.classContent #classMd h3 a.permalink {
+	display: none;
+}
+.classContent #classMd h2 a.invisible {
+	
+}
+.classContent #classMd h3 a.invisible {
+	
+}
+.classContent #classMd h1 {
+	margin-left: 5px;
+}
+.classContent #classMd h2 {
+	margin-left: 5px;
+}
+.classContent #classMd h3 {
+	margin-left: 5px;
+}
+.classContent #classMd h4 {
+	margin-left: 5px;
+}
+.classContent #classMd h5 {
+	margin-left: 5px;
+}
+.classContent #classMd h6 {
+	margin-left: 5px;
+}
+.classContent #classMd h2 {
+	padding-bottom: 0px; margin-top: 10px; border-bottom-color: rgb(220, 220, 220); border-bottom-width: 0px; border-bottom-style: solid;
+}
+.classContent #classMd h2 a {
+	margin: 0px 5px;
+}
+.classContent #classMd h3 a {
+	margin: 0px 5px;
+}
+.classContent #classMd h2 a.invisible {
+	visibility: hidden;
+}
+.classContent #classMd h3 a.invisible {
+	visibility: hidden;
+}
+.classContent #classMd h4 {
+	font-weight: 600; margin-left: 0px;
+}
+.classContent #classMd table {
+	text-align: left; margin-left: 0px;
+}
+.classContent #classMd table thead tr {
+	background-color: rgb(241, 241, 241);
+}
+.classContent #classMd table thead tr th {
+	padding: 3px 11px; border: 2px solid rgb(220, 220, 220); border-image: none;
+}
+.classContent #classMd table tbody tr td {
+	padding: 3px 11px; border: 2px solid rgb(220, 220, 220); border-image: none;
+}
+.classContent #classMd table tbody tr:nth-child(2n) {
+	background-color: rgb(248, 248, 248);
+}
+.classContent #classMd p {
+	margin-left: 0px;
+}
+}
+@media screen and (max-width:1280px)
+{
+#classes_classesListByAlpha {
+	column-count: 3; -webkit-column-count: 3; -moz-column-count: 3;
+}
+}
+@media screen and (max-width:960px)
+{
+#classes_classesListByAlpha {
+	column-count: 2; -webkit-column-count: 2; -moz-column-count: 2;
+}
+#classes_classesListByTag {
+	width: 100%;
+}
+.whats-new-banner {
+	padding-top: 50px;
+}
+}
+@media screen and (max-width:610px)
+{
+#classes_classesListByAlpha {
+	margin-right: auto; margin-left: auto; max-width: 95%; column-count: 1; -webkit-column-count: 1; -moz-column-count: 1;
+}
+#classes_classesListByAlpha::after {
+	clear: both; display: table; content: "";
+}
+}
+@media screen and (max-width:1280px)
+{
+.statics-content .fileList {
+	margin-right: auto; margin-left: auto; max-width: 100%;
+}
+.statics-content .fileList::after {
+	clear: both; display: table; content: "";
+}
+}
+@media screen and (max-width:960px)
+{
+.statics-banner {
+	padding-top: 50px;
+}
+}
+@media screen and (max-width:960px)
+{
+.static-content {
+	margin-right: auto; margin-left: auto; max-width: 95%;
+}
+.static-content::after {
+	clear: both; display: table; content: "";
+}
+}
+.search-content {
+	-ms-word-break: break-all;
+}
+.search-content {
+	-ms-word-break: break-all;
+}
+@media screen and (max-width:960px)
+{
+.error#wrapper .error_message {
+	margin: 0px; padding-top: 50px; font-size: 5.1em;
+}
+.error#wrapper .error_choice_mobile {
+	padding: 0px; flex:1 1 auto; text-align: center; display: inherit;
+}
+.error#wrapper .error_choice_mobile i {
+	font-size: 3.1em;
+}
+.error#wrapper .error_choice {
+	display: none;
+}
+.error#wrapper a:hover {
+	color: rgb(0, 174, 239); background-color: white;
+}
+}

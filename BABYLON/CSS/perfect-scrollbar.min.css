@@ -1,0 +1,69 @@
+.ps-container {
+	overflow: hidden !important; -ms-touch-action: none;
+}
+.ps-active-x.ps-container > .ps-scrollbar-x-rail {
+	display: block;
+}
+.ps-active-y.ps-container > .ps-scrollbar-y-rail {
+	display: block;
+}
+.ps-in-scrolling.ps-container {
+	pointer-events: none;
+}
+.ps-x.ps-in-scrolling.ps-container > .ps-scrollbar-x-rail {
+	opacity: 0.9; background-color: rgb(238, 238, 238);
+}
+.ps-x.ps-in-scrolling.ps-container > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+	background-color: rgb(153, 153, 153);
+}
+.ps-y.ps-in-scrolling.ps-container > .ps-scrollbar-y-rail {
+	opacity: 0.9; background-color: rgb(238, 238, 238);
+}
+.ps-y.ps-in-scrolling.ps-container > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+	background-color: rgb(153, 153, 153);
+}
+.ps-container > .ps-scrollbar-x-rail {
+	border-radius: 4px; transition:background-color 0.2s linear, opacity 0.2s linear; height: 8px; bottom: 3px; display: none; position: absolute; opacity: 0; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -webkit-transition: background-color .2s linear, opacity .2s linear; -moz-transition: background-color .2s linear, opacity .2s linear; -o-transition: background-color .2s linear, opacity .2s linear;
+}
+.ps-container > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+	border-radius: 4px; transition:background-color 0.2s linear; height: 8px; bottom: 0px; position: absolute; background-color: rgb(170, 170, 170); -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -webkit-transition: background-color .2s linear; -moz-transition: background-color .2s linear; -o-transition: background-color .2s linear;
+}
+.ps-container > .ps-scrollbar-y-rail {
+	border-radius: 4px; transition:background-color 0.2s linear, opacity 0.2s linear; width: 8px; right: 3px; display: none; position: absolute; opacity: 0; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -webkit-transition: background-color .2s linear, opacity .2s linear; -moz-transition: background-color .2s linear, opacity .2s linear; -o-transition: background-color .2s linear, opacity .2s linear;
+}
+.ps-container > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+	border-radius: 4px; transition:background-color 0.2s linear; width: 8px; right: 0px; position: absolute; background-color: rgb(170, 170, 170); -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -webkit-transition: background-color .2s linear; -moz-transition: background-color .2s linear; -o-transition: background-color .2s linear;
+}
+.ps-in-scrolling.ps-container:hover {
+	pointer-events: none;
+}
+.ps-x.ps-in-scrolling.ps-container:hover > .ps-scrollbar-x-rail {
+	opacity: 0.9; background-color: rgb(238, 238, 238);
+}
+.ps-x.ps-in-scrolling.ps-container:hover > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+	background-color: rgb(153, 153, 153);
+}
+.ps-y.ps-in-scrolling.ps-container:hover > .ps-scrollbar-y-rail {
+	opacity: 0.9; background-color: rgb(238, 238, 238);
+}
+.ps-y.ps-in-scrolling.ps-container:hover > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+	background-color: rgb(153, 153, 153);
+}
+.ps-container:hover > .ps-scrollbar-x-rail {
+	opacity: 0.6;
+}
+.ps-container:hover > .ps-scrollbar-y-rail {
+	opacity: 0.6;
+}
+.ps-container:hover > .ps-scrollbar-x-rail:hover {
+	opacity: 0.9; background-color: rgb(238, 238, 238);
+}
+.ps-container:hover > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x {
+	background-color: rgb(153, 153, 153);
+}
+.ps-container:hover > .ps-scrollbar-y-rail:hover {
+	opacity: 0.9; background-color: rgb(238, 238, 238);
+}
+.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
+	background-color: rgb(153, 153, 153);
+}
