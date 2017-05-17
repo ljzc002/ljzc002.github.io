@@ -358,7 +358,7 @@ function AdjustTryd()
     context.moveTo((tryangle_hold[0].uv[0]*width),(height-tryangle_hold[0].uv[1]*height));
     context.lineTo((tryangle_hold[1].uv[0]*width),(height-tryangle_hold[1].uv[1]*height));
     context.lineTo((tryangle_hold[2].uv[0]*width),(height-tryangle_hold[2].uv[1]*height));
-    //context.clip();
+    context.clip();
 
     
     var u_scaling=(Math.abs((tryangle_hold[2].uv[0]*width)-(tryangle_hold[0].uv[0]*width))/2)/inputs2[3].value;
