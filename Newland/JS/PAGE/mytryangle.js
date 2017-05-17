@@ -364,7 +364,7 @@ function AdjustTryd()
     var u_scaling=(Math.abs((tryangle_hold[2].uv[0]*width)-(tryangle_hold[0].uv[0]*width))/2)/inputs2[3].value;
     var v_scaling=(Math.abs((height-tryangle_hold[0].uv[1]*height)-(height-tryangle_hold[1].uv[1]*height))/2)/inputs2[4].value;
     var u_move=-inputs2[1].value*2*u_scaling+(tryangle_hold[0].uv[0]*width);
-    var v_move=inputs2[2].value*2*v_scaling-tryangle_hold[1].uv[1]*height;
+    var v_move=inputs2[2].value*2*v_scaling-tryangle_hold[1].uv[1]*height+(height-(height2)*v_scaling);
     var angle=context2.mydata.angle;
     if(angle==0)
     {
