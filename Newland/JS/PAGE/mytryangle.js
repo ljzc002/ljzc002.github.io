@@ -360,26 +360,27 @@ function AdjustTryd()
     context.lineTo((tryangle_hold[2].uv[0]*width),(height-tryangle_hold[2].uv[1]*height));
     context.clip();
 
-    var u_move=-inputs2[1].value*2+(tryangle_hold[0].uv[0]*width);
-    var v_move=inputs2[2].value*2-tryangle_hold[1].uv[1]*height;
+    
     var u_scaling=(Math.abs((tryangle_hold[2].uv[0]*width)-(tryangle_hold[0].uv[0]*width))/2)/inputs2[3].value;
     var v_scaling=(Math.abs((height-tryangle_hold[0].uv[1]*height)-(height-tryangle_hold[1].uv[1]*height))/2)/inputs2[4].value;
+    var u_move=-inputs2[1].value*2*u_scaling+(tryangle_hold[0].uv[0]*width);
+    var v_move=inputs2[2].value*2*v_scaling-tryangle_hold[1].uv[1]*height;
     var angle=context2.mydata.angle;
     if(angle==0)
     {
-        context.drawImage(context2.mydata.image,u_move*u_scaling,v_move*v_scaling,(width2)*u_scaling,(height2)*v_scaling);
+        context.drawImage(context2.mydata.image,u_move,v_move,(width2)*u_scaling,(height2)*v_scaling);
     }
     else if(angle==90)
     {
-        context.drawImage(context2.mydata.image90,u_move*u_scaling,v_move*v_scaling,(width2)*u_scaling,(height2)*v_scaling);
+        context.drawImage(context2.mydata.image90,u_move,v_move,(width2)*u_scaling,(height2)*v_scaling);
     }
     else if(angle==180)
     {
-        context.drawImage(context2.mydata.image180,u_move*u_scaling,v_move*v_scaling,(width2)*u_scaling,(height2)*v_scaling);
+        context.drawImage(context2.mydata.image180,u_move,v_move,(width2)*u_scaling,(height2)*v_scaling);
     }
     else if(angle==270)
     {
-        context.drawImage(context2.mydata.image270,u_move*u_scaling,v_move*v_scaling,(width2)*u_scaling,(height2)*v_scaling);
+        context.drawImage(context2.mydata.image270,u_move,v_move,(width2)*u_scaling,(height2)*v_scaling);
     }
     //context.drawImage(context2.mydata.image,u_move*u_scaling,v_move*v_scaling,(width2)*u_scaling,(height2)*v_scaling);
     context.closePath();
