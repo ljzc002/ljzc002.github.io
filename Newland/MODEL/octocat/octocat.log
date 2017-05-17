@@ -1,0 +1,40 @@
+	Exporter version: 4.5.1, Blender version: 2.76 (sub 0)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used:
+		selected layers only:  false
+		flat shading entire scene:  false
+		inline textures:  false
+		texture directory:  D:\下载区15\72542_octocat\babylon\
+	Python World class constructor completed
+	processing begun of mesh:  Cone
+		processing begun of Standard material:  Material.002
+		num positions      :  545
+		num normals        :  545
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  3258
+	processing begun of mesh:  Circle
+		processing begun of Standard material:  Material.001
+		num positions      :  32
+		num normals        :  32
+		num uvs            :  0
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  90
+	processing begun of camera (FreeCamera):  Camera
+	processing begun of mesh:  Cube
+		processing begun of Standard material:  Material
+			Diffuse texture found "Texture.001"
+				Image texture found, type:  diffuseTexture, mapped using: "UVMap"
+		num positions      :  8445
+		num normals        :  8445
+		num uvs            :  16890
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  44736
+	WARNING: The following object (type - CURVE) is not currently exportable thus ignored: BezierCurve
+========= Writing of scene file started =========
+========= Writing of scene file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.454 secs

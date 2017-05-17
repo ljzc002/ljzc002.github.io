@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简单模型查看器</title>
+    <style>canvas { width: 100%; height: 100% }</style>
+
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+</body>
+<script src="../JS/LIB/babylon.26.all.max.js"></script>
+<script src="../JS/LIB/jquery-1.11.3.min.js"></script>
+<script>
+    var canvas = document.getElementById("renderCanvas");
+    var engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    var scene = new BABYLON.Scene(engine);
+    var sceneCharger = false;
+    var cameraArcRotative = [];
+    var shadowGenerator ;
+
+    //半球光照
+    light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+    light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+    light0.specular = new BABYLON.Color3(0,0,0);
+    light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+    //定向光照
+    var LightDirectional = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(-2, -4, 2), scene);
+    LightDirectional.diffuse = new BABYLON.Color3(1, 1, 1);//散射颜色
+    LightDirectional.specular = new BABYLON.Color3(0, 0, 0);//镜面反射颜色
+    LightDirectional.position = new BABYLON.Vector3(250, 400, 0);
+    LightDirectional.intensity = 1.8;//强度
+    shadowGenerator = new BABYLON.ShadowGenerator(1024, LightDirectional);//为该光源建立阴影生成器，用在submesh上时一直在报错，不知道为了什么
+
+    //弧形旋转相机
+    cameraArcRotative[0] = new BABYLON.ArcRotateCamera("CameraBaseRotate", -Math.PI/2, Math.PI/2.2, 12, new BABYLON.Vector3(0, 0, 0), scene);
+    cameraArcRotative[0].wheelPrecision = 15;//鼠标滚轮？
+    cameraArcRotative[0].lowerRadiusLimit = 2;
+    cameraArcRotative[0].upperRadiusLimit = 22;
+    cameraArcRotative[0].minZ = 0;
+    cameraArcRotative[0].minX = 4096;
+    scene.activeCamera = cameraArcRotative[0];
+    cameraArcRotative[0].attachControl(canvas);//控制关联
+    //cameraArcRotative[0].position.y=-4.0;
+
+    var plan = BABYLON.Mesh.CreatePlane("plane", 10.0, scene);
+    plan.rotation.x=Math.PI/2;
+    plan.position.y=-5.0;
+    plan.material=new BABYLON.StandardMaterial("test", scene);
+    plan.material.diffuseColor=new BABYLON.Color3(1, 1, 1);
+
+    //BABYLON.SceneLoader.ImportMesh("", "../MODEL/test278/", "Baymax_Walk Cycle.babylon", scene, function (newMeshes, particleSystems, skeletons)
+    //BABYLON.SceneLoader.ImportMesh("", "../MODEL/Baymax_Walk/", "Baymax_Walk Cycle.blend.babylon", scene, function (newMeshes, particleSystems, skeletons)
+    //BABYLON.SceneLoader.ImportMesh("", "../MODEL/simple/", "simple.babylon", scene, function (newMeshes, particleSystems, skeletons)
+    //BABYLON.SceneLoader.ImportMesh("", "../MODEL/allbase/", "2017328_13_8_48allbase.babylon", scene, function (newMeshes, particleSystems, skeletons)
+    BABYLON.SceneLoader.ImportMesh("", "../MODEL/allbase/", "2017517_15_29_21testscene.babylon", scene, function (newMeshes, particleSystems, skeletons)
+    {//默认把视口大小也加载进来了吗？
+        var baymaxmesh = newMeshes[0];
+
+        if(skeletons[0])
+        {
+            var totalFrame = skeletons[0]._scene._activeSkeletons.data.length;//总帧数
+            var start = 0;
+            var end = 50;
+            var VitesseAnim = parseFloat(1 / 100);//动画的速度比，慢速
+            //scene.beginAnimation(skeletons[0], (100 * start) / totalFrame, (100 * end) / totalFrame, true, VitesseAnim);//启动动画
+            scene.beginAnimation(newMeshes[1].skeleton, (100 * start) / totalFrame, (100 * end) / totalFrame, true, VitesseAnim);
+        }
+        //scene.beginAnimation(skeletons[0], 0, 72, true, 0.8);
+        console.log("baymaxmesh");
+    });
+    scene.registerBeforeRender(function()
+    {//每次渲染前
+        if(scene.isReady())
+        {//加载完毕
+            if(sceneCharger == false) {
+                engine.hideLoadingUI();//隐藏载入ui
+                sceneCharger = true;
+            }
+        }
+    });
+    engine.runRenderLoop(function () {
+        scene.render();
+
+    });
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+</script>
+
+
+</html>

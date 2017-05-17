@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>核心库起名叫Newland</title>
+    <link href="../CSS/newland.css" rel="stylesheet">
+    <script src="../JS/LIB/jquery-1.11.3.min.js"></script>
+    <script src="../JS/LIB/stat.js"></script>
+    <script src="../JS/LIB/babylon.26.all.max.js"></script>
+    <script src="../JS/LIB/html2canvas.min.js"></script>
+    <script src="../JS/MYLIB/Events.js"></script>
+    <script src="../JS/MYLIB/FileText.js"></script>
+    <script src="../JS/MYLIB/View.js"></script>
+    <script src="../JS/MYLIB/ALTER_VIEW.js"></script>
+    <script src="../JS/MYLIB/newland.js"></script>
+    <script src="../JS/MYLIB/move.js"></script>
+    <script src="../JS/PAGE/mytryangle.js"></script>
+    <script src="../JS/PAGE/mymesh.js"></script>
+</head>
+<body>
+<div id="all_base" style="">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;position: fixed;"></div>
+    <div id="div_control" style="">
+        <!--使用时将二阶和三阶按钮添加到div_control中，避免按钮的宽度被限制-->
+        <!--1-->
+        <div class="div_col to_left">
+            <button class="btn_first" onclick="Open_second(0)">文件</button>
+            <div class="hidden">
+                <button class="btn_second" style="left: 0px;top: 2px">导入</button>
+                <button class="btn_second" style="left: 0px;top: 27px" onclick="Export_mesh()">导出</button>
+                <button class="btn_second" style="left: 0px;top: 52px" onclick="Export_png()">导出图片</button>
+                <button class="btn_second" style="left: 0px;top: 77px" onclick="BackWord();">后退</button>
+            </div>
+        </div>
+        <!--2-->
+        <div class="div_col to_left">
+            <button class="btn_first" onclick="Open_second(1)">选择</button>
+            <div class="hidden">
+                <button class="btn_second" style="left: 0px;top: 2px" onclick="Choose_mesh()">选择网格</button>
+                <button class="btn_second" style="left: 0px;top: 27px" onclick="Choose_tryangle()">选择三角形</button>
+                <button class="btn_second" style="left: 0px;top: 52px" onclick="Choose_point()">选择点</button>
+                <button class="btn_second" style="left: 0px;top: 77px" onclick="alert('选择骨骼')">选择骨骼</button>
+            </div>
+            <div class="hidden">
+                <button class="btn_third">位置</button>
+                <button class="btn_third">姿态</button>
+                <button class="btn_third">缩放</button>
+                <button class="btn_third">父子关系</button>
+                <button class="btn_third">材质</button>
+            </div>
+            <div class="hidden">
+                <button class="btn_third">颜色</button>
+                <button class="btn_third">纹理</button>
+            </div>
+            <div class="hidden">
+                <button class="btn_third">位置</button><!--所有的这个点一起移动-->
+                <button class="btn_third">法线</button><!--每个这个点单独改变-->
+                <button class="btn_third">纹理坐标</button>
+            </div>
+        </div>
+        <!--3-->
+        <div class="div_col to_left">
+            <button class="btn_first" onclick="Open_second(2)">添加</button>
+            <div class="hidden">
+                <button class="btn_second" style="left: 0px;top: 2px" onclick="Open_third(2,0)">新增网格</button>
+                <button class="btn_second" style="left: 0px;top: 27px" onclick="Open_third(2,1)">融合网格</button>
+                <button class="btn_second" style="left: 0px;top: 52px" onclick="Open_third(2,2)">切削网格</button>
+                <button class="btn_second" style="left: 0px;top: 77px">新增顶点</button>
+            </div>
+            <div class="hidden">
+                <button class="btn_third" onclick="AddMesh(0,0)">正方体</button>
+                <button class="btn_third" onclick="AddMesh(0,1)">正球体</button>
+                <button class="btn_third" onclick="AddMesh(0,2)">测试体</button>
+                <button class="btn_third" onclick="AddMesh(0,3)">章鱼猫</button>
+                <button class="btn_third" onclick="AddMesh(0,4)">test3</button>
+            </div>
+            <div class="hidden">
+                <button class="btn_third" onclick="AddMesh(1,0)">正方体</button>
+                <button class="btn_third" onclick="AddMesh(1,1)">正球体</button>
+            </div>
+            <div class="hidden">
+                <button class="btn_third" onclick="AddMesh(2,0)">正方体</button>
+                <button class="btn_third" onclick="AddMesh(2,1)">正球体</button>
+            </div>
+        </div>
+        <!--4-->
+        <div class="div_col to_left">
+            <button class="btn_first" onclick="Open_second(3)">动画</button>
+            <div class="hidden">
+                <button class="btn_second" style="">测试测试测试测试测试测试</button>
+            </div>
+        </div>
+        <!--5-->
+        <div class="div_col to_left">
+            <button class="btn_first" onclick="Open_second(4)">空着</button>
+            <div class="hidden"></div>
+        </div>
+        <!--6-->
+        <div class="div_col to_left">
+            <button class="btn_first" onclick="Open_second(5)">空着</button>
+            <div class="hidden"></div>
+        </div>
+        <!--=-->
+        <div class="div_col to_right">
+            <button class="btn_first" onclick="Open_second(6)">调整</button>
+            <div class="hidden">
+                <button class="btn_second" style="right: 0px;top: 2px" onclick="MouseOff()">按住鼠标</button>
+                <button class="btn_second" style="right: 0px;top: 27px" onclick="ChangeViewMode()">视角切换</button>
+                <button class="btn_second" style="right: 0px;top: 52px" onclick="AdjustV()">调整速度</button>
+                <button class="btn_second" style="right: 0px;top: 77px" onclick="FreeControl()">自由浏览</button>
+                <button class="btn_second" onclick="AdjustPos()">调整位置</button><!--弹出一个非模式的对话框，并设置焦点物体的六按键绑定-->
+                <button class="btn_second" onclick="AdjustRoa()">调整姿态</button>
+                <button class="btn_second" onclick="AdjustSca()">调整缩放</button>
+            </div>
+        </div>
+        <!----->
+        <div class="div_col to_right">
+            <button class="btn_first" onclick="Open_second(7)">网络</button>
+            <div class="hidden">
+                <button class="btn_second" style="right: 0px;top: 2px">测试测试测试测试测试测试</button>
+            </div>
+        </div>
+        <!--0-->
+        <div class="div_col to_right">
+            <button class="btn_first" onclick="Open_second(8)">空着</button>
+            <div class="hidden"></div>
+        </div>
+        <!--9-->
+        <div class="div_col to_right">
+            <button class="btn_first" onclick="Open_second(9)">空着</button>
+            <div class="hidden"></div>
+        </div>
+        <!--8-->
+        <div class="div_col to_right">
+            <button class="btn_first" onclick="Open_second(10)">空着</button>
+            <div class="hidden"></div>
+        </div>
+        <!--7-->
+        <div class="div_col to_right">
+            <button class="btn_first" onclick="Open_second(11)">空着</button>
+            <div class="hidden"></div>
+        </div>
+    </div>
+</div>
+<div id="div_hidden" class="hidden">
+    <div id="div_mod1"><!--速度调整对话框，包括控制体移动速度，自由浏览移动速度，被控制体移动速度，鼠标灵敏度-->
+        <div class="div_inmod1" style="width: 800px;height: 450px;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px;display: inline-block;background: transparent">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid;cursor: move;font-family: verdana,arial,sans-serif;font-size: 12px;">
+                <span style="float: left;margin-left: 10px">速度调整</span>
+                <BUTTON onclick='btn_del2();' type=submit  class="btn_close"></BUTTON>
+            </div>
+            <div class="div_inmod2_content" style="width: 100%;height: 428px;overflow-x: hidden;overflow-y: hidden;margin:0;border: 0;padding:0;background-color: #fbfcfb">
+                <div class="div_cook2" style="width: 100%;height: 100%">
+                    <ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span style="">视点移动速度：</span>
+                            <input class="str_normal" maxlength="10" style=""  onkeydown="onlyNum();" onchange="current_player.flag_runfast=this.value">
+                        </li>
+                        <li>
+                            <span style="">自由浏览移动速度：</span>
+                            <input class="str_normal" maxlength="10" style=""  onkeydown="onlyNum();" onchange="freeCamera.speed=this.value">
+                        </li>
+                        <li>
+                            <span style="">物体移动速度：</span>
+                            <input class="str_normal" maxlength="10" style=""  onkeydown="onlyNum();" onchange="current_player.flag_objfast=this.value">
+                        </li>
+                        <li>
+                            <span style="">转动速度：</span>
+                            <input class="str_normal" maxlength="10" style=""  onkeydown="onlyNum();" onchange="freeCamera.angularSensibility=this.value">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div_mod2"><!--物体位置调整，包括使用脚本调整-->
+        <div class="div_inmod2" style="width: 240px;height: 320px;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px;display: inline-block;background: transparent">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid;cursor: move;font-family: verdana,arial,sans-serif;font-size: 12px;">
+                <span style="float: left;margin-left: 10px">物体位置调整</span>
+                <BUTTON onclick='btn_del2();flag.holdMode=null;' type=submit  class="btn_close"></BUTTON>
+            </div>
+            <div class="div_inmod2_content" style="width: 100%;height: 298px;overflow-x: hidden;overflow-y: hidden;margin:0;border: 0;padding:0;background-color: #fbfcfb">
+                <div class="div_cook2" style="width: 100%;height: 100%">
+                    <ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span style="width: 60px">x：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustPos'
+                            ,mesh_hold.name,new BABYLON.Vector3(this.value-mesh_hold.position.x,0,0)]);mesh_hold.position.x=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">y：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustPos'
+                            ,mesh_hold.name,new BABYLON.Vector3(0,this.value-mesh_hold.position.y,0)]);mesh_hold.position.y=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">z：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustPos'
+                            ,mesh_hold.name,new BABYLON.Vector3(0,0,this.value-mesh_hold.position.z)]);mesh_hold.position.z=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">脚本：</span>
+                            <textarea class="str_normal" style="width: 100%"></textarea>
+                            <button onclick="AdjustPos2()" style="width: 120px">执行脚本</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div_mod3"><!--物体姿态调整，包括使用脚本调整-->
+        <div class="div_inmod3" style="  width: 240px;height: 320px;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px;display: inline-block;background: transparent">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid;cursor: move;font-family: verdana,arial,sans-serif;font-size: 12px;">
+                <span style="float: left;margin-left: 10px">物体姿态调整</span>
+                <BUTTON onclick='btn_del2();flag.holdMode=null;' type=submit  class="btn_close"></BUTTON>
+            </div>
+            <div class="div_inmod2_content" style="width: 100%;height: 298px;overflow-x: hidden;overflow-y: hidden;margin:0;border: 0;padding:0;background-color: #fbfcfb">
+                <div class="div_cook2" style="width: 100%;height: 100%">
+                    <ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span style="width: 60px">x：</span>
+                            <input class="str_normal"  style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustRoa'
+                            ,mesh_hold.name,new BABYLON.Vector3(this.value-mesh_hold.rotation.x,0,0)]);mesh_hold.rotation.x=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">y：</span>
+                            <input class="str_normal"  style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustRoa'
+                            ,mesh_hold.name,new BABYLON.Vector3(0,this.value-mesh_hold.rotation.y,0)]);mesh_hold.rotation.y=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">z：</span>
+                            <input class="str_normal"  style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustRoa'
+                            ,mesh_hold.name,new BABYLON.Vector3(0,0,this.value-mesh_hold.rotation.z)]);mesh_hold.rotation.z=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">脚本：</span>
+                            <textarea class="str_normal" style="width: 100%"></textarea>
+                            <button onclick="AdjustRoa2()" style="width: 120px">执行脚本</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div_mod4"><!--物体缩放调整，包括使用脚本调整-->
+        <div class="div_inmod4" style="width: 240px;height: 320px;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px;display: inline-block;background: transparent">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid;cursor: move;font-family: verdana,arial,sans-serif;font-size: 12px;">
+                <span style="float: left;margin-left: 10px">物体缩放调整</span>
+                <BUTTON onclick='btn_del2();flag.holdMode=null;' type=submit  class="btn_close"></BUTTON>
+            </div>
+            <div class="div_inmod2_content" style="width: 100%;height: 298px;overflow-x: hidden;overflow-y: hidden;margin:0;border: 0;padding:0;background-color: #fbfcfb">
+                <div class="div_cook2" style="width: 100%;height: 100%">
+                    <ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span style="width: 60px">x：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustSca'
+                            ,mesh_hold.name,new BABYLON.Vector3(this.value/mesh_hold.scaling.x,1,1)]);mesh_hold.scaling.x=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">y：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustSca'
+                            ,mesh_hold.name,new BABYLON.Vector3(1,this.value/mesh_hold.scaling.y,1)]);mesh_hold.scaling.y=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">z：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="PushHistory([WhoAmI,'AdjustSca'
+                            ,mesh_hold.name,new BABYLON.Vector3(1,1,this.value/mesh_hold.scaling.z)]);mesh_hold.scaling.z=this.value">
+                        </li>
+                        <li>
+                            <span style="width: 60px">脚本：</span>
+                            <textarea class="str_normal" style="width: 100%"></textarea>
+                            <button onclick="AdjustSca2()" style="width: 120px">执行脚本</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div_mod5"><!--调整选中的三角形图元的颜色-->
+        <div class="div_inmod5" style="width: 320px;height: 480px;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px;display: inline-block;background: transparent">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid;cursor: move;font-family: verdana,arial,sans-serif;font-size: 12px;">
+                <span style="float: left;margin-left: 10px">三角形纹理调整</span>
+                <!--BUTTON onclick='CloneSurface();btn_del2();flag.holdMode=null;' type=submit  class="btn_close"></BUTTON-->
+            </div>
+            <div class="div_inmod2_content" style="width: 100%;height: 458px;overflow-x: hidden;overflow-y: hidden;margin:0;border: 0;padding:0;background-color: #fbfcfb">
+                <div class="div_cook2" style="width: 100%;height: 100%">
+                    <ul style="width: 100%;margin-left: 0px">
+                        <canvas id="can_tryangle" style="width: 256px;height: 256px;border: 1px solid" width="1024" height="1024"></canvas>
+                    </ul>
+                    <ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span style="width: 60px">R：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <span style="width: 60px">G：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <span style="width: 60px">B：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <span style="width: 60px">A：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <button onclick="AdjustTrya()" style="width: 120px">选择颜色</button>
+                            <button onclick="AdjustTryb()" style="width: 120px">从图片选取</button>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div_mod6"><!--速度调整对话框，包括控制体移动速度，自由浏览移动速度，被控制体移动速度，鼠标灵敏度-->
+        <div class="div_inmod6" style="width: 800px;height: 600px;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px;display: inline-block;background: transparent">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid;cursor: move;font-family: verdana,arial,sans-serif;font-size: 12px;">
+                <span style="float: left;margin-left: 10px">图片选择</span>
+                <BUTTON onclick='btn_del3();' type=submit  class="btn_close"></BUTTON>
+            </div>
+            <div class="div_inmod2_content" style="width: 100%;height: 578px;overflow-x: hidden;overflow-y: hidden;margin:0;border: 0;padding:0;background-color: #fbfcfb">
+                <div style="width: 512px;height: 512px;float: left;margin-left: 5px;margin-top: 5px;position: relative">
+                    <canvas class="can_pic" style="width: 512px;height: 512px;float: left;"
+                            width="1024" height="1024"></canvas>
+                </div>
+
+
+                <div class="div_cook2" style="width: 250px;height: 100%;margin-left: 10px">
+                    <ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span>选择图片：</span>
+                            <input type='file' class='str_file' onchange='ShowImg(this)' value='' />
+                        </li>
+                    </ul>
+                    <ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span style="width: 60px">u偏移：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="AdjustTryf()">
+                        </li>
+                        <li>
+                            <span style="width: 60px">v偏移：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="AdjustTryf()">
+                        </li>
+                        <li>
+                            <span style="width: 60px">u长度：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="AdjustTrye()">
+                        </li>
+                        <li>
+                            <span style="width: 60px">v长度：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="AdjustTrye()">
+                        </li>
+                    </ul>
+                    <ul style="width: 100%;margin-left: 0px;margin-bottom: 5px;margin-top: 10px">
+                        <li>
+                            <button onclick="TurnZ(0)" style="width: 200px">原图</button>
+                            <button onclick="TurnZ(90)" style="width: 200px">顺时针旋转90度</button>
+                            <button onclick="TurnZ(180)" style="width: 200px">顺时针旋转180度</button>
+                            <button onclick="TurnZ(270)" style="width: 200px">顺时针旋转270度</button>
+                        </li>
+                    </ul>
+                    <ul style="width: 100%;margin-left: 0px;margin-bottom: 5px;margin-top: 200px">
+                        <li>
+                            <button onclick="AdjustTryd()" style="width: 100px">确定</button>
+                            <button onclick="btn_del3();" style="width: 100px">取消</button>
+                        </li>
+                    </ul>
+                    <!--ul style="width: 100%;margin-left: 0px">
+                        <li>
+                            <span style="width: 60px">u1：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();" onchange="InONE(evt)">
+                        </li>
+                        <li>
+                            <span style="width: 60px">v1：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <span style="width: 60px">u2：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <span style="width: 60px">v2：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <span style="width: 60px">u3：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <span style="width: 60px">v3：</span>
+                            <input class="str_normal" style=""  onkeydown="onlyNum();">
+                        </li>
+                        <li>
+                            <button onclick="AdjustTryc()" style="width: 120px">标记</button>
+                            <button onclick="AdjustTryd()" style="width: 120px">确定</button>
+                            <button onclick="btn_del3();" style="width: 120px">取消</button>
+                        </li>
+
+                    </ul-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--canvas id="can_tryangle" style="width: 256px;height: 256px;border: 1px solid" width="1024" height="1024"></canvas-->
+</body>
+<script src="../JS/PAGE/control.js"></script>
+<script src="../JS/PAGE/characters.js"></script>
+<script src="../JS/PAGE/index_newland.js"></script>
+<script>
+    function btn_del2()
+    {
+        delete_div('div_choose');
+        delete_div('div_mask');
+        flag.inputMode=false;
+    }
+    function btn_del3()
+    {
+        delete_div('div_choose2');
+        delete_div('div_mask');
+        flag.inputMode=false;
+    }
+</script>
+</html>

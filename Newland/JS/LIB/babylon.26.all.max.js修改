@@ -1,0 +1,2 @@
+22469行前后updateSideOrientation的出处由this改为MeshBuilder
+55092行前后DebugLayer.InspectorURL改为本地的'http://localhost:6334/PRACTICE4/JS/LIB/babylon.inspector.bundle.js';
