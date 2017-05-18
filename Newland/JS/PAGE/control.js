@@ -172,7 +172,7 @@ function onKeyUp(event)
                     {
                         var len=mesh_hold._children.length;
 
-                        for(var i=0;i<len-1;i++)//其中有一个是cross！！
+                        for(var i=0;i<len;i++)//其中有一个是cross！！
                         {
                             try{
                                 var child=mesh_hold._children[0];
