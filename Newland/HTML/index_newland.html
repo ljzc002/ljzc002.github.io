@@ -402,7 +402,19 @@
             </div>
         </div>
     </div>
+    <div id="div_mod7"><!--用来弹出大段的文本提示-->
+        <div class="div_inmod7" style="width: 800px;height: 450px;margin: 0px;border: 1px solid;padding: 0px;float: left;line-height: 20px;display: inline-block;background: transparent">
+            <div class="div_inmod_head" style="width: 100%;height: 20px;background-color: #E0ECFF;margin:0;border: 0;padding:0;border-bottom: 1px solid;cursor: move;font-family: verdana,arial,sans-serif;font-size: 12px;">
+                <span style="float: left;margin-left: 10px">提示</span>
+                <BUTTON onclick='btn_del2();' type=submit  class="btn_close"></BUTTON>
+            </div>
+            <div class="div_inmod2_content" style="width: 100%;height: 428px;overflow-x: hidden;overflow-y: hidden;margin:0;border: 0;padding:0;background-color: #fbfcfb">
+                <iframe style="width: 100%;height: 100%">
 
+                </iframe>
+            </div>
+        </div>
+    </div>
 </div>
 <!--canvas id="can_tryangle" style="width: 256px;height: 256px;border: 1px solid" width="1024" height="1024"></canvas-->
 </body>
@@ -421,6 +433,23 @@
         delete_div('div_choose2');
         delete_div('div_mask');
         flag.inputMode=false;
+    }
+    function OpenComment(str)
+    {
+        delete_div("div_btn_third");
+        delete_div("div_btn_second");
+        btn_selected=null;
+        delete_div('div_choose');
+        delete_div('div_choose2');
+        delete_div('div_mask');
+        flag.inputMode=false;
+        var size=window_size();
+        Open_div2("div_choose",{left:(size.width)/2-400,top:(size.height)/2-225}
+                ,800,450,null//[type]
+                ,1,401,1,"#ffffff");
+        var div_choose=$("#div_choose")[0];
+        div_choose.innerHTML=$("#div_hidden #div_mod7")[0].innerHTML;
+        div_choose.getElementsByTagName("iframe")[0].src="LOAD/"+str+".htm";
     }
 </script>
 </html>
