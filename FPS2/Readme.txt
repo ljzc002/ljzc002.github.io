@@ -1,3 +1,3 @@
-这是参考法国同行Julian Chenard的教程编写的一个第三人称3D射击游戏原型，原教程的地址是http://www.pixelcodr.com/tutorials.html。
+这是参考法国同行Julian Chenard的教程编写的一个第三人称3D射击游戏原型，原教程的地址是http://www.pixelcodr.com/tutorials.html
 在Julian作品的基础上我添加了物理引擎控制、玩家本体网格并优化了小地图的显示效果，同时使用新版Babylon.js的新用法代替了一些原教程中的旧用法。
 Julian的教程帮助了我很多，在此谨对他表示诚挚的感谢
