@@ -1,0 +1,54 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+canvas {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#viseur {
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin-top:-37px;
+    margin-left:-37px;
+}
+/*
+#guiCanvas {
+    position:absolute;
+    top:0;
+    pointer-events: none;
+}*/
+#fps {
+    position: absolute;
+    right: 20px;
+    top: 5em;
+    font-size: 20px;
+    color: white;
+    text-shadow: 2px 2px 0 black;
+}
+
+#stats {
+    position: absolute;
+    right: 20px;
+    top: 11em;
+    font-size: 14px;
+    color: white;
+    text-align: right;
+    text-shadow: 2px 2px 0 black;
+}
+
+#status {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    font-size: 14px;
+    color: white;
+    text-shadow: 2px 2px 0 black;
+}
