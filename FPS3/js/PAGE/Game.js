@@ -77,7 +77,7 @@ Game = function(canvasId) {
         obj_p.mesh.renderingGroupId=2;
         obj_p.mesh.physicsImpostor=new BABYLON.PhysicsImpostor(obj_p.mesh
             , BABYLON.PhysicsImpostor.SphereImpostor, { mass: 70, restitution: 0.1 ,friction:1.5}, scene);
-        obj_p.mesh.physicsImpostor.physicsBody.fixedRotation=true;
+        //obj_p.mesh.physicsImpostor.physicsBody.fixedRotation=true;
         obj_p.methodofmove="pathgoto20170808";
         obj_p.name="农民";//显示的名字
         obj_p.id="农民";//WebSocket Sessionid
