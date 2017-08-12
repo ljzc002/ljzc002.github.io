@@ -146,6 +146,8 @@ function pathgoto20170808(obj)
             var len_y=MyGame.arena.len_y;
             var len_s=MyGame.arena.len_s;
             //obj.mesh.physicsImpostor.setMass(70);//正在运动中
+            var vl_now=obj.mesh.physicsImpostor.getLinearVelocity();
+
             if(obj.path_goto.length>0)
             {
                 var px=obj.mesh.position.x;//全是场景坐标！！
@@ -176,8 +178,10 @@ function pathgoto20170808(obj)
                         //obj.mesh.physicsImpostor.physicsBody
                     }
                     else{
-                        obj.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(count_x2,y_obj,count_y2).subtract(obj.mesh.position).normalize().scaleInPlace(obj.vm.forward));
-                        obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
+                        var v_temp=new BABYLON.Vector3(count_x2,0,count_y2).subtract(new BABYLON.Vector3(obj.mesh.position.x,0,obj.mesh.position.z)).normalize().scaleInPlace(obj.vm.forward);
+                        v_temp.y=vl_now.y;
+                        obj.mesh.physicsImpostor.setLinearVelocity(v_temp);
+                        //obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
                         if(obj.path_goto.length>1)
                         {
                             obj.path_goto=[obj.path_goto[len-1]];//只剩一个最终目标
@@ -199,14 +203,18 @@ function pathgoto20170808(obj)
                     count_x=obj.path_goto[0][0];
                     count_y=obj.path_goto[0][1];
                     console.log("切换下一个寻路单元格：["+count_x+","+count_y+"]");
-                    obj.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(count_x,y_obj,count_y).subtract(obj.mesh.position).normalize().scaleInPlace(obj.vm.forward));
-                    obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
+                    var v_temp=new BABYLON.Vector3(count_x,0,count_y).subtract(new BABYLON.Vector3(obj.mesh.position.x,0,obj.mesh.position.z)).normalize().scaleInPlace(obj.vm.forward);
+                    v_temp.y=vl_now.y;
+                    obj.mesh.physicsImpostor.setLinearVelocity(v_temp);
+                    //obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
                 }
                 else//正常向目标寻路格移动
                 {
                     console.log("普通寻路");
-                    obj.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(count_x,y_obj,count_y).subtract(obj.mesh.position).normalize().scaleInPlace(obj.vm.forward));
-                    obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
+                    var v_temp=new BABYLON.Vector3(count_x,0,count_y).subtract(new BABYLON.Vector3(obj.mesh.position.x,0,obj.mesh.position.z)).normalize().scaleInPlace(obj.vm.forward);
+                    v_temp.y=vl_now.y;
+                    obj.mesh.physicsImpostor.setLinearVelocity(v_temp);
+                    //obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
                 }
 
             }
