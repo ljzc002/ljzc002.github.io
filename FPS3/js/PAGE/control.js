@@ -179,7 +179,7 @@ function pathgoto20170808(obj)
                     }
                     else{
                         var v_temp=new BABYLON.Vector3(count_x2,0,count_y2).subtract(new BABYLON.Vector3(obj.mesh.position.x,0,obj.mesh.position.z)).normalize().scaleInPlace(obj.vm.forward);
-                        v_temp.y=vl_now.y;
+                        v_temp.y=vl_now.y<=0?vl_now.y:0;//这个单位应该脚踏实地的平稳运动
                         obj.mesh.physicsImpostor.setLinearVelocity(v_temp);
                         //obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
                         if(obj.path_goto.length>1)
@@ -204,7 +204,7 @@ function pathgoto20170808(obj)
                     count_y=obj.path_goto[0][1];
                     console.log("切换下一个寻路单元格：["+count_x+","+count_y+"]");
                     var v_temp=new BABYLON.Vector3(count_x,0,count_y).subtract(new BABYLON.Vector3(obj.mesh.position.x,0,obj.mesh.position.z)).normalize().scaleInPlace(obj.vm.forward);
-                    v_temp.y=vl_now.y;
+                    v_temp.y=vl_now.y<=0?vl_now.y:0;
                     obj.mesh.physicsImpostor.setLinearVelocity(v_temp);
                     //obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
                 }
@@ -212,7 +212,7 @@ function pathgoto20170808(obj)
                 {
                     console.log("普通寻路");
                     var v_temp=new BABYLON.Vector3(count_x,0,count_y).subtract(new BABYLON.Vector3(obj.mesh.position.x,0,obj.mesh.position.z)).normalize().scaleInPlace(obj.vm.forward);
-                    v_temp.y=vl_now.y;
+                    v_temp.y=vl_now.y<=0?vl_now.y:0;
                     obj.mesh.physicsImpostor.setLinearVelocity(v_temp);
                     //obj.mesh.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0,0,0));//停下
                 }
