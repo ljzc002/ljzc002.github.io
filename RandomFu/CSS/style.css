@@ -1,0 +1,40 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    display: inline-block;
+}
+#div_allbase
+{
+    width:800px;
+    height:650px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    float: left;
+}
+#div_Fus
+{
+    width: 512px;
+    height: 512px;
+    top: 10px;
+    left: 10px;
+    position: absolute;
+}
+#div_btnright
+{
+    width: 200px;
+    height: 512px;
+    top: 10px;
+    left: 532px;
+    position: absolute;
+}
+#div_btnbottom
+{
+    width: 800px;
+    height: 120px;
+    top: 530px;
+    left: 0px;
+    position: absolute;
+}
