@@ -38,8 +38,8 @@ function RefreshFu()
                 div_Fu.style.transform="scale("+RandomBetweenNum(0.1,2)+","+RandomBetweenNum(0.1,2)+")";
                 div_Fu.style.transform="rotate("+RandomBetweenNumInt(-10,10)+"deg)";
                 div_Fus.appendChild(div_Fu);
-                div_Fu.style.top=RandomBetweenNumInt(50,350)+"px";
-                div_Fu.style.left=RandomBetweenNumInt(50,350)+"px";
+                div_Fu.style.top=RandomBetweenNumInt(0,350)+"px";
+                div_Fu.style.left=RandomBetweenNumInt(0,350)+"px";
                 console.log("位置："+div_Fu.style.top+":"+div_Fu.style.left);
                 div_Fu.style.position="absolute";
             }
