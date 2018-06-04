@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>根据规则自动生成地区块，并且可以选择直接显示或者保存到数据库</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <link href="../../CSS/stat.css" rel="stylesheet">
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+    <script src="../../JS/MYLIB/Linkh2.js"></script>
+    <script src="../../JS/MYLIB/Events.js"></script>
+    <script src="../../JS/LIB/babylon.32.all.max.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/DataCook.js"></script>
+    <script src="../../JS/MYLIB/tab_libdata.js"></script>
+    <script src="../../JS/LIB/stat.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+</div>
+</body>
+<script>
+    var canvas,engine,scene,gl;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+            ;
+    window.onload=beforewebGL;
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+    function beforewebGL()
+    {
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        gl=engine._gl;
+        createScene();
+        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+        var UiPanel = new BABYLON.GUI.StackPanel();
+        UiPanel.width = "220px";
+        UiPanel.fontSize = "14px";
+        UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        advancedTexture.addControl(UiPanel);
+        // ..
+        var button = BABYLON.GUI.Button.CreateSimpleButton("button", "生成地块");
+        button.paddingTop = "10px";
+        button.width = "100px";
+        button.height = "50px";
+        button.color = "white";
+        button.background = "green";
+        button.onPointerDownObservable.add(function(state,info,coordinates) {
+            H2Login(CreateChess);//这里包含了对地形的获取
+        });
+        UiPanel.addControl(button);
+        var button2 = BABYLON.GUI.Button.CreateSimpleButton("button2", "从库查询");
+        button2.paddingTop = "10px";
+        button2.width = "100px";
+        button2.height = "50px";
+        button2.color = "white";
+        button2.background = "green";
+        button2.onPointerDownObservable.add(function(state,info,coordinates) {
+            H2Login(SelectChess);
+        });
+        UiPanel.addControl(button2);
+        MyBeforeRender();
+
+    }
+
+    var createScene = function (engine) {
+        camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -20), scene);
+        camera0.attachControl(canvas, true);
+        camera0.speed=0.5;
+        camera0.minZ=0.0001;
+        light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+        sphere1=BABYLON.MeshBuilder.CreateSphere("sphere1",{segments:10,diameter:10.0},scene);
+
+        if(localStorage.getItem("strsrc_dqk"))//如果本地存储里已经有地区块图片的dataurl
+        {
+            var str_temp=JSON.parse(localStorage.getItem("strsrc_dqk"));
+            var utexturedqk = new BABYLON.Texture.CreateFromBase64String(str_temp,"utexturedqk", scene
+                    ,false,false,BABYLON.Texture.NEAREST_NEAREST);//测试一下标准采样
+            var groundMaterial = new BABYLON.StandardMaterial("groundMat", scene);//泥土材质
+            groundMaterial.diffuseTexture = utexturedqk;//地面的纹理贴图
+            sphere1.material=groundMaterial;
+        }
+        else//否则使用一个预设的动态图像着色器
+        {
+            var amigaMaterial = new BABYLON.ShaderMaterial("amiga", scene,{
+                        vertexElement: "sh1v4.sh",
+                        fragmentElement: "sh1f4.sh",
+                    },
+                    {
+                        attributes: ["position"],
+                        uniforms: ["worldViewProjection","worldView"]
+                    });
+            amigaMaterial.setVector4("uColor", new BABYLON.Vector4(0.0,1.0,0.0,1.0));
+            sphere1.material=amigaMaterial;
+        }
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+
+    }
+    function CreateChess()//读取地区块的一些整体信息，从planet表获取更合理？
+    {
+        Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+        Argv="sql=select min_floor,max_floor,width_room,perimeter from tab_planet where id='test1'";//查找这个行星的地区块层数
+        //使用同步Ajax请求保证进度同步
+        Request(xmlHttp,"POST",Url,true,Argv,"application/x-www-form-urlencoded",CreateChessCallBack,0);
+    }
+    //地区块计算使用的变量
+    var min_floor= 0,max_floor= 0,width_room= 0,height_floor= 0,perimeter=0;//最低层数，最高层数
+    var can_temp=document.createElement("canvas");//用来做像素处理的隐形canvas
+    var context_temp;
+    var imagedata_temp;//=context_temp.getImageData(0,0,400,199);
+    var strsrc_dqk="";
+    function CreateChessCallBack()
+    {
+        if(xmlHttp.readyState==4) {
+            if(isTimout=="1")
+            {
+                alert("登陆验证请求超时！！");
+                clearTimeout(timer);
+                xmlHttp.abort();
+            }
+            else {
+                if (xmlHttp.status == 200) {
+                    clearTimeout(timer);//停止定时器
+                    try
+                    {
+                        var str_res=xmlHttp.responseText;//获取到的是一个dom文档，要从中找到所需要的字段
+                        xmlHttp.abort();
+                        var div=document.createElement("div");
+                        //div.innerHTML=str_res;//这样做会报错，因为作为dom被加载时，标签中的引用和代码都会被执行！！！！
+                        div.innerHTML=str_res.substring(str_res.search(/<table/),str_res.search(/<\/table>/)+8);
+                        div.style.display=false;
+                        //document.getElementById("div_allbase").appendChild(div);
+                        var tr=div.getElementsByTagName("tr")[1];
+                        var tds=tr.getElementsByTagName("td");
+                        min_floor=parseInt(tds[0].innerHTML);
+                        max_floor=parseInt(tds[1].innerHTML);
+                        width_room=parseInt(tds[2].innerHTML);
+                        perimeter=parseInt(tds[3].innerHTML);
+                        height_floor=min_floor+max_floor+1;
+                        var int_wh=width_room>height_floor?width_room:height_floor;//取宽高中较大的值
+                        var int_size=newland.FindPower(int_wh);//找到大于size的最小的2的整数次幂
+                        can_temp.width=int_size;
+                        can_temp.height=int_size;
+                        context_temp=can_temp.getContext("2d");
+                        context_temp.fillStyle="rgba(0,0,255,1)";
+                        context_temp.fillRect(0,0,int_size,int_size);
+                        imagedata_temp=context_temp.getImageData(0,0,int_size,int_size);
+
+                        arr_floorroom=[];
+                        pbeta=0;//认为每一层的弧度区分度是一定的
+                        arr_palpha=[];//每一层内的房间的弧度区分度不同
+                        //var arr_temp=JSON.parse(localStorage.getItem("arr_floorroom"));//读取本地存储
+                        //在向数据库写入之前，先把以前写入的清空掉
+                        Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+                        Argv="sql=delete tab_dqk where planetid='test1'";//查找这个行星的地区块层数
+                        //使用同步Ajax请求保证进度同步
+                        Request(xmlHttp,"POST",Url,true,Argv,"application/x-www-form-urlencoded",CreateChess2CallBack,0);
+                    }catch(e)
+                    {
+                        alert(xmlHttp.responseText);
+                        console.error(e)
+                        xmlHttp.abort();
+                    }
+                }
+            }
+        }
+    }
+    function CreateChess2CallBack()
+    {
+        if(xmlHttp.readyState==4) {
+            if(isTimout=="1")
+            {
+                alert("登陆验证请求超时！！");
+                clearTimeout(timer);
+                xmlHttp.abort();
+            }
+            else {
+                if (xmlHttp.status == 200) {
+                    clearTimeout(timer);//停止定时器
+                    try
+                    {
+                        xmlHttp.abort();
+                        CookDqk();
+                        //大小超过了本地存储限制
+
+
+                        DrawPlanet();
+                        //localStorage.setItem("strsrc_dqk",JSON.stringify(strsrc_dqk));
+                    }catch(e)
+                    {
+                        alert(xmlHttp.responseText);
+                        console.error(e)
+                        xmlHttp.abort();
+                    }
+                }
+            }
+        }
+    }
+
+
+    function CookDqk()//生成地区块，每一floor的每个room
+    {
+        var size_dqk=100;//每个地区块的长宽都是100km
+        var r_planet=perimeter/(2*Math.PI);//行星的半径
+        var len_beta=sswr(((perimeter/2)/size_dqk)/2);//通过弧度来分层！！100
+        pbeta=(Math.PI/4)/len_beta;
+        //对于每一层，
+        for(var i=-len_beta;i<=len_beta;i++)
+        {
+
+            var rad_beta=(Math.PI/2)*(i/len_beta);
+            var r_floor=Math.cos(rad_beta)*r_planet;//这一层的半径
+            var len_alpha_floor=sswr((r_floor*2*Math.PI)/size_dqk);
+            var palpha=Math.PI/len_alpha_floor;//每一个地区块的角度边界，在这个边界范围内即属于这个地区块
+            arr_palpha.push(palpha);
+            var beta=i*pbeta*2;
+            //console.log(i+"/"+len_beta+">"+len_alpha_floor);
+            var arr1=[];
+            //对于圆环上的每一个片
+            for(var j=0;j<len_alpha_floor;j++)
+            {
+                var obj={};
+                obj.palpha=palpha;
+                obj.alpha=j*palpha*2;
+                obj.pbeta=pbeta;
+                obj.beta=beta;
+                //obj.weight={};
+                obj.floor=i;
+                obj.room=j;
+                obj.countcook=0;
+                obj.altitude=0;
+                /*if((Math.floor(i/3)%2)==(Math.floor(j/3)%2))//棋盘形
+                {
+                    obj.weight="{land_textblack:1}";//在数据库中直接使用字符串形式保存
+                }
+                else
+                {
+                    obj.weight="{land_textyellow:1}";
+                }*/
+                arr1.push(obj);
+                //先尝试单独推入每一个地区块
+                //PushChess(obj);//将这个地区块数据写入数据库
+            }
+            if(arr1.length>0)
+            {
+                arr_floorroom.push(arr1);
+            }
+
+        }
+        CookDqk2();//对生成的数据结构进行  规律随机填充
+    }
+    //使用正态随机数和卷积确定每个地区块的海拔
+    function CookDqk2()
+    {
+        var len=arr_floorroom.length;
+        //生成初始的随机正态随机海拔
+        console.log("生成初始的随机正态随机海拔");
+        for(var i=0;i<len;i++)
+        {
+            //console.log(i+" in "+len);
+            var len2=arr_floorroom[i].length;
+            for(var j=0;j<len2;j++)
+            {
+                var obj=arr_floorroom[i][j];
+                obj.altitude=dc1.getNumberInNormalDistribution(-10,1000);//平均海拔是0，常见的海拔在正负100以内
+                if(obj.altitude<-10000)
+                {
+                    obj.altitude=-10000;
+                }
+                else if(obj.altitude>10000)
+                {
+                    obj.altitude=10000;
+                }
+                obj.countcook=1;
+                if(i%2==1)//如果是奇数层，room偏移一个识别范围
+                {
+                    obj.alpha+=obj.palpha;
+                }
+            }
+        }
+        //使用离散的卷积方法使海拔趋于连续
+        console.log("使用离散的卷积方法使海拔趋于连续");
+        for(var i=0;i<len;i++)
+        {
+            console.log(i+" in "+len);
+            var len2=arr_floorroom[i].length;
+            for(var j=0;j<len2;j++)
+            {
+                var obj=arr_floorroom[i][j];
+                obj.altitude1=obj.altitude;
+                if(i>0)//考虑这个room下面的floor
+                {
+                    //var alpha=obj.alpha;
+                    var len3=arr_floorroom[i-1].length;
+                    for(var k=0;k<len3;k++)//遍历下层的room
+                    {
+                        var subplpha=Math.abs(arr_floorroom[i-1][k].alpha-obj.alpha);
+                        if(subplpha>Math.PI)
+                        {
+                            subplpha=Math.PI*2-subplpha;
+                        }
+                        if(subplpha<=(obj.palpha+arr_floorroom[i-1][k].palpha))
+                        {//对这个地区块有影响
+                            obj.altitude1+=arr_floorroom[i-1][k].altitude;
+                            obj.countcook++;
+                        }
+                    }
+
+                }
+                if(i<len-1)//考虑这个room上面的floor
+                {
+                    var len3=arr_floorroom[i+1].length;
+                    for(var k=0;k<len3;k++)//遍历上层的room
+                    {
+                        var subplpha=Math.abs(arr_floorroom[i+1][k].alpha-obj.alpha);
+                        if(subplpha>Math.PI)
+                        {
+                            subplpha=Math.PI*2-subplpha;
+                        }
+                        if(subplpha<=(obj.palpha+arr_floorroom[i+1][k].palpha))
+                        {//对这个地区块有影响
+                            obj.altitude1+=arr_floorroom[i+1][k].altitude;
+                            obj.countcook++;
+                        }
+                    }
+                }
+                //考虑本层的相邻元素
+                if(j==0)
+                {
+                    obj.altitude1+=arr_floorroom[i][1].altitude;
+                    obj.altitude1+=arr_floorroom[i][len2-1].altitude;
+                    obj.countcook+=2;
+                }else if(j==(len2-1))
+                {
+                    obj.altitude1+=arr_floorroom[i][0].altitude;
+                    obj.altitude1+=arr_floorroom[i][len2-2].altitude;
+                    obj.countcook+=2;
+                }
+                else{
+                    obj.altitude1+=arr_floorroom[i][j-1].altitude;
+                    obj.altitude1+=arr_floorroom[i][j+1].altitude;
+                    obj.countcook+=2;
+                }
+            }
+        }
+        var min_altitude= 0,max_altitude=0;
+        console.log("去除总权值");
+        for(var i=0;i<len;i++)
+        {
+            console.log(i+" in "+len);
+            var len2=arr_floorroom[i].length;
+            for(var j=0;j<len2;j++)
+            {
+                var obj=arr_floorroom[i][j];
+                obj.altitude=obj.altitude1/obj.countcook;
+                if(obj.altitude<min_altitude)
+                {
+                    min_altitude=obj.altitude;
+                }
+                if(obj.altitude>max_altitude)
+                {
+                    max_altitude=obj.altitude;
+                }
+                //delete obj.altitude1;
+            }
+        }
+        console.log("最低、最高海拔为："+min_altitude+"、"+max_altitude);
+        //根据海拔高度与概率规则确定海洋与陆地，根据纬度和高度确定陆地的类型（高度达到一定程度后优于纬度）
+        CookDqk3();
+    }
+    function CookDqk3()
+    {
+        console.log("开始生成地区块级地形");
+        var len=arr_floorroom.length;
+        for(var i=0;i<len;i++) {
+            console.log(i+" in "+len);
+            var len2 = arr_floorroom[i].length;
+            for (var j = 0; j < len2; j++)
+            {
+                var obj=arr_floorroom[i][j];
+                getLandtypeDqk(obj);
+            }
+        }
+        //使用卷积方法将地区块平均化
+        console.log("使用卷积方法将地区块平均化");
+        for(var i=0;i<len;i++)
+        {
+            console.log(i+" in "+len);
+            var len2=arr_floorroom[i].length;
+            for(var j=0;j<len2;j++)
+            {
+                var obj=arr_floorroom[i][j];
+
+                if(i>0)//考虑这个room下面的floor
+                {
+                    //var alpha=obj.alpha;
+                    var len3=arr_floorroom[i-1].length;
+                    for(var k=0;k<len3;k++)//遍历下层的room
+                    {
+                        var obj1=arr_floorroom[i-1][k];
+                        var subplpha=Math.abs(obj1.alpha-obj.alpha);
+                        if(subplpha>Math.PI)
+                        {
+                            subplpha=Math.PI*2-subplpha;
+                        }
+                        if(subplpha<=(obj.palpha+obj1.palpha))
+                        {//对这个地区块有影响
+                            if(!obj.landtypedqk[obj1.type2])
+                            {
+                                obj.landtypedqk[obj1.type2]=obj1.effect;
+                            }
+                            else
+                            {
+                                obj.landtypedqk[obj1.type2]+=obj1.effect;
+                            }
+                            obj.landtypedqkeffect+=obj1.effect;
+                        }
+                    }
+
+                }
+                if(i<len-1)//考虑这个room上面的floor
+                {
+                    var len3=arr_floorroom[i+1].length;
+                    for(var k=0;k<len3;k++)//遍历上层的room
+                    {
+                        var obj1=arr_floorroom[i+1][k];
+                        var subplpha=Math.abs(obj1.alpha-obj.alpha);
+                        if(subplpha>Math.PI)
+                        {
+                            subplpha=Math.PI*2-subplpha;
+                        }
+                        if(subplpha<=(obj.palpha+obj1.palpha))
+                        {//对这个地区块有影响
+                            if(!obj.landtypedqk[obj1.type2])
+                            {
+                                obj.landtypedqk[obj1.type2]=obj1.effect;
+                            }
+                            else
+                            {
+                                obj.landtypedqk[obj1.type2]+=obj1.effect;
+                            }
+                            obj.landtypedqkeffect+=obj1.effect;
+                        }
+                    }
+                }
+                //考虑本层的相邻元素
+                if(j==0)
+                {
+                    var obj1=arr_floorroom[i][1];
+                    if(!obj.landtypedqk[obj1.type2])
+                    {
+                        obj.landtypedqk[obj1.type2]=obj1.effect;
+                    }
+                    else
+                    {
+                        obj.landtypedqk[obj1.type2]+=obj1.effect;
+                    }
+                    obj.landtypedqkeffect+=obj1.effect;
+                    var obj1=arr_floorroom[i][len2-1];
+                    if(!obj.landtypedqk[obj1.type2])
+                    {
+                        obj.landtypedqk[obj1.type2]=obj1.effect;
+                    }
+                    else
+                    {
+                        obj.landtypedqk[obj1.type2]+=obj1.effect;
+                    }
+                    obj.landtypedqkeffect+=obj1.effect;
+                }
+                else if(j==(len2-1))
+                {
+                    var obj1=arr_floorroom[i][0];
+                    if(!obj.landtypedqk[obj1.type2])
+                    {
+                        obj.landtypedqk[obj1.type2]=obj1.effect;
+                    }
+                    else
+                    {
+                        obj.landtypedqk[obj1.type2]+=obj1.effect;
+                    }
+                    obj.landtypedqkeffect+=obj1.effect;
+                    var obj1=arr_floorroom[i][len2-2];
+                    if(!obj.landtypedqk[obj1.type2])
+                    {
+                        obj.landtypedqk[obj1.type2]=obj1.effect;
+                    }
+                    else
+                    {
+                        obj.landtypedqk[obj1.type2]+=obj1.effect;
+                    }
+                    obj.landtypedqkeffect+=obj1.effect;
+                }
+                else{
+                    var obj1=arr_floorroom[i][j-1];
+                    if(!obj.landtypedqk[obj1.type2])
+                    {
+                        obj.landtypedqk[obj1.type2]=obj1.effect;
+                    }
+                    else
+                    {
+                        obj.landtypedqk[obj1.type2]+=obj1.effect;
+                    }
+                    obj.landtypedqkeffect+=obj1.effect;
+                    var obj1=arr_floorroom[i][j+1];
+                    if(!obj.landtypedqk[obj1.type2])
+                    {
+                        obj.landtypedqk[obj1.type2]=obj1.effect;
+                    }
+                    else
+                    {
+                        obj.landtypedqk[obj1.type2]+=obj1.effect;
+                    }
+                    obj.landtypedqkeffect+=obj1.effect;
+                }
+            }
+        }
+        console.log("对每个地区块进行加权并入库");
+        for(var i=0;i<len;i++)//对每个地区块进行加权
+        {
+            var len2=arr_floorroom[i].length;
+            console.log(i+" in "+len);
+            for(var j=0;j<len2;j++)
+            {
+
+                var obj=arr_floorroom[i][j];
+                obj.altitude=obj.altitude/obj.countcook;
+                var rate_type1final=Math.random()*obj.landtypedqkeffect;
+                var rate_type1final_count=0;
+                obj.type2final="默认dqk";
+                for(key in obj.landtypedqk)
+                {
+                    rate_type1final_count+=obj.landtypedqk[key];//这一种地形的权重
+                    if(rate_type1final<rate_type1final_count)
+                    {
+                        obj.type2final=key;
+                        break;
+                    }
+                }
+                //在这里把这个地区块插入数据库？
+                /*Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+                Argv="sql=insert into tab_dqk values(uuid(),'test1',"+obj.beta+","+obj.pbeta+","+obj.alpha+","+obj.palpha+",'"
+                        +obj.type2final+"',"+obj.floor+","+obj.room+","+obj.altitude+")";
+                //使用同步Ajax请求保证进度同步，在连续使用同步Ajax时不需要xmlHttp.abort()！！！！
+                Request(xmlHttp,"POST",Url,false,Argv,"application/x-www-form-urlencoded",PushChessCallBack,0);*/
+                Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid+"&sql=insert into tab_dqk values(uuid(),'test1',"+obj.beta+","+obj.pbeta+","+obj.alpha+","+obj.palpha+",'"
+                        +obj.type2final+"',"+obj.floor+","+obj.room+","+obj.altitude+")"
+                Argv="";
+                Request(xmlHttp,"GET",Url,false,Argv,"application/x-www-form-urlencoded",PushChessCallBack,0);
+            }
+        }
+        CookDqk4();//着色
+    }
+    function PushChessCallBack()
+    {//空的ajax返回函数
+
+    }
+    function getLandtypeDqk(obj)
+    {
+        var height=obj.altitude;//对于这个地区块
+        var beta=obj.beta;
+        var rate_land=Math.random();
+        for(key in tab_landtypedqk)//这个方法并不能保证顺序！！！！//for key和eval占用了大量时间？？？？
+        {//按顺序查找每一个地区块大类，
+            if(eval(tab_landtypedqk[key].eval))
+            {
+                obj.type1=key;
+                var count_rate=0;//用来累加概率
+                var obj1=tab_landtypedqk[key];
+                for(key2 in obj1)
+                {
+                    if(key2!="eval")
+                    {
+                        var rate_type2=Math.random();
+                        count_rate+=obj1[key2].rate;
+                        if(rate_type2<count_rate)
+                        {
+                            obj.type2=key2;
+                            obj.effect=obj1[key2].effect;//对周边地块的影响程度
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        if (!obj.type1)//如果这个地区块没有被分配地形
+        {
+            obj.type1="未定义";
+            obj.type2="默认dqk";
+            obj.effect=0;
+        }
+        obj.landtypedqk={};
+        obj.landtypedqk[obj.type2]=obj.effect;
+        obj.landtypedqkeffect=obj.effect;
+    }
+    function CookDqk4()
+    {
+        var len=arr_floorroom.length;
+        //开始生成数据纹理
+        console.log("开始生成数据纹理");
+        for(var i=0;i<len;i++) //每一行
+        {
+            //console.log(i+" in "+len);
+            var len2 = arr_floorroom[i].length;
+            for (var j = 0; j < len2; j++) {
+                var obj = arr_floorroom[i][j];
+                var index= (i)*4*can_temp.width+(j-1)*4;//每个room由4个元素组成
+                var color4=[];
+                if(tab_landtypedqk2[obj.type2final].color)
+                {
+                    color4=tab_landtypedqk2[obj.type2final].color;
+                }
+                else
+                {
+                    color4=[250,126,126];//默认纹理远观颜色
+                }
+                imagedata_temp.data[index]=color4[0];//这里存的真的是颜色
+                imagedata_temp.data[index+1]=color4[1];
+                imagedata_temp.data[index+2]=color4[2];
+                imagedata_temp.data[index+3]=255;
+
+            }
+        }
+
+    }
+
+    function SelectChess()
+    {
+        Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+        Argv="sql=select min_floor,max_floor,width_room,perimeter from tab_planet where id='test1'";//查找这个行星的地区块层数
+        //使用同步Ajax请求保证进度同步
+        Request(xmlHttp,"POST",Url,true,Argv,"application/x-www-form-urlencoded",SelectChessCallBack,0);
+    }
+    function SelectChessCallBack()
+    {
+        if(xmlHttp.readyState==4) {
+            if(isTimout=="1")
+            {
+                alert("登陆验证请求超时！！");
+                clearTimeout(timer);
+                xmlHttp.abort();
+            }
+            else {
+                if (xmlHttp.status == 200) {
+                    clearTimeout(timer);//停止定时器
+                    try
+                    {
+                        var str_res=xmlHttp.responseText;//获取到的是一个dom文档，要从中找到所需要的字段
+                        xmlHttp.abort();
+                        var div=document.createElement("div");
+                        //div.innerHTML=str_res;//这样做会报错，因为作为dom被加载时，标签中的引用和代码都会被执行！！！！
+                        div.innerHTML=str_res.substring(str_res.search(/<table/),str_res.search(/<\/table>/)+8);
+                        div.style.display=false;
+                        //document.getElementById("div_allbase").appendChild(div);
+                        var tr=div.getElementsByTagName("tr")[1];
+                        var tds=tr.getElementsByTagName("td");
+                        min_floor=parseInt(tds[0].innerHTML);
+                        max_floor=parseInt(tds[1].innerHTML);
+                        width_room=parseInt(tds[2].innerHTML);
+                        perimeter=parseInt(tds[3].innerHTML);
+                        height_floor=min_floor+max_floor+1;
+                        var int_wh=width_room>height_floor?width_room:height_floor;//取宽高中较大的值
+                        var int_size=newland.FindPower(int_wh);//找到大于size的最小的2的整数次幂
+                        can_temp.width=int_size;
+                        can_temp.height=int_size;
+                        context_temp=can_temp.getContext("2d");
+                        context_temp.fillStyle="rgba(0,0,255,1)";
+                        context_temp.fillRect(0,0,int_size,int_size);
+                        imagedata_temp=context_temp.getImageData(0,0,int_size,int_size);
+
+                        arr_floorroom=[];
+                        pbeta=0;//认为每一层的弧度区分度是一定的
+                        arr_palpha=[];//每一层内的房间的弧度区分度不同
+                        console.log("开始从数据库读取地区块数据");
+                        for(var i=min_floor;i<=max_floor;i++)//读取每一层的数据放入数组
+                        {
+                            Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+                            Argv="sql=select id,beta,pbeta,alpha,palpha,weight,floor,room,altitude from tab_dqk" +
+                                    " where planetid='test1' and floor="+i;//查找这个行星的地区块层数
+                            //使用同步Ajax请求保证进度同步
+                            Request(xmlHttp,"POST",Url,false,Argv,"application/x-www-form-urlencoded",QueryCallBack,0);
+                        }
+                        DrawPlanet();
+                    }catch(e)
+                    {
+                        alert(xmlHttp.responseText);
+                        console.error(e)
+                        xmlHttp.abort();
+                    }
+                }
+            }
+        }
+    }
+    function QueryCallBack()
+    {
+        if(xmlHttp.readyState==4) {
+            if(isTimout=="1")
+            {
+                alert("登陆验证请求超时！！");
+                clearTimeout(timer);
+                xmlHttp.abort();
+            }
+            else {
+                if (xmlHttp.status == 200) {
+                    clearTimeout(timer);//停止定时器
+                    try
+                    {
+                        var str_res=xmlHttp.responseText;//这时已经在h2服务端建立登录状态
+                        //xmlHttp.abort();
+                        var div=document.createElement("div");
+                        div.innerHTML=str_res.substring(str_res.search(/<table/),str_res.search(/<\/table>/)+8);
+                        var trs=div.getElementsByTagName("tr");
+                        var len=trs.length;
+                        var int_floor=parseInt(trs[1].getElementsByTagName("td")[6].innerHTML);
+                        if(!arr_floorroom[int_floor])//这里认为只有一个行星，在实际使用时，数组还要加上一维
+                        {
+                            arr_floorroom[int_floor]=[];
+                        }
+                        if(pbeta==0)
+                        {
+                            pbeta=parseFloat(trs[1].getElementsByTagName("td")[2].innerHTML);
+                        }
+                        console.log(int_floor+"/"+max_floor+">"+(len-1));
+                        arr_palpha.push(parseFloat(trs[1].getElementsByTagName("td")[4].innerHTML));
+                        for(var i=1;i<len;i++)//对于这一层中的每个room
+                        {
+                            var tds=trs[i].getElementsByTagName("td");
+                            var int_room=parseInt(tds[7].innerHTML);
+                            //var arr_landtype={land_textblack:[0,0,0,255],land_textyellow:[255,255,0,255]}
+                            //保存在内存中的数据结构
+                            //var obj=eval(tds[5].innerHTML);
+                            //var obj={};
+                            //eval("obj="+tds[5].innerHTML);
+                            arr_floorroom[int_floor][int_room]={beta:parseFloat(tds[1].innerHTML) ,pbeta:parseFloat(tds[2].innerHTML)
+                                ,alpha:parseFloat(tds[3].innerHTML),palpha:parseFloat(tds[4].innerHTML),floor:int_floor,room:i
+                                ,type2final:tds[5].innerHTML,altitude:parseFloat(tds[8].innerHTML)};
+                            //使用何种数据结构传递到显卡？使用一个超长数组arr_set4？
+                            var color4=[];
+                            if(tab_landtypedqk2[tds[5].innerHTML].color)
+                            {
+                                color4=tab_landtypedqk2[tds[5].innerHTML].color;
+                            }
+                            else
+                            {
+                                color4=[250,126,126];//默认纹理远观颜色
+                            }
+                            var index= (int_floor+max_floor)*4*can_temp.width+(i-1)*4;//每个room由4个元素组成
+                            imagedata_temp.data[index]=color4[0];//这里存的真的是颜色
+                            imagedata_temp.data[index+1]=color4[1];
+                            imagedata_temp.data[index+2]=color4[2];
+                            imagedata_temp.data[index+3]=255;
+                        }
+                    }catch(e)
+                    {
+                        alert(xmlHttp.responseText);
+                        console.error(e)
+                        xmlHttp.abort();
+                    }
+                }
+            }
+        }
+    }
+
+    function DrawPlanet()
+    {//这时imagedata_temp需要准备完成
+        var amigaMaterial = new BABYLON.ShaderMaterial("amiga2", scene,{
+                    vertexElement: "sh2v4.sh",
+                    fragmentElement: "sh2f4.sh",
+                },
+                {
+                    attributes: ["position"],
+                    uniforms: ["worldViewProjection","worldView"]
+                });
+        //amigaMaterial.doNotSerialize=true;
+        sphere1.material=amigaMaterial;
+        strsrc_dqk="";
+        if(strsrc_dqk=="")
+        {
+            context_temp.putImageData(imagedata_temp,0,0);//如果是直接读取的本地存储，则imagedata_temp中没有数据
+            strsrc_dqk=can_temp.toDataURL("image/png");
+
+        }
+        var utexturedqk = new BABYLON.Texture.CreateFromBase64String(strsrc_dqk,"utexturedqk2", scene
+                ,false,false,BABYLON.Texture.NEAREST_NEAREST);
+        amigaMaterial.setTexture("utexturedqk",utexturedqk);
+        amigaMaterial.setFloat("wid_utexturedqk",can_temp.width);//room区分度的纹理宽度
+        amigaMaterial.setFloat("hei_utexturedqk",can_temp.width);
+        amigaMaterial.setFloat("pbeta",pbeta);//层间区分角度
+
+        var size=newland.FindPower2(arr_palpha.length);
+        var strsrc_palpha=newland.TranArrToPng1(arr_palpha,size,size);//每一层内的房间区分角度，用4个元素保存一个浮点数
+        var utexturepalpha = new BABYLON.Texture.CreateFromBase64String(strsrc_palpha,"utexturepalpha", scene
+                ,true,false,BABYLON.Texture.NEAREST_NEAREST);
+        amigaMaterial.setTexture("utexturepalpha",utexturepalpha);
+        amigaMaterial.setFloat("wid_utexturepalpha",size);//room区分度的纹理宽度
+        amigaMaterial.setFloat("hei_utexturepalpha",size);//为了防止越界，需要比实际情况+1？
+
+        amigaMaterial.setFloat("uarrpalphalen",arr_palpha.length);
+        amigaMaterial.setFloat("max_floorf",max_floor);//Babylon.js不支持传递整形量？？GpenGL中int也是以float形式计算的！！！！
+        amigaMaterial.setFloat("MathPI",Math.PI);
+
+        amigaMaterial.onCompiled=function()//文档上写effect是material的一个内容，而material需要一个“编译过程”，那么是不是编译之后才生成effect属性？？
+        {
+        }
+    }
+
+</script>
+</html>

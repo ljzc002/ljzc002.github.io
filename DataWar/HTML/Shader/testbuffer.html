@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试将数据库中的地形块数据作为一次性的缓存发给显卡</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <link href="../../CSS/stat.css" rel="stylesheet">
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+    <script src="../../JS/MYLIB/Linkh2.js"></script>
+    <script src="../../JS/MYLIB/Events.js"></script>
+    <script src="../../JS/LIB/babylon.32.all.max.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/LIB/stat.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+</div>
+</body>
+<script>
+    var canvas,engine,scene,gl;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+            ;
+
+    arr_shv=[];//建立数组收集顶点着色器和片元着色器
+    arr_shf=[];
+
+    window.onload=beforewebGL;
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+    function beforewebGL()
+    {
+        /*if(gl)
+        {//加载着色器代码
+            var assetsManager = new BABYLON.AssetsManager(scene);
+            var str_shv1="",str_shf1="";
+            var task_shv1 = assetsManager.addTextFileTask("task_shv1", "./sh1v4.sh");
+            task_shv1.onSuccess = function(task) {
+                str_shv1=task.text;
+                arr_shv.push(str_shv1);
+            }
+            var task_shf1 = assetsManager.addTextFileTask("task_shf1", "./sh1f4.sh");
+            task_shf1.onSuccess = function(task) {
+                str_shf1=task.text;
+                arr_shf.push(str_shf1);
+            }
+        }
+        assetsManager.onFinish=function(tasks)
+        {//资源加载完成
+            webGLStart();
+        }
+         /*
+        assetsManager.useDefaultLoadingScreen = false;
+        BABYLON.SceneLoader.ShowLoadingScreen = false;
+        assetsManager.load();*/
+        //着色器材质内置有加载着色器代码的方法，所以这个加载可以省略
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        //alert("放置断点！");
+        gl=engine._gl;
+        createScene();
+        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+        var UiPanel = new BABYLON.GUI.StackPanel();
+        UiPanel.width = "220px";
+        UiPanel.fontSize = "14px";
+        UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        advancedTexture.addControl(UiPanel);
+        // ..
+        var button = BABYLON.GUI.Button.CreateSimpleButton("button", "Readdqk");
+        button.paddingTop = "10px";
+        button.width = "100px";
+        button.height = "50px";
+        button.color = "white";
+        button.background = "green";
+        button.onPointerDownObservable.add(function(state,info,coordinates) {
+            H2Login();
+        });
+        UiPanel.addControl(button);
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //sphere1.isDirty=true;
+            scene.render();
+            /*if(flag_export==0)
+             {
+             ExportMesh3(arr_mesh);
+             flag_export=1;
+             }*/
+
+        });
+
+    }
+    var createScene = function (engine) {
+        camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -20), scene);
+        camera0.attachControl(canvas, true);
+        camera0.speed=0.5;
+        camera0.minZ=0.0001;
+        light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+        sphere1=BABYLON.MeshBuilder.CreateSphere("sphere1",{segments:10,diameter:10.0},scene);
+
+        if(localStorage.getItem("strsrc_dqk"))
+        {
+            var str_temp=JSON.parse(localStorage.getItem("strsrc_dqk"));
+            var utexturedqk = new BABYLON.Texture.CreateFromBase64String(str_temp,"utexturedqk", scene
+                    ,false,false,BABYLON.Texture.NEAREST_NEAREST);//测试一下标准采样
+            var groundMaterial = new BABYLON.StandardMaterial("groundMat", scene);//泥土材质
+            groundMaterial.diffuseTexture = utexturedqk;//地面的纹理贴图
+            sphere1.material=groundMaterial;
+        }
+        else
+        {
+            var amigaMaterial = new BABYLON.ShaderMaterial("amiga", scene,{
+                        vertexElement: "sh1v4.sh",
+                        fragmentElement: "sh1f4.sh",
+                    },
+                    {
+                        attributes: ["position"],
+                        uniforms: ["worldViewProjection","worldView"]
+                    });
+            amigaMaterial.setVector4("uColor", new BABYLON.Vector4(0.0,1.0,0.0,1.0));
+            sphere1.material=amigaMaterial;
+        }
+
+
+        //var mvMatrix = BABYLON.Matrix.Identity();//物体的变换矩阵
+        //var pMatrix = BABYLON.Matrix.PerspectiveFovLH(90, gl.viewportWidth / gl.viewportHeight,0.1, 100.0);// the projection matrix投影矩阵
+
+        //var cMatrix = BABYLON.Matrix.Identity();//相机的变换矩阵
+        //cMatrix=camera0._viewMatrix;
+        //amigaMaterial.setMatrix("mvMatrix",mvMatrix);
+        //amigaMaterial.setMatrix("pMatrix",pMatrix);
+        //amigaMaterial.setMatrix("cMatrix",cMatrix);
+
+
+
+    }
+    function CreateChess()
+    {
+        Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+        Argv="sql=select min(floor),max(floor) from tab_dqk where planetid='test'";//查找这个行星的地区块层数
+        //使用同步Ajax请求保证进度同步
+        Request(xmlHttp,"POST",Url,true,Argv,"application/x-www-form-urlencoded",CreateChessCallBack,0);
+    }
+    var min_floor= 0,max_floor=0;
+    var can_temp=document.createElement("canvas");
+    can_temp.width=400;
+    can_temp.height=199;
+    var context_temp=can_temp.getContext("2d");
+    context_temp.fillStyle="rgba(0,0,255,1)";
+    context_temp.fillRect(0,0,400,199);
+    var imagedata_temp=context_temp.getImageData(0,0,400,199);
+    var strsrc_dqk="";
+    function CreateChessCallBack()
+    {
+        if(xmlHttp.readyState==4) {
+            if(isTimout=="1")
+            {
+                alert("登陆验证请求超时！！");
+                clearTimeout(timer);
+                xmlHttp.abort();
+            }
+            else {
+                if (xmlHttp.status == 200) {
+                    clearTimeout(timer);//停止定时器
+                    try
+                    {
+                        var str_res=xmlHttp.responseText;//获取到的是一个dom文档，要从中找到所需要的字段
+                        xmlHttp.abort();
+                        var div=document.createElement("div");
+                        //div.innerHTML=str_res;//这样做会报错，因为作为dom被加载时，标签中的引用和代码都会被执行！！！！
+                        div.innerHTML=str_res.substring(str_res.search(/<table/),str_res.search(/<\/table>/)+8);
+                        div.style.display=false;
+                        //document.getElementById("div_allbase").appendChild(div);
+                        var tr=div.getElementsByTagName("tr")[1];
+                        var tds=tr.getElementsByTagName("td");
+                        min_floor=parseInt(tds[0].innerHTML);
+                        max_floor=parseInt(tds[1].innerHTML);
+                        arr_floorroom=[];
+                        //arr_set4=[];
+                        pbeta=0;//认为每一层的弧度区分度是一定的
+                        arr_palpha=[];//每一层内的房间的弧度区分度不同
+                        //arr_roomcount=[];//每一层积累的房间数量
+                        //arr_palpharoomcount=[];
+                        var arr_temp=JSON.parse(localStorage.getItem("arr_floorroom"));//读取本地存储
+
+                        if(arr_temp&&arr_temp.length>0)//如果有本地持久化存储就使用本地的存储，节省时间
+                        {
+                            strsrc_dqk=JSON.parse(localStorage.getItem("strsrc_dqk"));
+                            arr_floorroom=arr_temp;
+                            arr_palpha=JSON.parse(localStorage.getItem("arr_palpha"));
+                            pbeta=JSON.parse(localStorage.getItem("pbeta"));
+
+                        }
+                        else
+                        {
+                            for(var i=min_floor;i<=max_floor;i++)//读取每一层的数据放入数组
+                            {
+                                Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+                                Argv="sql=select id,beta,pbeta,alpha,palpha,weight,floor,room from tab_dqk" +
+                                        " where planetid='test' and floor="+i;//查找这个行星的地区块层数
+                                //使用同步Ajax请求保证进度同步
+                                Request(xmlHttp,"POST",Url,false,Argv,"application/x-www-form-urlencoded",QueryCallBack,0);
+                            }
+                        }
+                        localStorage.setItem("arr_floorroom",JSON.stringify(arr_floorroom));
+                        localStorage.setItem("arr_palpha",JSON.stringify(arr_palpha));
+                        localStorage.setItem("pbeta",JSON.stringify(pbeta));
+                        //大小超过了本地存储限制
+                        xmlHttp.abort();
+                        DrawPlanet();
+                    }catch(e)
+                    {
+                        alert(xmlHttp.responseText);
+                        console.error(e)
+                        xmlHttp.abort();
+                    }
+                }
+            }
+        }
+    }
+
+
+    function QueryCallBack()//对于每一层的数据
+    {
+        if(xmlHttp.readyState==4) {
+            if(isTimout=="1")
+            {
+                alert("登陆验证请求超时！！");
+                clearTimeout(timer);
+                xmlHttp.abort();
+            }
+            else {
+                if (xmlHttp.status == 200) {
+                    clearTimeout(timer);//停止定时器
+                    try
+                    {
+                        var str_res=xmlHttp.responseText;//这时已经在h2服务端建立登录状态
+                        //xmlHttp.abort();
+                        var div=document.createElement("div");
+                        div.innerHTML=str_res.substring(str_res.search(/<table/),str_res.search(/<\/table>/)+8);
+                        var trs=div.getElementsByTagName("tr");
+                        var len=trs.length;
+                        var int_floor=parseInt(trs[1].getElementsByTagName("td")[6].innerHTML);
+                        if(!arr_floorroom[int_floor])//这里认为只有一个行星，在实际使用时，数组还要加上一维
+                        {
+                            arr_floorroom[int_floor]=[];
+                        }
+                        if(pbeta==0)
+                        {
+                            pbeta=parseFloat(trs[1].getElementsByTagName("td")[2].innerHTML);
+                        }
+                        console.log(int_floor+"/"+max_floor+">"+(len-1));
+                        arr_palpha.push(parseFloat(trs[1].getElementsByTagName("td")[4].innerHTML));
+                        /*if(arr_roomcount.length==0)
+                        {
+                            arr_roomcount.push(len-1);//这一层的房间数
+                        }
+                        else{
+                            arr_roomcount.push(arr_roomcount[arr_roomcount.length-2]+len-1);
+                        }*/
+
+                        for(var i=1;i<len;i++)//对于这一层中的每个room
+                        {
+                            //if(i<len)
+                            //{
+                                var tds=trs[i].getElementsByTagName("td");
+                                var int_room=parseInt(tds[7].innerHTML);
+                                var arr_landtype={land_textblack:[0,0,0,255],land_textyellow:[255,255,0,255]}
+                                //保存在内存中的数据结构
+                                //var obj=eval(tds[5].innerHTML);
+                                var obj={};
+                                eval("obj="+tds[5].innerHTML);
+                                arr_floorroom[int_floor][int_room]={id:tds[0],beta:tds[1].innerHTML,pbeta:tds[2].innerHTML,alpha:tds[3].innerHTML
+                                    ,palpha:tds[4].innerHTML,weight:obj};
+                                //使用何种数据结构传递到显卡？使用一个超长数组arr_set4？
+                                var num1= 0,num2= 0,num3= 0,num4= 255;
+                                for(key in obj)
+                                {
+                                    var num_key=obj[key];
+                                    num1+=(num_key*arr_landtype[key][0]);
+                                    num2+=(num_key*arr_landtype[key][1]);
+                                    num3+=(num_key*arr_landtype[key][2]);
+                                }
+                                //ctx.putImageData(imgData,10,70);
+                                var index= (int_floor+max_floor)*1600+(i-1)*4;//每个room由4个元素组成
+                                imagedata_temp.data[index]=num1;//这里存的真的是颜色
+                                imagedata_temp.data[index+1]=num2;
+                                imagedata_temp.data[index+2]=num3;
+                                imagedata_temp.data[index+3]=num4;
+                                //arr_set4.push(num1);
+                                //arr_set4.push(num2);
+                                //arr_set4.push(num3);
+                                //arr_set4.push(num4);
+
+                            //}
+
+
+                        }
+
+
+                    }catch(e)
+                    {
+                        alert(xmlHttp.responseText);
+                        console.error(e)
+                        xmlHttp.abort();
+                    }
+                }
+            }
+        }
+    }
+    //用glsl和Babylon.js结合的方式绘制行星
+    function DrawPlanet()
+    {
+        var amigaMaterial = new BABYLON.ShaderMaterial("amiga2", scene,{
+                    vertexElement: "sh2v4.sh",
+                    fragmentElement: "sh2f4.sh",
+                },
+                {
+                    attributes: ["position"],
+                    uniforms: ["worldViewProjection","worldView"]
+                });
+        //amigaMaterial.checkReadyOnEveryCall=true;//如果在每次调用时都需要检查就绪状态
+        amigaMaterial.doNotSerialize=true;
+        sphere1.material=amigaMaterial;
+        //var image=new Image();
+        //amigaMaterial.setArray4("uarrdqk",arr_set4);//新版本有这个？或者是继承来的？，所有房间顺序排布的颜色
+        //amigaMaterial.setArray3("uarrdqk",arr_set4);
+        //var amigaTexture = new BABYLON.Texture("../../ASSETS/IMAGE/amiga.jpg", scene);
+        //amigaMaterial.setTexture("utexturedqk",textureFromFloats(gl,400,199,new Float32Array(arr_set4)));
+        if(strsrc_dqk=="")
+        {
+            context_temp.putImageData(imagedata_temp,0,0);
+            strsrc_dqk=can_temp.toDataURL("image/png");
+            localStorage.setItem("strsrc_dqk",JSON.stringify(strsrc_dqk));
+        }
+        var utexturedqk = new BABYLON.Texture.CreateFromBase64String(strsrc_dqk,"utexturedqk", scene
+                ,false,false,BABYLON.Texture.NEAREST_NEAREST);
+        //Texture.CreateFromBase64String = function (data, name, scene, noMipmap, invertY, samplingMode, onLoad, onError, format)
+        //BABYLON.Texture.NEAREST_SAMPLINGMODE
+        //BILINEAR_SAMPLINGMODE
+        //TRILINEAR_SAMPLINGMODE
+        amigaMaterial.setTexture("utexturedqk",utexturedqk);
+        amigaMaterial.setFloat("wid_utexturedqk",400.0);//room区分度的纹理宽度
+        amigaMaterial.setFloat("hei_utexturedqk",199.0);
+        amigaMaterial.setFloat("pbeta",pbeta);//层间区分角度
+
+
+
+        var strsrc_palpha=TranArrToPng1(arr_palpha,50,Math.ceil(arr_palpha.length/50));//每一层内的房间区分角度，用4个元素保存一个浮点数
+        var utexturepalpha = new BABYLON.Texture.CreateFromBase64String(strsrc_palpha,"utexturepalpha", scene
+                ,true,false,BABYLON.Texture.NEAREST_NEAREST);
+        amigaMaterial.setTexture("utexturepalpha",utexturepalpha);
+        amigaMaterial.setFloat("wid_utexturepalpha",50.0);//room区分度的纹理宽度
+        amigaMaterial.setFloat("hei_utexturepalpha",Math.ceil(arr_palpha.length/50));//为了防止越界，需要比实际情况+1？
+
+        //amigaMaterial.setArray("uarrpalpha",arr_palpha);//每一层内的房间区分角度，setFloat方法有数量限制？？setArray方法有吗？
+        // Material没有普通的setArray方法尝试改为对effect使用
+        amigaMaterial.setFloat("uarrpalphalen",arr_palpha.length);
+        //amigaMaterial.setArray("uarrpalpharoomcount",arr_palpharoomcount);
+        amigaMaterial.setFloat("max_floorf",max_floor);//Babylon.js不支持传递整形量？？GpenGL中int也是以float形式计算的！！！！
+        amigaMaterial.setFloat("MathPI",Math.PI);
+
+        /*var strsrc_roomcount=TranArrToPng(arr_palpha,50,Math.ceil(arr_roomcount.length/50));//每一层的累积房间数量
+        var utextureroomcount = new BABYLON.Texture.CreateFromBase64String(strsrc_roomcount,"utextureroomcount", scene);
+        amigaMaterial.setTexture("utextureroomcount",utextureroomcount);
+        amigaMaterial.setFloat("wid_utextureroomcount",50.0);//每一层的累积房间数量的纹理宽度，用来把由层数得到的数组索引转变为纹理坐标
+        */
+        //arr_floorroom
+        amigaMaterial.onCompiled=function()//文档上写effect是material的一个内容，而material需要一个“编译过程”，那么是不是编译之后才生成effect属性？？
+        {
+           /* var len=arr_palpha.length;
+            var arr=arr_palpha.concat();
+            for(var i=len;i<500;i++)
+            {
+                arr.push(0);
+            }
+            amigaMaterial.getEffect().setArray("uarrpalpha",arr);//每一层水平区分度*/
+            //console.log(amigaMaterial.getEffect());
+        }
+    }
+    //glsl不支持直接用变量的计算结果作为数组索引，所以使用2D纹理来传入数组！！！！
+    /*
+     * Pass in an array of rgba floats,
+     * for example: var data = new Float32Array([0.1,0.2,0.3,1,  .5,.5,1.0,1]);
+     */
+    function textureFromFloats(gl,width,height,float32Array)
+    {
+        var oldActive = gl.getParameter(gl.ACTIVE_TEXTURE);
+        gl.activeTexture(gl.TEXTURE15); // working register 31, thanks.
+
+        var texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,
+                width, height, 0,
+                gl.RGBA, gl.FLOAT, float32Array);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+
+        gl.activeTexture(oldActive);
+
+        return texture;
+    }
+    //将一个一维的四元数组转成image（PNG），规定arr的元素都小于1
+    function TranArrToPng1(arr,width,height)
+    {
+        var can_temp=document.createElement("canvas");
+        can_temp.width=width;
+        can_temp.height=height;
+        var context=can_temp.getContext("2d");
+        context.fillStyle="rgba(0,0,255,1)";//多余的位都是1？
+        context.fillRect(0,0,width,height);
+        var imagedata=context.getImageData(0,0,width,height);
+        var len=arr.length;//小数部分会自动四舍五入！！！！默认palpha必定小于1
+        for(var i=0;i<len;i+=1)//arr的长度必须是4的整数倍！！！！
+        {
+            var str_num=arr[i]+"";
+            //var int_0=str_num.indexOf();
+            var len_str=str_num.length;
+            var count_0=0;
+            for(var j=0;j<len_str;j++)
+            {
+                if(str_num[j]=="0"||str_num[j]==".")
+                {
+                    continue;
+                }
+                else
+                {
+                    count_0=j;//找到第一个非零数
+                    break;
+                }
+            }
+            var num1=parseInt(str_num.substr(count_0,2));
+            var num2=parseInt(str_num.substr(count_0+2,2));
+            //var num3=parseInt(str_num.substr(count_0+4,2));
+            var num4=4+(count_0-2);
+            imagedata.data[i*4]=num1;//原样把数据灌进纹理里去,这里的数据可能大于1！！！！glsl纹理采样器是否允许？？？？
+            imagedata.data[i*4+1]=num2;
+            imagedata.data[i*4+2]=num4;
+            //imagedata.data[i*4+3]=num4;
+        }
+        /*imagedata=context.getImageData(0,0,width,height);
+        for(var i=0;i<imagedata.data.length;i++)//测试用
+        {
+            imagedata.data[i*4]=0;
+            imagedata.data[i*4+1]=0;
+            imagedata.data[i*4+2]=i;
+        }*/
+
+        context.putImageData(imagedata,0,0);
+        var strsrc_palpha=can_temp.toDataURL("image/png");
+        return strsrc_palpha;
+    }
+</script>
+</html>

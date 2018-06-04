@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提取一副固定大小图片的平均颜色color4</title>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas style="width: 512px;height: 512px" width="512" height="512" id="can_pic">
+
+    </canvas>
+</div>
+</body>
+<script>
+    var canvas=document.getElementById("can_pic");
+    window.onload=loadImage;
+    function loadImage()
+    {
+        var context=canvas.getContext("2d");
+        var img=document.createElement("img");
+        img.src="../../ASSETS/IMAGE/Texture_landtypedmk/lvzhou.png";
+        img.onload=function()
+        {//在图片加载完毕后才可以在canvas里绘制
+            context.drawImage(img,0,0);
+            var imagedata_temp=context.getImageData(0,0,512,512);//规定地貌块纹理图片的宽高是512
+            var data=imagedata_temp.data;
+            var len=data.length;
+            var color4=[0,0,0,0];
+            for(var i=0;i<len;i+=4)
+            {
+                color4[0]+=data[i];
+                color4[1]+=data[i+1];
+                color4[2]+=data[i+2];
+                color4[3]+=data[i+3];
+            }
+            var int=512*512;
+            color4[0]=Math.round(color4[0]/int);
+            color4[1]=Math.round(color4[1]/int);
+            color4[2]=Math.round(color4[2]/int);
+            color4[3]=Math.round(color4[3]/int);
+            console.log(color4);
+        }
+
+    }
+</script>
+</html>

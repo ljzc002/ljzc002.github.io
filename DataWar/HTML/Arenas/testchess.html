@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生成并存储类似国际象棋棋盘的色块</title>
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+    <script src="../../JS/MYLIB/Linkh2.js"></script>
+    <script src="../../JS/MYLIB/Events.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+
+</div>
+</body>
+<script>
+    window.onload=BeforeLog;
+    function BeforeLog()
+    {
+        var btn=document.createElement("button");
+        document.getElementById("div_allbase").appendChild(btn);
+        btn.textContent="1";
+        btn.onclick=H2Login;
+    }
+    //根据极坐标和变化的半径生成颜色交错的地区块
+    function CreateChess()
+    {
+        var size_dqk=100;//每个地区块的长宽都是100km
+        var perimeter_planet=40000;//这个行星的周长是40000km
+        var r_planet=perimeter_planet/(2*Math.PI);//行星的半径
+        //var len_height=(r_planet*2)/
+
+        //var len_alpha=sswr(perimeter_planet/size_dqk);//把它限制为偶数段？
+        var len_beta=sswr(((perimeter_planet/2)/size_dqk)/2);//通过弧度来分层！！
+        var pbeta=(Math.PI/4)/len_beta;
+
+        //对于每一层，
+        for(var i=-len_beta;i<=len_beta;i++)
+        {
+            var rad_beta=(Math.PI/2)*(i/len_beta);
+            var r_floor=Math.cos(rad_beta)*r_planet;//这一层的半径
+            var len_alpha_floor=sswr((r_floor*2*Math.PI)/size_dqk);
+            var palpha=Math.PI/len_alpha_floor;//每一个地区块的角度边界，在这个边界范围内即属于这个地区块
+            var beta=i*pbeta;
+            console.log(i+"/"+len_beta+">"+len_alpha_floor);
+            //对于圆环上的每一个片
+            for(var j=0;j<len_alpha_floor;j++)
+            {
+                var obj={};
+                obj.palpha=palpha;
+                obj.alpha=j*palpha;
+                obj.pbeta=pbeta;
+                obj.beta=beta;
+                obj.weight={};
+                obj.floor=i;
+                obj.room=j;
+                if((Math.floor(i/3)%2)==(Math.floor(j/3)%2))//棋盘形
+                {
+                    obj.weight="{land_textblack:1}";//在数据库中直接使用字符串形式保存
+                }
+                else
+                {
+                    obj.weight="{land_textyellow:1}";
+                }
+
+                //先尝试单独推入每一个地区块
+                PushChess(obj);//将这个地区块数据写入数据库
+            }
+        }
+    }
+    function PushChess(obj)
+    {
+        Url="http://127.0.0.1:8082/query.do?jsessionid="+jsessionid;
+        Argv="sql=insert into tab_dqk values(uuid(),'test',"+obj.beta+","+obj.pbeta+","+obj.alpha+","+obj.palpha+",'"
+                +obj.weight+"',"+obj.floor+","+obj.room+")";
+        //使用同步Ajax请求保证进度同步，在连续使用同步Ajax时不需要xmlHttp.abort()！！！！
+        Request(xmlHttp,"POST",Url,false,Argv,"application/x-www-form-urlencoded",PushChessCallBack,0);
+    }
+    function PushChessCallBack()
+    {
+
+    }
+</script>
+</html>
