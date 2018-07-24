@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>建立一个条带网格生成器，能够输入参数生成起始条带，然后通过命令行选取并修改pathArray，然后导出生成的条带</title>
+    <link href="../CSS/newland.css" rel="stylesheet">
+    <link href="../CSS/stat.css" rel="stylesheet">
+    <script src="../JS/MYLIB/Events.js"></script>
+    <script src="../JS/MYLIB/FileText.js"></script>
+    <script src="../JS/MYLIB/View.js"></script>
+    <script src="../JS/LIB/babylon.32.all.maxs.js"></script><!--V3.2的稳定版本-->
+    <script src="../JS/MYLIB/newland.js"></script>
+    <script src="../JS/LIB/stat.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame={};
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        //MyGame=new Game(0,"first_pick","","http://127.0.0.1:8082/");
+        /*0-startWebGL
+         * */
+        webGLStart();
+    }
+    //从下面开始分成简单测试和对象框架两种架构
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+            ;
+    var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+    mat_frame.wireframe = true;
+    var mat_red = new BABYLON.StandardMaterial("mat_red", scene);
+    mat_red.diffuseColor = new BABYLON.Color3(1, 0, 0);
+    mat_red.backFaceCulling=false;
+    var mat_green = new BABYLON.StandardMaterial("mat_green", scene);
+    mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+    mat_green.backFaceCulling=false;
+    var mat_blue = new BABYLON.StandardMaterial("mat_blue", scene);
+    mat_blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+    mat_blue.backFaceCulling=false;
+    var mesh_origin;
+    var advancedTexture=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+    function webGLStart()
+    {
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+        camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -80), scene);
+        camera0.attachControl(canvas, true);
+        camera0.speed=0.5;
+        camera0.minZ=0.01;
+        camera0.layerMask=2;
+        scene.activeCameras.push(camera0);
+        light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.layerMask=2;
+        //CreateArm();
+        mesh_origin=new BABYLON.Mesh("mesh_origin",scene);//建立一个空的初始网格对象
+        mesh_surface=new BABYLON.Mesh("mesh_surface",scene);
+        mesh_surface0=new BABYLON.Mesh("mesh_surface0",scene);
+        if(true)
+        {
+            label_index1=new BABYLON.GUI.TextBlock();
+            label_index1.text = "label_index1";
+            label_index1.color="white";
+            label_index1.isVisible=false;
+            //label_index1.linkWithMesh(mesh_surface0);//TextBlock并不是顶层元素
+            advancedTexture.addControl(label_index1);
+            label_index2=new BABYLON.GUI.TextBlock();
+            label_index2.text = "label_index2";
+            label_index2.color="white";
+            label_index2.isVisible=false;
+            //label_index2.linkWithMesh(mesh_surface0);
+            advancedTexture.addControl(label_index2);
+            label_index3=new BABYLON.GUI.TextBlock();
+            label_index3.text = "label_index3";
+            label_index3.color="white";
+            label_index3.isVisible=false;
+            //label_index3.linkWithMesh(mesh_surface0);
+            advancedTexture.addControl(label_index3);
+        }
+
+
+        //建立GUI
+        /*var UiPanel = new BABYLON.GUI.StackPanel();
+        UiPanel.width = "220px";
+        UiPanel.fontSize = "14px";
+        UiPanel.color = "white";
+        UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        advancedTexture.addControl(UiPanel);
+        var text1 = new BABYLON.GUI.TextBlock();
+        text1.text = "无选定路径";
+        text1.paddingTop = "20px";
+        text1.width = "200px";
+        text1.height = "50px";
+        UiPanel.addControl(text1);
+        var text2 = new BABYLON.GUI.TextBlock();
+        text2.text = "";
+        text2.paddingTop = "10px";
+        text2.width = "200px";
+        text2.height = "50px";
+        UiPanel.addControl(text2);*/
+        //鼠标拾取事件
+        //camera0.attachControl之后会接管canvas的鼠标按下和抬起事件，除非在scene上进行监听，否则canvas收不到这两种事件
+        canvas.addEventListener("mousemove", function(evt){
+            //var pickInfo = scene.pick(width/2, height/2, null, false, camera0);//点击信息，这种方式是锁定鼠标时使用的！！
+            /*
+            *pick
+             pick(x: number, y: number, predicate?: function, fastCheck?: boolean, camera?: Nullable<Camera>): Nullable<PickingInfo>
+             Launch a ray to try to pick a mesh in the scene
+
+             Parameters
+             x: number
+             position on screen
+
+             y: number
+             position on screen
+
+             Optional predicate: function
+             Predicate function used to determine eligible meshes. Can be set to null. In this case, a mesh must be enabled, visible and with isPickable set to true
+
+             (mesh: AbstractMesh): boolean
+             Parameters
+             mesh: AbstractMesh
+             Returns boolean
+             Optional fastCheck: boolean
+             Launch a fast check only using the bounding boxes. Can be set to null.
+
+             Optional camera: Nullable<Camera>
+             to use for computing the picking ray. Can be set to null. In this case, the scene.activeCamera will be used
+
+             Returns Nullable<PickingInfo>
+             a PickingInfo
+            * */
+            var pickInfo = scene.pick(scene.pointerX, scene.pointerY,null,null,camera0);//如果同时又多个激活的相机，则要明确的指出使用哪个相机
+            //cancelPropagation(evt);
+            //cancelEvent(evt);
+            label_index1.isVisible=false;
+            label_index2.isVisible=false;
+            label_index3.isVisible=false;
+            if(mesh_surface.dispose)
+            {
+                mesh_surface.dispose();
+            }
+            if(mesh_surface0.dispose)
+            {
+                mesh_surface0.dispose();
+            }
+            if(pickInfo.hit&&(pickInfo.pickedMesh.name=="mesh_origin"||pickInfo.pickedMesh.name=="mesh_ribbon"))//找到鼠标所在的三角形并重绘之
+            {
+
+                var faceId=pickInfo.faceId;
+                var pickedMesh=pickInfo.pickedMesh;
+                var indices=[pickedMesh.geometry._indices[faceId*3]
+                    ,pickedMesh.geometry._indices[faceId*3+1],pickedMesh.geometry._indices[faceId*3+2]];
+                var vb=pickedMesh.geometry._vertexBuffers;
+                var position=vb.position._buffer._data;
+                var normal=vb.normal._buffer._data;
+                var uv=vb.uv._buffer._data;
+                var len=arr_path[0].length;
+                var p1={index:indices[0],position:[position[indices[0]*3],position[indices[0]*3+1],position[indices[0]*3+2]]
+                    ,normal:[normal[indices[0]*3],normal[indices[0]*3+1],normal[indices[0]*3+2]]
+                    ,uv:[uv[indices[0]*2],uv[indices[0]*2+1]],ppi:("1:"+(Math.round(indices[0]/len)+0))+"-"+(indices[0]%len)};//pathpointindex
+                var p2={index:indices[1],position:[position[indices[1]*3],position[indices[1]*3+1],position[indices[1]*3+2]]
+                    ,normal:[normal[indices[1]*3],normal[indices[1]*3+1],normal[indices[1]*3+2]]
+                    ,uv:[uv[indices[1]*2],uv[indices[1]*2+1]],ppi:("2:"+(Math.round(indices[1]/len)+0))+"-"+(indices[1]%len)};
+                var p3={index:indices[2],position:[position[indices[2]*3],position[indices[2]*3+1],position[indices[2]*3+2]]
+                    ,normal:[normal[indices[2]*3],normal[indices[2]*3+1],normal[indices[2]*3+2]]
+                    ,uv:[uv[indices[2]*2],uv[indices[2]*2+1]],ppi:("3:"+(Math.round(indices[2]/len)+0))+"-"+(indices[2]%len)};
+                var po=[(p1.position[0]+p2.position[0]+p3.position[0])/3,(p1.position[1]+p2.position[1]+p3.position[1])/3,(p1.position[2]+p2.position[2]+p3.position[2])/3];
+                var numm=2;
+                mesh_surface0=newland.make_tryangle(p1,p2,p3,"mesh_surface1",scene);
+                mesh_surface0.material=mat_green;
+                mesh_surface0.sideOrientation==BABYLON.Mesh.DOUBLESIDE;
+                mesh_surface0.layerMask=2;
+                label_index1.isVisible=true;
+                //label_index1.layerMask=2;//这个属性对于gui被管对象并不生效？
+                label_index1.text=p1.ppi;
+                var pos1=new BABYLON.Vector3(p1.position[0],p1.position[1],p1.position[2]);
+                label_index1.moveToVector3(pos1,scene);
+                label_index1.itspos=pos1;
+                label_index2.isVisible=true;
+                label_index2.text=p2.ppi;
+                var pos2=new BABYLON.Vector3(p2.position[0],p2.position[1],p2.position[2]);
+                label_index2.moveToVector3(pos2,scene);
+                label_index2.itspos=pos2;
+                label_index3.isVisible=true;
+                label_index3.text=p3.ppi;
+                var pos3=new BABYLON.Vector3(p3.position[0],p3.position[1],p3.position[2]);
+                label_index3.moveToVector3(pos3,scene);
+                label_index3.itspos=pos3;
+                //将三个点移动到场景的中心
+                pt=[(p1.position[0]-po[0])*numm,(p1.position[1]-po[1])*numm,(p1.position[2]-po[2])*numm];
+                p1.position=pt;
+                pt=[(p2.position[0]-po[0])*numm,(p2.position[1]-po[1])*numm,(p2.position[2]-po[2])*numm];
+                p2.position=pt;
+                pt=[(p3.position[0]-po[0])*numm,(p3.position[1]-po[1])*numm,(p3.position[2]-po[2])*numm];
+                p3.position=pt;
+
+                mesh_surface=newland.make_tryangle(p1,p2,p3,"mesh_surface",scene);
+                mesh_surface.material=mat_green;
+                mesh_surface.sideOrientation==BABYLON.Mesh.DOUBLESIDE;
+                mesh_surface.layerMask=1;
+
+            }
+
+        },false);
+        scene.onPointerDown = function (evt, pickResult) {
+            // if the click hits the ground object, we change the impact position
+            if (pickResult.hit) {
+                console.log(scene.pointerX+"-"+scene.pointerY);
+            }
+        };
+        //特写视口
+        /*var mm = new BABYLON.FreeCamera("minimap", new BABYLON.Vector3(0,0,-20), scene);
+        mm.layerMask = 1;
+        var xstart = 0.0,
+                ystart = 0.1;
+        var width = 0.2,
+                height = 0.2;
+        //视口边界从左下角开始
+        mm.viewport = new BABYLON.Viewport(
+                xstart,
+                ystart,
+                width,
+                height
+        );
+        scene.activeCameras.push(mm);*/
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+                if(label_index1.isVisible==true)//不断刷新gui的位置
+                {//在具有多个激活相机时选择了错误的参考相机？
+                    label_index1.moveToVector3(label_index1.itspos,scene);
+                    label_index2.moveToVector3(label_index2.itspos,scene);
+                    label_index3.moveToVector3(label_index3.itspos,scene);
+                }
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+
+    }
+
+    //下面这些函数都通过命令行调用
+    //在ZoY平面里建立一个圆环路径
+    //radius:半径，sumpoint：使用几个点
+    function MakeRing(radius,sumpoint)
+    {
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var x=0;
+            var rad=radp*i;
+            //var y=sswr(radius*Math.sin(rad),null,5);//在这里需要降低一些精确度？否则Babylon.js在计算顶点数据时可能和这里不一致？
+            //var z=sswr(radius*Math.cos(rad),null,5);
+            var y=radius*Math.sin(rad);
+            var z=radius*Math.cos(rad);
+            arr_point.push(new BABYLON.Vector3(x,y,z));
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        return arr_point;
+    }
+    var arr_path=[];//核心数据
+    //arr_point：单个路径的点数组，xstartl：第一个扁平路径放在最左侧，spacing：路径的间距，sumpath：一共使用几条路径，
+    function MakeRibbon(arr_point,xstartl,spacing,sumpath,name)
+    {
+        arr_path=[];
+        for(var i=0;i<sumpath;i++)//对于每一条路径
+        {
+            var x=xstartl+spacing*i;
+            //var arr=arr_point.concat(null);//为什么拷贝失灵了？
+            //var [ ...arr ] = arr_point;//ES6的新扩展运算符？-》也不好使，因为数组里的元素是指针？!!
+            var len=arr_point.length;
+            var arr=[];
+            for(var j=0;j<len;j++)
+            {
+                var obj=arr_point[j].clone();
+                obj.x=x;
+                //arr[j].x=x;
+                arr.push(obj);
+            }
+            arr_path.push(arr);
+            arr=null;
+        }
+        mesh_origin.dispose();
+        mesh_origin=BABYLON.MeshBuilder.CreateRibbon(name,{pathArray:arr_path,updatable:true,closePath:false,closeArray:false});
+        //mesh_origin=mesh;//用一个全局变量保存最终会被导出的mesh
+        mesh_origin.sideOrientation=BABYLON.Mesh.DOUBLESIDE;
+        mesh_origin.material=mat_frame;
+        mesh_origin.layerMask=2;
+    }
+    function ChangeMaterial(mesh,mat)
+    {
+        mesh.material=mat;
+    }
+/*
+ mesh_origin.dispose()//在控制台使用无效
+* MakeRibbon(MakeRing(5,12),-10,2,11,"mesh_ribbon")
+*DeleteMeshes(mesh_origin);
+* ChangeMaterial(mesh_origin,mat_blue);
+* */
+    //var arr_line_normal=[];
+    var lines_normal={};
+    /*ShowNormals(mesh_origin)
+     DeleteMeshes([lines_normal]);
+    * */
+    //显示所有的顶点法线
+    function ShowNormals(mesh)
+    {
+        //DeleteMeshes(arr_line_normal);
+        if(lines_normal.dispose)
+        {
+            lines_normal.dispose();
+        }
+        //遍历顶点
+        var vb=mesh.geometry._vertexBuffers;
+        var data_pos=vb.position._buffer._data;
+        var data_mormal=vb.normal._buffer._data;
+        var len=data_pos.length;
+        var lines=[];
+        for(var i=0;i<len;i+=3)
+        {//CreateLineSystem使用一个网格包含很多线段，CreateLines则是一条路径
+            //var line=new BABYLON.MeshBuilder.lineS
+            var vec=new BABYLON.Vector3(data_pos[i],data_pos[i+1],data_pos[i+2]);
+            var vec2=vec.clone().add(new BABYLON.Vector3(data_mormal[i],data_mormal[i+1],data_mormal[i+2]).normalize().scale(1));
+            lines.push([vec,vec2]);
+        }
+        lines_normal=new BABYLON.MeshBuilder.CreateLineSystem("lines_normal",{lines:lines,updatable:false},scene);
+        lines_normal.color=new BABYLON.Color3(1, 0, 0);
+    }
+    function DeleteMeshes(arr)//假设一个数组里的都是mesh，彻底清空它
+    {
+        var len=arr.length;
+        for(var i=0;i<len;i++)
+        {
+            if(arr[i].dispose)
+                arr[i].dispose();
+        }
+        arr=[];
+    }
+
+    var lines_inpicked={};
+    var arr_ij=[];
+    /*DeleteMeshes([lines_inpicked]);
+    * PickPoints([[0,0],[0,12],[1,1]],mesh_origin)
+    * */
+    //选定一些顶点
+    function PickPoints(arr,mesh)
+    {
+        if(arr_path.length==0)
+        {
+            alert("尚未生成路径数组！");
+            return;
+        }
+        if(lines_inpicked.dispose)
+        {
+            lines_inpicked.dispose();
+        }
+        //arr_ij=[];
+        //为了后面考虑，需要先对arr整体遍历一遍，把首尾接口处关联起来
+        arr_ij=arr;//把路径和点的位置记录下来
+        var vb=mesh.geometry._vertexBuffers;
+        var data_pos=vb.position._buffer._data;
+        var len_pos=data_pos.length;
+        var data_index=mesh.geometry._indices;
+        var len_index=data_index.length;
+        var len=arr.length;
+        var lines=[];
+        for(var i=0;i<len;i++)//对于每一个需要显示的被选择点
+        {
+            var int0=arr[i][0];
+            var int1=arr[i][1];
+            var vec=arr_path[int0][int1];//获取到路径数组中的一个Vector3对象
+            //假设路径数组和顶点数据是一一对应的？同时假设每一条路径的长度都和第一条相同
+            var arr_index=[int0*arr_path[0].length+int1];//所有位于所选位置的顶点的索引
+            /*if(int1==0)
+            {
+                arr_index.push[(int0+1)*arr_path[0].length-1];
+            }
+            else if(int1==arr_path[0].length)
+            {
+                arr_index.push[(int0)*arr_path[0].length];
+            }*/
+            /*for(var j=0;j<len_pos;j+=3)
+            {
+                if(numnear(vec.x,data_pos[j],0.00001)&&numnear(vec.y,data_pos[j+1],0.00001)&&numnear(vec.z,data_pos[j+2],0.00001))//vec.x==data_pos[j]&&vec.y==data_pos[j+1]&&vec.z==data_pos[j+2])
+                {
+                    arr_index.push(j/3);
+                }
+                //又思考了一下，不能使用位置作为判断是否是选定顶点的标准，有时变形后顶点可能发生重合，这样被选中的点就增加了！
+            }*/
+            for(var j=0;j<len_index;j+=3)//根据索引在三角形中的位置分三种情况讨论
+            {//绘制出和这个顶点相关的所有线段，这样绘制会有很严重的线段重合！观察是否对性能有很大的影响
+                var len2=arr_index.length;
+                for(var k=0;k<len2;k++)
+                {
+                    if(arr_index[k]==data_index[j])//三角形的第一个顶点
+                    {
+                        var num2=data_index[j+1]*3;
+                        var num3=data_index[j+2]*3;
+                        var vec2=new BABYLON.Vector3(data_pos[num2],data_pos[num2+1],data_pos[num2+2]);
+                        var vec3=new BABYLON.Vector3(data_pos[num3],data_pos[num3+1],data_pos[num3+2]);
+                        lines.push([vec,vec2]);
+                        lines.push([vec,vec3]);
+                    }
+                    else if(arr_index[k]==data_index[j+1])//三角形的第一个顶点
+                    {
+                        var num2=data_index[j]*3;
+                        var num3=data_index[j+2]*3;
+                        var vec2=new BABYLON.Vector3(data_pos[num2],data_pos[num2+1],data_pos[num2+2]);
+                        var vec3=new BABYLON.Vector3(data_pos[num3],data_pos[num3+1],data_pos[num3+2]);
+                        lines.push([vec,vec2]);
+                        lines.push([vec,vec3]);
+                    }
+                    else if(arr_index[k]==data_index[j+2])//三角形的第一个顶点
+                    {
+                        var num2=data_index[j]*3;
+                        var num3=data_index[j+1]*3;
+                        var vec2=new BABYLON.Vector3(data_pos[num2],data_pos[num2+1],data_pos[num2+2]);
+                        var vec3=new BABYLON.Vector3(data_pos[num3],data_pos[num3+1],data_pos[num3+2]);
+                        lines.push([vec,vec2]);
+                        lines.push([vec,vec3]);
+                    }
+                }
+            }
+        }
+        lines_inpicked=new BABYLON.MeshBuilder.CreateLineSystem("lines_normal",{lines:lines,updatable:false},scene);
+        lines_inpicked.color=new BABYLON.Color3(1, 1, 0);
+    }
+    //需要一些选择选定顶点的方法
+
+    /*
+    * TransVertex(mesh_origin,arr_ij,BABYLON.Matrix.RotationX(Math.PI/2))
+    *TransVertex(mesh_origin,arr_ij,BABYLON.Matrix.Translation(0.5,0,0))
+    * */
+    //移动选定的顶点，同时更新网格、选取线、法线
+    function TransVertex(mesh,arr,matrix)
+    {
+        var len=arr.length;
+        for(var i=0;i<len;i++)//移动路径数组里的每个顶点
+        {
+            //var vec=arr_path[arr[i][0]][arr[i][1]];
+            arr_path[arr[i][0]][arr[i][1]]=BABYLON.Vector3.TransformCoordinates(arr_path[arr[i][0]][arr[i][1]],matrix);
+        }
+        //更新网格,发现设置了closePath:true之后在顶点数据里还是会自动补上一个接续点，这还不如一开始自己添加！起码自己添加可以保证路径数组和顶点数据的一致性！！！！
+        mesh=BABYLON.MeshBuilder.CreateRibbon(mesh.name,{pathArray:arr_path,updatable:true,instance:mesh,closePath:false,closeArray:false});
+        //清空法线
+        DeleteMeshes([lines_normal]);
+        //更新选取顶点表示
+        PickPoints(arr,mesh);
+    }
+    //需要一些生成变化矩阵的方法
+
+    //鼠标移入时用GUI显示路径信息
+
+/*ExportMesh("1",mat_blue)*/
+    function ExportMesh(filename,mat)
+    {
+        try{
+            newland.ExportBabylonMesh([mesh_origin],filename,mat);
+        }
+        catch(e)
+        {
+            console.error(e)
+        }
+    }
+
+    //按照路径和点的索引选取一些点
+    var arr_lines={};//用来表示选取位置的点，每个属性是一个点对象
+    var arr_ij=[];//每个属性分别表示路径和点索引
+    //arr_ij_temp和arr_ij一样表示这些选取的点分别是在哪条路径上，并且是路径内的第几个点
+
+
+</script>
+</html>

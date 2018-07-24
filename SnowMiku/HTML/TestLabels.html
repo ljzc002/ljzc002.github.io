@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试GUI被控对象的排布规则</title>
+    <link href="../CSS/newland.css" rel="stylesheet">
+    <link href="../CSS/stat.css" rel="stylesheet">
+    <script src="../JS/LIB/babylon.32.all.maxs.js"></script>
+    <script src="../JS/LIB/stat.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame={};
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        //MyGame=new Game(0,"first_pick","","http://127.0.0.1:8082/");
+        /*0-startWebGL
+         * */
+        webGLStart();
+    }
+    //从下面开始分成简单测试和对象框架两种架构
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+            ;
+    var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+    mat_frame.wireframe = true;
+    var mat_red = new BABYLON.StandardMaterial("mat_red", scene);
+    mat_red.diffuseColor = new BABYLON.Color3(1, 0, 0);
+    var mat_green = new BABYLON.StandardMaterial("mat_green", scene);
+    mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+    var mat_blue = new BABYLON.StandardMaterial("mat_blue", scene);
+    mat_blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+    var mesh_origin;
+    //var advancedTexture=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+    function webGLStart()
+    {
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+        camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -80), scene);
+        camera0.attachControl(canvas, true);
+        camera0.speed=0.5;
+        camera0.minZ=0.01;//问题出在这里！！设置的过小，会导致鼠标pick失败！！！！
+        light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+        var advancedTexture=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+        var mat_green = new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.backFaceCulling=false;
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.layerMask=2;
+
+        label_index1=new BABYLON.GUI.TextBlock();
+        label_index1.text = "label_index1";
+        label_index1.color="white";
+        label_index1.isVisible=true;
+        advancedTexture.addControl(label_index1);
+        label_index2=new BABYLON.GUI.TextBlock();
+        label_index2.text = "label_index2";
+        label_index2.color="white";
+        label_index2.isVisible=true;
+        advancedTexture.addControl(label_index2);
+        label_index3=new BABYLON.GUI.TextBlock();
+        label_index3.text = "label_index3";
+        label_index3.color="white";
+        label_index3.isVisible=true;
+        advancedTexture.addControl(label_index3);
+
+        label_index1.moveToVector3(new BABYLON.Vector3(-5,0,-5),scene);//如果后期不刷新，这些全屏uilabel将固定在视口上
+        label_index2.moveToVector3(new BABYLON.Vector3(0,0,0),scene);
+        label_index3.moveToVector3(new BABYLON.Vector3(5,0,5),scene);
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+                //label_index1.moveToVector3(new BABYLON.Vector3(-5,0,-5),scene);
+                //label_index2.moveToVector3(new BABYLON.Vector3(0,0,0),scene);
+                //label_index3.moveToVector3(new BABYLON.Vector3(5,0,5),scene);
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+
+    }
+</script>
+</html>

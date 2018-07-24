@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试自由相机下的pick</title>
+    <link href="../CSS/newland.css" rel="stylesheet">
+    <link href="../CSS/stat.css" rel="stylesheet">
+    <!--script src="../JS/MYLIB/Events.js"></script>
+    <!--script src="../JS/MYLIB/FileText.js"></script>
+    <!--script src="../JS/MYLIB/View.js"></script-->
+    <script src="../JS/LIB/babylon.26.all.max.js"></script><!--V3.2的稳定版本-->
+    <!--script src="../JS/MYLIB/newland.js"></script-->
+    <script src="../JS/LIB/stat.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame={};
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        //MyGame=new Game(0,"first_pick","","http://127.0.0.1:8082/");
+        /*0-startWebGL
+         * */
+        webGLStart();
+    }
+    //从下面开始分成简单测试和对象框架两种架构
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+            ;
+    var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+    mat_frame.wireframe = true;
+    var mat_red = new BABYLON.StandardMaterial("mat_red", scene);
+    mat_red.diffuseColor = new BABYLON.Color3(1, 0, 0);
+    var mat_green = new BABYLON.StandardMaterial("mat_green", scene);
+    mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+    var mat_blue = new BABYLON.StandardMaterial("mat_blue", scene);
+    mat_blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+    var mesh_origin;
+    //var advancedTexture=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+    function webGLStart()
+    {
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+        camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -80), scene);
+        camera0.attachControl(canvas, true);
+        camera0.speed=0.5;
+        camera0.minZ=0.01;//问题出在这里！！设置的过小，会导致鼠标pick失败！！！！
+        light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+        //mesh_origin=new BABYLON.Mesh.
+        var impact = BABYLON.Mesh.CreatePlane("impact", 1, scene);
+        impact.material = new BABYLON.StandardMaterial("impactMat", scene);
+        impact.material.diffuseTexture = new BABYLON.Texture("../ASSETS/IMAGE/amiga.jpg", scene);
+        impact.material.diffuseTexture.hasAlpha = true;
+        impact.position = new BABYLON.Vector3(0, 0, -0.1);
+
+        var wall = BABYLON.Mesh.CreatePlane("wall", 20.0, scene);
+        wall.material = new BABYLON.StandardMaterial("wallMat", scene);
+        wall.material.emissiveColor = new BABYLON.Color3(0.5, 1, 0.5);
+        wall.material.backFaceCulling=false;
+        wall.sideOrientation=BABYLON.Mesh.DOUBLESIDE;
+
+        scene.onPointerDown = function (evt, pickResult) {
+            // if the click hits the ground object, we change the impact position
+            if (pickResult.hit) {
+                impact.position.x = pickResult.pickedPoint.x;
+                impact.position.y = pickResult.pickedPoint.y;
+            }
+        };
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+
+    }
+</script>
+</html>
