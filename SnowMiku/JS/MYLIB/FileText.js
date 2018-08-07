@@ -18,7 +18,22 @@ function DownloadText(filename,content,filetype)
         {
             datatype="data:text/xml;charset=UTF-8,";
         }
-        aLink.href = datatype+content;//dataurl格式的字符串"
+        if(filetype==".babylon")
+        {//浏览器还没有支持babylon的mime类型！！
+            datatype="data:text/plain;charset=UTF-8,";
+        }
+        if(filetype==".png"||filetype==".jpeg")
+        {
+            datatype="";
+        }
+        if(content.length<1000000)
+        {
+            aLink.href = datatype+content;//dataurl格式的字符串"
+        }
+        else
+        {//对于过大的文件普通dataURL不支持，所以使用“二进制流大对象”
+            aLink.href=URL.createObjectURL(new Blob([content],{type:"text/plain"}));
+        }
         aLink.download = filename;
         aLink.innerHTML=filename;
         //aLink.setAttribute("onclick","");
@@ -31,19 +46,19 @@ function DownloadText(filename,content,filetype)
         //aLink.style.display="none";
         //document.body.appendChild(aLink);
         /*var evt = document.createEvent("HTMLEvents");//建立一个事件
-        evt.initEvent("click", false, false);//这是一个单击事件
-        evt.eventType = 'message';
-        aLink.dispatchEvent(evt);//触发事件*/
+         evt.initEvent("click", false, false);//这是一个单击事件
+         evt.eventType = 'message';
+         aLink.dispatchEvent(evt);//触发事件*/
         //chrome认为点击超链接下载文件是超链接标签的“默认属性”，谷歌认为默认属性不可以用脚本来触发，所以从M53版本开始dispatchEvent无法触发超链接下载
         //window.open(datatype+content, "_blank");
         //document.write(datatype+content);
         delete_div('div_choose');
         delete_div('div_mask');
-        var evt=evt||window.event||arguments[0];
+        var evt=evt||window.event;
         cancelPropagation(evt);
         var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
 
-        Open_div("", "div_choose", 240, 180, 400, 80, "", "",1,450);//打开一个带遮罩的弹出框
+        Open_div("", "div_choose", 240, 180, 400, 80, "", "",1,401);//打开一个带遮罩的弹出框
         var div_choose=document.getElementById("div_choose");//$("#div_choose")[0];
         div_choose.style.border="1px solid";
         div_choose.innerHTML="<span>谷歌浏览器专用文件生成完毕，请点击下面的文件名下载文件。</span><br>"
@@ -51,7 +66,7 @@ function DownloadText(filename,content,filetype)
         drag(div_choose);
         aLink.onmousedown=function()
         {
-            var evt=evt||window.event||arguments[0];
+            var evt=evt||window.event;
             cancelPropagation(evt);
         }
     }
@@ -89,7 +104,7 @@ function BrowseFolder()
             Folder = Folder.Path;   // 返回路径
             if(Folder.charAt(Folder.length-1) != "\\")
             {
-                 Folder = Folder + "\\";
+                Folder = Folder + "\\";
             }
             //document.all.savePath.value=Folder;
             return Folder;
@@ -175,7 +190,7 @@ function subDate(dt1,dt2)//计算两时间的天数差
     return days;
 }
 /*
-* var s1 = '2012-05-12';
+ * var s1 = '2012-05-12';
 
  s1 = new Date(s1.replace(/-/g, "/"));
  s2 = new Date();
@@ -210,11 +225,11 @@ function MakeExcel2(str_title,arr_th,th_start,td_start,arr_td,row_start)
         flag_b="ch";
         MakeXML(str_title,arr_th,th_start,td_start,arr_td,row_start);
         /*}
-        else
-        {
-            alert("很遗憾，要打印该表，您必须安装Excel电子表格软件，同时浏览器须使用“ActiveX 控件”，您的浏览器须允许执行控件。");
-        }
-        return "";*/
+         else
+         {
+         alert("很遗憾，要打印该表，您必须安装Excel电子表格软件，同时浏览器须使用“ActiveX 控件”，您的浏览器须允许执行控件。");
+         }
+         return "";*/
     }
     if(flag_b=="ch")
     {
@@ -933,9 +948,9 @@ function BinaryFile(name)
 function texttoimg(str,font,lineheight,color,type)
 {
     var c=document.createElement("canvas");
-    c.height=lineheight+4;
+    c.height=lineheight+2;
     c.width=lineheight*str.length;
-    c.style.height=lineheight+4+"px";
+    c.style.height=lineheight+2+"px";
     c.style.width=lineheight*str.length+"px";
     var context = c.getContext('2d');
     context.font=font;
@@ -946,7 +961,7 @@ function texttoimg(str,font,lineheight,color,type)
         context.fillRect(0,0,c.width,c.height);
         context.fillStyle = color;
         context.textBaseline = 'top';
-        context.fillText(str,(c.width-str.length*lineheight)/2,-1);
+        context.fillText(str,(c.width-str.length*lineheight)/2,0);
         var str_src=c.toDataURL("image/jpeg");
         c=null;//要求回收？？
         return str_src;
@@ -955,7 +970,7 @@ function texttoimg(str,font,lineheight,color,type)
     {
         context.fillStyle = color;
         context.textBaseline = 'top';//
-        context.fillText(str,(c.width-str.length*lineheight)/2,-1);
+        context.fillText(str,(c.width-str.length*lineheight)/2,0);
         var str_src=c.toDataURL("image/png");
         c=null;//要求回收？？
         return str_src;
