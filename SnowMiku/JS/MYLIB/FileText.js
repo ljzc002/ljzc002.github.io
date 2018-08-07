@@ -54,9 +54,9 @@ function DownloadText(filename,content,filetype)
         //document.write(datatype+content);
         delete_div('div_choose');
         delete_div('div_mask');
-        var evt=evt||window.event;
-        cancelPropagation(evt);
-        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        //var evt=evt||window.event;
+        //cancelPropagation(evt);
+        //var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
 
         Open_div("", "div_choose", 240, 180, 400, 80, "", "",1,401);//打开一个带遮罩的弹出框
         var div_choose=document.getElementById("div_choose");//$("#div_choose")[0];
