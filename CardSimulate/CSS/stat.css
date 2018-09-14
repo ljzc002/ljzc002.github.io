@@ -1,0 +1,28 @@
+/*帧数显示*/
+#fps {
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    font-size: 20px;
+    color: white;
+    text-shadow: 2px 2px 0 black;
+}
+
+#stats {
+    position: absolute;
+    right: 20px;
+    top: 11em;
+    font-size: 14px;
+    color: white;
+    text-align: right;
+    text-shadow: 2px 2px 0 black;
+}
+
+#status {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    font-size: 14px;
+    color: white;
+    text-shadow: 2px 2px 0 black;
+}
