@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试绘制canvas</title>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas style="width: 450px;height: 800px;border: 1px solid yellow" width="450" height="800" id="can_pic">
+
+    </canvas>
+</div>
+</body>
+<script>
+    var canvas=document.getElementById("can_pic");
+    window.onload=loadImage;
+    function loadImage()
+    {
+        var context=canvas.getContext("2d");
+        context.fillStyle="#ff0000";
+        //context.fill();//在没有路径时调用，不会将整个canvas填充！！
+        context.fillRect(0,0,450,800);
+        context.beginPath();
+        context.moveTo(20,20)
+
+
+
+        var img=document.createElement("img");
+        img.src="../../ASSETS/IMAGE/play.png";
+        img.onload=function() {//在图片加载完毕后才可以在canvas里绘制
+
+        }
+    }
+</script>
+</html>
