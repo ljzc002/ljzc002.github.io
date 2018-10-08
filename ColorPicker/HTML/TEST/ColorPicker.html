@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>色度测量器</title>
+    <script src="../../JS/MYLIB/Events.js"></script>
+    <script src="../../JS/MYLIB/FileText.js"></script>
+    <script src="../../JS/MYLIB/View.js"></script>
+</head>
+<style>
+.btn_close
+{
+    float:right;position: static;width: 14px;height:14px;margin:0;margin-top:2px;margin-right:2px;padding:0;
+    background: url(../../ASSETS/IMAGE/close.png);border:0;vertical-align: top;z-index: 101;
+}
+    .str_number
+    {
+        border:1px solid #020202;
+        width:60px;
+    }
+    .div_label_small
+    {
+        position:static;float:left;width:20px;height:30px;border:0;margin:0;padding:0;display: inline-block;
+        text-align: center;
+    }
+</style>
+<body>
+<div id="div_allbase">
+    <div style="width: 800px;height: 80px;border-bottom:1px solid" id="div_title">
+        <span style="margin-left: 20px">选择本地图片</span>
+        <input type="file" id="str_local" class="str_file" onchange="ShowImg()" value="" style="margin-left: 30px">
+        <br><br>
+        <span style="margin-left: 20px">输入图片链接</span>
+        <input type=text" id="str_url" class="str_url" onchange="ShowImg2()" value="" style="margin-left: 30px;width: 600px">
+    </div>
+    <canvas style="width: 512px;height: 512px;cursor: crosshair" width="512" height="512" id="can_pic">
+
+    </canvas>
+</div>
+<div id="div_hidden" style="display: none">
+    <div id="div_mod1">
+        <div class="div_inmod" style="width: 200px;height: 120px;margin:0;border:1px solid;float:left
+        ;line-height: 20px;display: inline-block">
+            <div class="div_inmod_head" style="width:100%;height:20px;background-color: #E0ECFF;margin:0;border:0;padding:0
+            ;border-bottom: 1px solid;">
+                <span style="float:left;margin-left: 10px">像素颜色</span>
+                <button onclick="btn_del2();" type="submit" class="btn_close"></button>
+            </div>
+            <div class="div_inmod_content" style="width:100%;height: 98px;overflow-x: hidden;overflow-y: hidden;margin:0;
+            border:0;padding: 0;background-color: #FBFCFB;font-size: 12px">
+                <span>色度:</span><input class="str_number" id="str_h">
+                <div class="div_label_small" style="float:right;width: 14px;height: 14px;margin-right: 10px;margin-top: 2px;"></div>
+                <br>
+                <input type="range" style="width: 180px;margin-left: 10px" min=0 max=360 >
+                <br>
+                <div class="div_label_small">红<br>0</div>
+                <div class="div_label_small" style="margin-left: 10px">黄<br>60</div>
+                <div class="div_label_small" style="margin-left: 10px">绿<br>120</div>
+                <div class="div_label_small" style="margin-left: 10px">青<br>180</div>
+                <div class="div_label_small" style="margin-left: 10px">蓝<br>240</div>
+                <div class="div_label_small" style="margin-left: 10px">紫<br>300</div>
+                <div class="div_label_small" style="margin-left: 10px">红<br>360</div>
+                <!--红__黄__绿__青__蓝__紫__红
+                <br>
+                0___60__120_180_240_300_360-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    //http://ljzc002.github.io/ColorPicker/HTML/TEST/ColorPicker.html
+    var canvas=document.getElementById("can_pic");
+    var context=canvas.getContext("2d");
+    window.onload=Welcome;
+    function Welcome()
+    {
+        canvas.addEventListener('click', function(e) {//点击了canvas中的一个像素
+            //let canvas = canvas;
+            var x = e.clientX - canvas.getBoundingClientRect().left;
+            var y = e.clientY - canvas.getBoundingClientRect().top;
+            /*for(let i of clickXY) {//clickXY是一个图形范围数组，可以用来简单的判断点击位置
+                if (x > (i.x - i.r) && x < (i.x + i.r) && y > (i.y - i.r) && y < (i.y + i.r)) {
+                    alert(i)
+                    //这里可以根据i 来确定你需要执行的方法
+                    break
+                }
+            }*/
+            var imagedata_temp=context.getImageData(x,y,1,1);
+            var data=imagedata_temp.data;
+            var r=data[0];
+            var g=data[1];
+            var b=data[2];
+            var a=data[3];
+            //要转化成hls颜色！！
+            var hls=rgb2hls(r,g,b);
+            delete_div("div_choose");
+            //window.screen.availHeight
+            Open_div2("div_choose",{top:e.clientY,left:e.clientX}//<window.screen.availHeight-121?e.clientY:window.screen.availHeight-121}
+                    ,200,120,null,0,100);
+            var div_choose=document.getElementById("div_choose");
+            div_choose.innerHTML=document.getElementById("div_mod1").innerHTML;
+            div_choose.getElementsByTagName("input")[0].value=Math.floor(hls.h);
+            div_choose.getElementsByTagName("input")[1].value=Math.floor(hls.h);
+            //div_choose.getElementsByTagName("span")[2].style.backgroundColor="rgb(r,g,b)";
+            document.querySelector("#div_choose .div_label_small").style.backgroundColor="rgb("+r+","+g+","+b+")";//这个query返回的就是第一个！！
+        }, false)
+    }
+    function rgb2hls(r,g,b)
+    {
+        var dr=r/255;
+        var dg=g/255;
+        var db=b/255;
+        var cmax=Math.max(dr,dg,db);
+        var cmin=Math.min(dr,dg,db);
+        var cdes=cmax-cmin;
+        var hh,ll,ss;
+        ll=(cmax+cmin)/2;
+        if(cdes){
+            if(ll <= 0.5)
+                ss = (cmax-cmin)/(cmax+cmin);
+            else
+                ss = (cmax-cmin)/(2-cmax-cmin);
+
+            if(cmax == dr)
+                hh = (0+(dg-db)/cdes)*60;
+            else if(cmax == dg)
+                hh = (2+(db-dr)/cdes)*60;
+            else// if(cmax == b)
+                hh = (4+(dr-dg)/cdes)*60;
+            if(hh<0)
+                hh+=360;
+        }
+        else
+        {
+            hh = ss = 0;
+        }
+        return({h:hh,l:ll,s:ss});
+    }
+    function ShowImg()//从本地显示图片
+    {
+        console.log("ShowImg");
+        delete_div("div_choose");
+        var value=document.getElementById("str_local").value;
+        var arr_split=value.split(".");
+        var file_type=arr_split[arr_split.length-1];
+
+        if(file_type=="jpg"||file_type=="png"||file_type=="gif"||file_type=="JPG"||file_type=="PNG"||file_type=="GIF")
+        {
+            //var img=document.createElement("img");//改成用Image标签？？
+            var img=new Image();
+            if(window.navigator.userAgent.indexOf("MSIE")>=1)//如果是IE浏览器，看来IE的安全限制更低？
+            {
+                img.src="file:///"+value;
+                img.onload = function () {
+                    DisplayImg(img);
+                }
+                //DisplayImg(img);
+            }
+            else
+            {
+                var file=document.getElementById("str_local").files[0];
+                var reader=new FileReader();
+                reader.onload=function(e)
+                {
+                    img.src= e.target.result;
+                    img.onload = function () {
+                        DisplayImg(img);
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+        else
+        {
+            alert("请选择图片文件");
+        }
+    }
+    function ShowImg2()//从url显示图片
+    {
+
+        console.log("ShowImg2");
+        delete_div("div_choose");
+        var value=document.getElementById("str_url").value;//通过url访问时并没有明确的后缀名限制
+        //var img=document.createElement("img");
+        var img=new Image();
+        img.src=value;
+        img.onload = function () {
+            DisplayImg(img);
+        }
+
+    }
+    function DisplayImg(img)//通用的显示
+    {
+        /*var size=getNaturalSize(img);
+        if(size.w>0)
+        {
+            canvas.style.width=size.w+"px";//重调canvas大小
+            canvas.width=size.w;
+            canvas.style.height=size.h+"px";
+            canvas.height=size.h;
+            context.drawImage(img,0,0);
+        }
+        else{
+            alert("没有读取到正常的图片");
+        }*/
+        canvas.style.width=img.width+"px";//重调canvas大小
+        canvas.width=img.width;
+        canvas.style.height=img.height+"px";
+        canvas.height=img.height;
+        context.drawImage(img,0,0);
+    }
+    function getNaturalSize(img)
+    {
+        var size={w:0,h:0};
+        if (img.naturalWidth) {
+            // HTML5 browsers
+            size.w = img.naturalWidth;
+            size.h = img.naturalHeight;
+        }
+        else {
+            // IE 6/7/8
+            var nImg = new Image();
+            nImg.onload = function () {
+                size.w = nImg.width;
+                size.h = nImg.height;
+                //console.log(w + "  " + h)
+            }
+            nImg.src = img.src;
+        }
+        return size;
+    }//注意img和Image是两种html标签，前置用来获取链接后者用来显示图片，后者由直接的宽高属性，前者则没有
+    function btn_del2()
+    {
+        delete_div("div_choose");
+    }
+</script>
+</html>
