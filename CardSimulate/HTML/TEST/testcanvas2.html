@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用canvas生成含有半透明度的图片</title>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas style="width: 512px;height: 512px" width="512" height="512" id="can_pic">
+
+    </canvas>
+</div>
+</body>
+<script>
+    var canvas=document.getElementById("can_pic");
+    window.onload=loadImage;
+    function loadImage()
+    {
+        var context=canvas.getContext("2d");
+        context.fillStyle="#0000ff";
+        context.fillRect(0,0,512,512);
+        drawRoundRect(context, 16, 16, 480, 480, 32);//建立一个路径，上下文、距canvas左上角距离、宽高、圆角半径
+        context.strokeStyle = "#ff0000";
+        context.fillStyle="#ff0000";
+        context.fillStyle="rgba(0,255,0,0.25)";//rgba的a通道上限是1，但在data里就变成了255
+        //context.stroke();//绘制路径
+        context.fill();//填充路径，关闭了路径也可以填充和绘制路径
+        //带有透明度的覆盖并不是替换颜色，而是混合颜色，0 0 255 255与0 255 0 64的混合结果是0 64 255 255，其实质应该是根据不透明度加权求和
+        //所以为了精确的设置颜色，还是通过ImageData逐像素设置比较好。
+
+            var imagedata_temp=context.getImageData(0,0,512,512);//规定地貌块纹理图片的宽高是512
+            var data=imagedata_temp.data;
+            var len=data.length;
+            //var color4=[0,0,0,0];
+            for(var i=0;i<len;i+=4)
+            {
+                if(data[i]==0&&data[i+1]==64&&data[i+2]==255)//如果是红色
+                {
+                    data[i]=0;
+                    data[i+1]=0;
+                    data[i+2]=255;
+                    data[i+3]=64;
+                }
+                else
+                {
+                    data[i+3]=192;
+                }
+
+            }
+        context.putImageData(imagedata_temp,0,0);
+    }
+
+    function drawRoundRect(cxt, x, y, width, height, radius){
+        cxt.beginPath();
+        cxt.arc(x + radius, y + radius, radius, Math.PI, Math.PI * 3 / 2);
+        cxt.lineTo(width - radius + x, y);
+        cxt.arc(width - radius + x, radius + y, radius, Math.PI * 3 / 2, Math.PI * 2);
+        cxt.lineTo(width + x, height + y - radius);
+        cxt.arc(width - radius + x, height - radius + y, radius, 0, Math.PI * 1 / 2);
+        cxt.lineTo(radius + x, height +y);
+        cxt.arc(radius + x, height - radius + y, radius, Math.PI * 1 / 2, Math.PI);
+        cxt.closePath();
+    }
+
+   </script>
+</html>

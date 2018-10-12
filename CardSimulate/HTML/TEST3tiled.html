@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>第二个场景测试，手牌的显示、排列、分组排序，显示瓷砖地面</title>
+    <title>测试棋盘地面、子网格子材质、范围计算，在上一场景基础上？</title>
     <link href="../CSS/newland.css" rel="stylesheet">
     <link href="../CSS/stat.css" rel="stylesheet">
     <script src="../JS/LIB/babylon.32.all.maxs.js"></script>
@@ -20,6 +20,7 @@
     <script src="../JS/PAGE/tab_somedata.js"></script>
     <script src="../JS/PAGE/HandleCard2.js"></script>
     <script src="../JS/PAGE/FullUI.js"></script>
+    <script src="../JS/PAGE/Tiled.js"></script>
     <script src="../JS/PAGE/CameraClick.js"></script>
 </head>
 <body>
@@ -76,6 +77,7 @@
         light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
         MyGame.lights.light0=light0;
         mesh_arr_cards=new BABYLON.Mesh("mesh_arr_cards", scene);
+        mesh_arr_cards._children=[];
         //相机网格对象
         var camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);
         //camera0.layerMask = 2;
@@ -157,6 +159,9 @@
             arr_mesh_groupicon.push(plane);
             //plane.parent=mesh_arr_cards;
         }
+        mesh_tiledGround=new BABYLON.Mesh("mesh_tiledGround", scene);
+        mesh_tiledGround.position.y=-7;
+        MakeTileds2(0,20,20);//先产生正方形的棋盘网格，20*20大小。
     }
     function initEvent()
     {
@@ -178,8 +183,8 @@
     function initObj()
     {//添加80个（？）实验对象
 
-        DrawCard4();
-        SortCard();
+        DrawCard5();//在棋盘上绘制而不是绘制手牌
+        //SortCard();
     }
     function initLoop()
     {
