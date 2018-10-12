@@ -1,6 +1,6 @@
 # ljzc002.github.io
 Test the github static web page
-http://ljzc002.github.io/
+https://ljzc002.github.io/
 
 让世界变得更好
 
