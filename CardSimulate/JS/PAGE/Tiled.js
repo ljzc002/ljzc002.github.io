@@ -435,7 +435,16 @@ function  PickTiled(pickInfo)//点击地块
         }
     }
     else{
-
+        //如果在没有选中棋子时，点击了一个存在棋子的地块
+        var mesh_unit=TiledHasCard(mesh);
+        if(mesh_unit)//
+        {
+            if(mesh_unit.card)
+            {
+                PickCard2(mesh_unit.card);
+            }
+            return;
+        }
     }
 }
 function TiledHasCard(node)//寻找这个地块之内的单位
