@@ -594,3 +594,26 @@ newland.canvasTextAutoLine=function(str,ctx,initX,initX2,initY,lineHeight){
         }
     }
 }
+newland.RandomChooseFromObj=function(obj)//随机从一个对象的所有属性中按照概率选择一个属性
+{
+    var len=Object.getOwnPropertyNames(obj).length;//所有属性的个数
+    var count_rate=0;
+    var num=Math.random();
+    var result=null;
+    for(var key in obj)
+    {
+        var ratep=1/len;
+        var pro=obj[key];
+        if(pro.rate)
+        {
+            ratep=pro.rate;
+        }
+        count_rate+=ratep;
+        if(count_rate>num)
+        {
+            result=pro;
+            return result;//理论上讲总会从这里返回一个
+        }
+    }
+    return "fault";
+}
