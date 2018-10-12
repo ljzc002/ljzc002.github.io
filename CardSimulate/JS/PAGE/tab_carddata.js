@@ -7,8 +7,20 @@ arr_carddata={
         imageb:"flower"//卡背
         ,imagemain:"../ASSETS/IMAGE/play.png"
         ,background:"Cu"//卡片正面的背景边框
-        ,attack:3,hp:4,cost:2,range:3,speed:5
+        ,attack:3,hp:4,cost:2,range:2
+        ,speed:10
+        //,speed:{lt_grass:5,lt_terre:3,lt_ice2:1}//每一回合在每一种地块能够走过几格，在寻路计算时取倒数？
         ,str_comment:"通过canvas排布生成动态纹理，（或者加入html2canvas，将dom排版转为dataurl？）"
         ,str_title:"测试卡片"
+    },
+    test2:{
+        imageb:"flower"//卡背
+        ,imagemain:"../ASSETS/IMAGE/close.png"
+        ,background:"Ag"//卡片正面的背景边框
+        ,attack:3,hp:4,cost:3,range:3
+        ,speed:15
+        //,speed:{lt_grass:5,lt_terre:3,lt_ice2:1}
+        ,str_comment:"另一个测试的卡片，由另一个用户管理"
+        ,str_title:"测试卡片2"
     }
 }

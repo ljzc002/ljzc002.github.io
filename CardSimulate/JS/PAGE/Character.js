@@ -40,7 +40,8 @@ CameraMesh.prototype._initPointerLock =function() {
     var _this = this;
     //这个监听只是用来获取焦点的？从降低耦合的角度来讲，全局事件监听并不应该放在角色类里！！！！
     canvas.addEventListener("click", function(evt) {//这个监听也会在点击GUI按钮时触发！！
-        if(MyGame.init_state==1||MyGame.init_state==2)//点击canvas则锁定光标，在因为某种原因在first_lock状态脱离焦点后用来恢复焦点
+        CameraClick(_this,evt);
+        /*if(MyGame.init_state==1||MyGame.init_state==2)//点击canvas则锁定光标，在因为某种原因在first_lock状态脱离焦点后用来恢复焦点
         {//不锁定指针时，这个监听什么也不做
             if(MyGame.flag_view!="first_pick")
             {
@@ -74,8 +75,21 @@ CameraMesh.prototype._initPointerLock =function() {
                     var card=mesh.card;
                     PickCard(card);
                 }
+                else if(MyGame.init_state==1&&MyGame.flag_view=="first_lock"//点击棋盘上的一张卡，认为这时不可多选，并且同样可以点击其他人的卡片，但只能控制自己的卡片
+                    &&pickInfo.hit&&pickInfo.pickedMesh.name.substr(0,5)=="card_")//&&pickInfo.pickedMesh.card.belongto==MyGame.WhoAmI)
+                {
+                    cancelPropagation(evt);
+                    cancelEvent(evt);
+                    var mesh=pickInfo.pickedMesh;
+                    var card=mesh.card;
+                    PickCard2(card);//在棋盘上点击
+                }
+                else if(MyGame.init_state==1&&MyGame.flag_view=="first_lock"&&pickInfo.hit&&pickInfo.pickedMesh.name.substr(0,5)=="mask_")
+                {//如果点击在遮罩层上，如果是第一次点击则计算路径并显示，如果已经计算了路径则表示路径确认，通过动画按路径移动
+
+                }
             }
-        }
+        }*/
 
     }, false);
     //一开始直接锁定光标
@@ -150,8 +164,8 @@ CameraMesh.prototype.CenterCursor=function()
 {
     //在屏幕中心绘制一个光标
     var rect_centor=new BABYLON.GUI.Rectangle();
-    rect_centor.width = "80px";
-    rect_centor.height = "80px";
+    rect_centor.width = "60px";
+    rect_centor.height = "60px";
     rect_centor.alpha=0.5;
     rect_centor.color="blue";
     MyGame.fsUI.addControl(rect_centor);
@@ -224,6 +238,7 @@ CardMesh.prototype.init=function(param,scene)
     this.isPicked=false;//这个卡片是否被选中
     this.num_group=999;//这个卡片的编队数字，编队越靠前显示越靠前，999表示最大，意为没有编队，显示在列表的最后面
     this.pickindex=0;//在被选中卡片数组中的索引，需要不断刷新？
+    this.workstate="hand";//单位目前的工作状态，hand在手里，wait等待行动，moved已经移动到工作地点，worked已经工作不能再移动和工作
 
     //正反表面顶点
     this.vertexData = new BABYLON.VertexData();//每一张卡片都要有自己的顶点数组对象，正反两面复用。这个对象要一直保持不变！！
@@ -289,7 +304,7 @@ CardMesh.prototype.init=function(param,scene)
     cardf.isPickable=false;
     //边线
     var path_line = this.make_line(this.vertexData, x, y);//这里是四个顶点，能否自动封口？改用细线+高亮辉光？？!!用可见性控制
-    this.path_line=path_line;
+    //this.path_line=path_line;
     //Mesh的Create方法事实上在调用MeshBuilder的对应Create方法，MeshBuilder的Create方法也可以实现对现有Mesh的变形功能
     //var line = new BABYLON.Mesh.CreateLines("line", path_line, this.scene, true);
     //为了能够调整宽度，将线改为圆柱体
@@ -302,7 +317,13 @@ CardMesh.prototype.init=function(param,scene)
     line.renderingGroupId = 2;
     line.position.y -= (y - 1) / 2;
     line.position.x -= (x - 1) / 2;
-    line.isVisible=false
+    line.isVisible=false;
+    //除了显示选中效果之外，还需要一种在远处表示归属的边框
+    var line2 = new BABYLON.Mesh.CreateLines("line2_"+this.name, path_line, this.scene, true);
+    line2.color=this.linecolor;
+    line2.renderingGroupId = 2;
+    line2.position.y -= (y - 1) / 2;
+    line2.position.x -= (x - 1) / 2;
 
     this.mesh=new BABYLON.MeshBuilder.CreateBox(("card_" +this.name),{width:x-1,height:y-1,depth:0.005},this.scene);
     this.mesh.renderingGroupId = 0;//隐形元素
@@ -312,11 +333,13 @@ CardMesh.prototype.init=function(param,scene)
     this.cardf = cardf;
     this.cardb = cardb;
     this.line = line;
-    this.path_line=path_line;
-    this.arr_path_line=line.getVerticesData(BABYLON.VertexBuffer.PositionKind,false);
+    this.line2 = line2;
+    this.path_line=path_line;//边界管路径
+    this.arr_path_line=line.getVerticesData(BABYLON.VertexBuffer.PositionKind,false);//边界管顶点
     cardf.parent = this.mesh;
     cardb.parent = this.mesh;
     line.parent = this.mesh;
+    line2.parent = this.mesh;
     this.mesh.card = this;
     //this.mesh.parent=mesh_arr_cards;//按照高内聚低耦合的规则，这个设定不应该放在角色类内部
     //暂时使用16:9的高宽设计
@@ -444,6 +467,7 @@ BallMan.prototype.init=function(param,scene)
     var mat_head=new BABYLON.StandardMaterial("mat_head", scene);
     mat_head.diffuseTexture =new BABYLON.Texture(param.image,scene);
     mat_head.freeze();
+    mat_head.useLogarithmicDepth=true;
     var mesh_head=BABYLON.Mesh.CreateSphere(this.name+"head", 10,  2.0, scene);
     mesh_head.renderingGroupId=2;
     mesh_head.layerMask=2;

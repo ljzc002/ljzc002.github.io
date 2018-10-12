@@ -400,8 +400,16 @@ function HandCard(flag)//用动画方式表现手牌的“展开和收拢”
 {
     var pos1,pos2;
     MyGame.flag_view="first_pick";
+    HideAllMask();
     if(flag==0)//将手牌从后面推到前面
     {
+        if(card_Closed2)//如果这时正在棋盘上显示某个单位的范围
+        {
+            //DisposeRange();
+            noPicked(card_Closed2);
+            //card_Closed2.isPicked=false;
+            card_Closed2=null;
+        }
         pos1=new BABYLON.Vector3(0,0,0);
         pos2=new BABYLON.Vector3(0,-2,16);
         var animation3=new BABYLON.Animation("ani_HandCard0","position",30,BABYLON.Animation.ANIMATIONTYPE_VECTOR3,BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
@@ -418,6 +426,10 @@ function HandCard(flag)//用动画方式表现手牌的“展开和收拢”
     }
     else if(flag==1)//将手牌从前面拉到后面
     {
+        if(arr_pickedCards.length>0)//隐藏手牌时要把所有选取痕迹去掉？
+        {
+
+        }
         pos1=new BABYLON.Vector3(0,0,0);
         pos2=new BABYLON.Vector3(0,2,-16);
         var animation3=new BABYLON.Animation("ani_HandCard1","position",30,BABYLON.Animation.ANIMATIONTYPE_VECTOR3,BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
@@ -430,4 +442,67 @@ function HandCard(flag)//用动画方式表现手牌的“展开和收拢”
             MyGame.flag_view="first_lock";
         });
     }
+}
+
+var card_Closed2=null;
+function PickCard2(card)//点击一下选中，高亮边缘，在非选中状态使用2D视角跟随，还是3D视角跟随？，再点击一下则拉近放大，是否要调整视角跟随方式？
+//同时还要在卡片附近建立一层蓝色或红色的半透明遮罩网格，表示移动及影响范围
+{//如果再次点击有已选中卡片，则把相机移到卡片面前
+    if(card.isPicked)
+    {
+        GetCardClose2(card);
+        //DisposeRange();//隐藏范围显示，规定点击棋盘时计算到达路径，点击空处时清空范围，点击其他卡牌时切换范围，切换成手牌时清空范围
+    }
+    else
+    {
+        getPicked(card);
+        //card.isPicked=true;//设为被选中卡片并为它计算范围
+        //card_Closed2=card;
+        DisplayRange(card);
+    }
+}
+function GetCardClose2(card)//让相机靠近card！！？？
+{
+    MyGame.flag_view="first_ani";
+    MyGame.anicount=2;//如果开启了多个物体的动画，要确定这些物体的动画都结束再退出动画状态
+    var pos_card=card.mesh._absolutePosition.clone();
+    var pos_camera=MyGame.player.mesh.position.clone();
+    var pos=pos_card.clone().add(pos_camera.clone().subtract(pos_card).normalize().scale(3));
+    var animation3=new BABYLON.Animation("animation3","position",30,BABYLON.Animation.ANIMATIONTYPE_VECTOR3,BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    var keys1=[{frame:0,value:MyGame.player.mesh.position.clone()},{frame:30,value:pos}];
+    animation3.setKeys(keys1);
+
+
+    var rot_camera=MyGame.player.mesh.rotation.clone();
+    var tran_temp=new BABYLON.Mesh("tran_temp",scene);
+    tran_temp.position=pos;
+    tran_temp.lookAt(pos_card,Math.PI,0,0);//,Math.PI,Math.PI);YXZ?
+    var rot=tran_temp.rotation.clone();//看起来这个rot是反向的，如何把它正过来？
+    rot.x=-rot.x;
+    //MyGame.PI2=Math.PI*2;
+    //rot.x=(rot.x-Math.PI)%MyGame.PI2;
+    //rot.y=(rot.y-Math.PI)%MyGame.PI2;
+    //rot.z=0;//出现了奇怪的坐标反向
+    tran_temp.dispose();
+    var animation4=new BABYLON.Animation("animation4","rotation",30,BABYLON.Animation.ANIMATIONTYPE_VECTOR3,BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    var keys2=[{frame:0,value:rot_camera},{frame:30,value:rot}];
+    animation4.setKeys(keys2);
+    MyGame.player.mesh.animations.push(animation3);//mesh和camera必须使用相同的动画？
+    //MyGame.Cameras.camera0.animations.push(animation3);
+    MyGame.Cameras.camera0.animations.push(animation4);
+    //MyGame.player.mesh.animations.push(animation4);
+    scene.beginAnimation(MyGame.player.mesh, 0, 30, false,1,function(){
+        MyGame.anicount--;
+        if(MyGame.anicount==0)
+        {
+            MyGame.flag_view="first_lock";
+        }
+    });
+    scene.beginAnimation(MyGame.Cameras.camera0, 0, 30, false,1,function(){
+        MyGame.anicount--;
+        if(MyGame.anicount==0)
+        {
+            MyGame.flag_view="first_lock";
+        }
+    });
 }

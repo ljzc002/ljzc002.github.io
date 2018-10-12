@@ -103,6 +103,17 @@ function CamerasFollowActor(object)
         {
             object.mesh.rotation.y = 0+camera0.rotation.y;
             object.mesh.rotation.x=0+camera0.rotation.x;
+            /*if(MyGame.flag_view!="first_ani")
+            {
+                object.mesh.rotation.y = 0+camera0.rotation.y;
+                object.mesh.rotation.x=0+camera0.rotation.x;
+            }
+            else//在动画视角下是否允许玩家手动控制视角？
+            {
+                object.mesh.rotation.y = 0+camera0.rotation.y;
+                object.mesh.rotation.x=0+camera0.rotation.x;
+            }*/
+
             //相机就位于相机网格的原点
             //var v_temp=new BABYLON.Vector3(0,0,0);
             //BABYLON.Vector3.TransformNormalToRef(object.mesh.position, object.mesh.worldMatrixFromCache, v_temp);
@@ -114,12 +125,25 @@ function CamerasFollowActor(object)
             //mesh_arr_cards.rotation.y=object.mesh.rotation.y;
             //mesh_arr_cards.rotation.x=object.mesh.rotation.x;
             //相机的位置变化也会导致选定的地区块变化？？
-            if(MyGame.init_state==2&&MyGame.flag_view=="first_lock")//突出显示约7个地区块
+            if(MyGame.init_state==1&&MyGame.flag_view=="first_lock")
             {
                 var width = engine.getRenderWidth();
                 var height = engine.getRenderHeight();
                 var pickInfo = scene.pick(width/2, height/2, null, false, MyGame.Cameras.camera0);
                 //LookingForDQK(pickInfo);
+                //让棋盘上的每一个卡片跟随视角？
+                var card_tiled=mesh_tiledGround._children[0]._children;//第一个子元素是所有棋盘上卡片的父网格，其他子元素是棋盘上的每个格子
+                var len=card_tiled.length;
+                for(var i=0;i<len;i++)
+                {
+                    var mesh=card_tiled[i];
+                    if(mesh.name.substr(0,5)=="card_")//注意不要让棋盘跟着一起旋转了
+                    {
+                        mesh.lookAt(camera0.position);//这个方法要求mesh必须没有父元素？
+                        mesh.rotation.x=0;//2D的跟随视角
+                    }
+
+                }
             }
         }
         else if(MyGame.flag_view=="third")

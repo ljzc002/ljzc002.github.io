@@ -90,6 +90,7 @@ function onKeyDown(event)
             MyGame.player._changePointerLock();
             arr_pickedCards=[];
             card_firstpick=null;
+            //HideAllMask();
             /*if(MyGame.flag_view=="first_lock")
             {
                 MyGame.flag_view="first_pick";
@@ -111,12 +112,12 @@ function onKeyDown(event)
         }
     }
 }
-function onKeyUp()
+function onKeyUp(event)
 {
     if(MyGame.flag_view=="first_ani")
     {
-        cancelPropagation(evt);
-        cancelEvent(evt);
+        cancelPropagation(event);
+        cancelEvent(event);
         return;
     }
     if(MyGame.flag_view=="first_lock"||MyGame.flag_view=="first_pick")//||MyGame.flag_view=="first_free")//光标锁定情况下的第一人称移动

@@ -181,3 +181,53 @@ function SortCard()
 
     }
 }
+
+function DrawCard5()//建立四张卡片，两张是自己的两张是他人的
+{
+    for(var i=0;i<4;i++)
+    {
+        var card_test=new CardMesh();
+        var pos,bel,color,type;
+        if(i==0)
+        {
+            pos=new BABYLON.Vector3(1.5,0,1.5);
+            bel=MyGame.WhoAmI;
+            color=new BABYLON.Color3(0, 1, 0);
+            type="test";
+        }
+        else if(i==1)
+        {
+            pos=new BABYLON.Vector3(1.5,0,-1.5);
+            bel="anOtherMan";
+            color=new BABYLON.Color3(1, 0, 0);
+            type="test2";
+        }
+        else if(i==2)
+        {
+            pos=new BABYLON.Vector3(-1.5,0,-1.5);
+            bel=MyGame.WhoAmI;
+            color=new BABYLON.Color3(0, 1, 0);
+            type="test";
+        }
+        else if(i==3)
+        {
+            pos=new BABYLON.Vector3(-1.5,0,1.5);
+            bel="anOtherMan";
+            color=new BABYLON.Color3(1,0, 0);
+            type="test2";
+        }
+        var obj_p={name:"cardname"+count_cardname,point_x:point_x,point_y:point_y
+            ,card:arr_carddata[type]
+            ,linecolor:color
+            ,scene:scene
+            ,position:pos
+            ,rotation:new BABYLON.Vector3(0,0,0)
+            ,scaling:new BABYLON.Vector3(0.1,0.1,0.1)
+            ,belongto:bel
+        };
+        card_test.init(obj_p,scene);
+        card_test.mesh.parent=mesh_tiledCard;
+        card_test.workstate="wait";
+        count_cardname++;
+    }
+}

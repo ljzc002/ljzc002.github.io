@@ -93,13 +93,13 @@ Game.prototype={
             _this.currentframet=new Date().getTime();
             _this.DeltaTime=_this.currentframet-_this.lastframet;//取得两帧之间的时间
             _this.lastframet=_this.currentframet;
-            _this.nohurry+=_this.DeltaTime;
+            /*_this.nohurry+=_this.DeltaTime;
 
             if(MyGame&&_this.nohurry>1000)//每一秒进行一次导航修正
             {
                 _this.nohurry=0;
 
-            }
+            }*/
             //var time_start=_this.currentframet-_this.firstframet;//当前时间到最初过了多久
             for(var i=0;i<_this.list_nohurry.length;i++)
             {

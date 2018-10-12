@@ -267,7 +267,7 @@ function PickCard(card)
         }
     }
 }
-function getPicked(card)
+function getPicked0(card)
 {//将卡片标识为选中状态，设置高亮边框，并且将它作为第一个选中点
     card.line.isVisible=true;
     MyGame.hl.addMesh(card.line,card.linecolor);
@@ -276,7 +276,7 @@ function getPicked(card)
     card.isPicked=true;
     //card.pickindex=arr_pickedCards.length;//
 }
-function noPicked(card)
+function noPicked0(card)
 {
     card.line.isVisible=false;
     MyGame.hl.removeMesh(card.line);
@@ -284,19 +284,19 @@ function noPicked(card)
     //card.line=BABYLON.MeshBuilder.CreateTube(card.line.name, {path: card.path_line, radius:0.05,updatable:true,instance:card.line}, scene);
     card.isPicked=false;
 }
-function getPicked2(card)
+function getPicked(card)
 {//将卡片标识为选中状态，设置高亮边框，并且将它作为第一个选中点
     //card.line.isVisible=true;
-    MyGame.hl.addMesh(card.cardb,card.linecolor);
+    MyGame.hl.addMesh(card.cardf,card.linecolor);
     //card.line.width=1000;
     //card.line=BABYLON.MeshBuilder.CreateTube(card.line.name, {path: card.path_line, radius:0.2,updatable:true,instance:card.line}, scene);
     card.isPicked=true;
     //card.pickindex=arr_pickedCards.length;//
 }
-function noPicked2(card)
+function noPicked(card)
 {
     //card.line.isVisible=false;
-    MyGame.hl.removeMesh(card.cardb);
+    MyGame.hl.removeMesh(card.cardf);
     //card.line.width=100;
     //card.line=BABYLON.MeshBuilder.CreateTube(card.line.name, {path: card.path_line, radius:0.05,updatable:true,instance:card.line}, scene);
     card.isPicked=false;
