@@ -290,12 +290,16 @@ function getPicked(card)
 }
 function noPicked(card)
 {
-    card.line.isVisible=false;
-    MyGame.hl.removeMesh(card.line);
-    MyGame.hl.removeMesh(card.mesh);
-    //card.line.width=100;
-    //card.line=BABYLON.MeshBuilder.CreateTube(card.line.name, {path: card.path_line, radius:0.05,updatable:true,instance:card.line}, scene);
-    card.isPicked=false;
+    if(card)
+    {
+        card.line.isVisible=false;
+        MyGame.hl.removeMesh(card.line);
+        MyGame.hl.removeMesh(card.mesh);
+        //card.line.width=100;
+        //card.line=BABYLON.MeshBuilder.CreateTube(card.line.name, {path: card.path_line, radius:0.05,updatable:true,instance:card.line}, scene);
+        card.isPicked=false;
+    }
+
 }
 
 var card_Closed=null;
@@ -455,7 +459,7 @@ function PickCard2(card)//点击一下选中，高亮边缘，在非选中状态
     }
     else
     {
-        getPicked(card);
+        //getPicked(card);
         //card.isPicked=true;//设为被选中卡片并为它计算范围
         //card_Closed2=card;
         DisplayRange(card);

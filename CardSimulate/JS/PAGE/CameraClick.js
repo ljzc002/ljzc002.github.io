@@ -48,7 +48,7 @@ function CameraClick(_this,evt)
             var pickInfo = scene.pick(scene.pointerX, scene.pointerY, null, false, MyGame.Cameras.camera0);//点击信息，取屏幕中心信息而不是鼠标信息！！
             if(MyGame.init_state==1&&MyGame.flag_view=="first_pick"
                 &&pickInfo.hit&&pickInfo.pickedMesh.name.substr(0,5)=="card_"&&pickInfo.pickedMesh.card.belongto==MyGame.WhoAmI)//在一个卡片上按下鼠标，按下即被选中
-            {
+            {//点击手牌中的一张卡片
                 cancelPropagation(evt);
                 cancelEvent(evt);
                 //releaseKeyState();

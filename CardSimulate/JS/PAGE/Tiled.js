@@ -161,6 +161,7 @@ function DisplayRange(card)//显示这个card的范围
         HideAllMask();//这里也会清空card_Closed2
     }
     card_Closed2=card;
+    getPicked(card_Closed2);
     card.isPicked=true;
     if(card.workstate!="wait")
     {
@@ -547,7 +548,11 @@ function DisplayRange2(card,range)//只显示移动后的影响范围
     }
     for(var key in arr_noderange2)
     {
-        arr_noderange2[key].node.mask.material=MyGame.materials.mat_alpha_red;
+        if(arr_noderange2[key].cost>0)
+        {
+            arr_noderange2[key].node.mask.material=MyGame.materials.mat_alpha_red;
+        }
+
         arr_DisplayedMasks.push(arr_noderange2[key].node.mask);
     }
 }
