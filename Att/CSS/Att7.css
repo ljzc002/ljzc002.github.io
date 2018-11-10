@@ -1,0 +1,34 @@
+/*专用于表格框架的样式*/
+body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;
+    height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;
+    -ms-touch-action: none;font-size: 12px;min-width: 600px;}
+#all_base{min-height: 576px;min-width: 1024px;height: 100%;width:100%;position: relative;overflow-x:auto;overflow-y: hidden;}
+/*表格的属性*/
+td input{    height: 100%;    width: 100%;    border:0;    text-align: center;    background-color: inherit;}
+.div_tab{float: left;position: relative;width:4000px;overflow-x: hidden;overflow-y: scroll}
+.div_tab td{    text-align: center;    /*border: solid 1px #008000;*/    border-right:solid 1px #008000;    border-bottom: solid 1px #008000;
+    line-height: 16px;    font-size: 13px;    height: 24px;    padding: 1px;    background-color: inherit;    word-break: keep-all;
+/*display: inline-block*/}
+.div_tab th{    text-align: center;    /*border: solid 1px #008000;*/    line-height: 16px;    font-size: 13px;    height: 36px;
+    padding: 1px;    text-align: center;    border-right: solid 1px #008000;    border-bottom: solid 1px #008000;    word-break: keep-all;
+    white-space:nowrap;    overflow: hidden;    text-overflow: ellipsis;/*display: inline-block*/}
+.div_tab table{    float: left;    width: auto;    border-right-width:0px;    border: solid 1px #008000;    table-layout: fixed;}
+.div_tab tr{    width: auto;    vertical-align: middle;    /*border: solid 1px #008000;*/    padding: 1px;}
+td a{    cursor: pointer;}
+td button{    cursor: pointer;}
+.div_mask2{    display:block;    left: 0px;    top: 0px;    /*filter: alpha(opacity=50);    opacity: 0.50;*/    overflow: hidden;/*锁定的表头表列*/
+    position: absolute;    float: left;    overflow-x: hidden}
+table{    border-spacing:0;}
+.div_mask2 td{    text-align: center;    /*border: solid 1px #008000;*/    border-right:solid 1px #008000;    border-bottom: solid 1px #008000;
+    line-height: 16px;    font-size: 13px;    height: 24px;    padding: 1px;    background-color: inherit;    word-break: keep-all;}
+.div_mask2 th{    text-align: center;    /*border: solid 1px #008000;*/    line-height: 16px;    font-size: 13px;    height: 36px;
+    padding: 1px;    text-align: center;    border-right: solid 1px #008000;    border-bottom: solid 1px #008000;    word-break: keep-all;
+    white-space:nowrap;    overflow: hidden;    text-overflow: ellipsis;}
+.div_mask2 table{    float: left;    width: auto;    border-right-width:0px;    border: solid 1px #008000;    table-layout: fixed;
+    position: absolute;}
+.div_mask2 tr{    width: auto;    vertical-align: middle;    /*border: solid 1px #008000;*/    padding: 1px;}
+.combo-panel li{    float:none;}
+.btn_limlen{    /*float: left;*/    height: 20px;    width: 20px;    border: 1px solid;    /*margin-top: 6px;*/    /*margin-left: 4px;*/
+    background: url(../ASSETS/IMAGE/play.png) no-repeat;    position: absolute;    -moz-border-radius: 3px;      /* Gecko browsers圆角 */
+    -webkit-border-radius: 3px;   /* Webkit browsers */    border-radius:3px;            /* W3C syntax */     position: absolute;
+    top: 6px;    right: 4px;}
