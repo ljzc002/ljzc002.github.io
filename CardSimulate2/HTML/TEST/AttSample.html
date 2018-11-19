@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试att7</title>
+    <link href="../../CSS/Att7.css" rel="stylesheet">
+    <script src="../../JS/MYLIB/Events.js"></script>
+    <script src="../../JS/MYLIB/FileText.js"></script>
+    <!--script src="../JS/MYLIB/newland.js"></script-->
+    <script src="../../JS/MYLIB/View.js"></script>
+    <script src="../../JS/MYLIB/Att7.js"></script>
+</head>
+<body>
+<div id="all_base" onscroll="TestLock()">
+    <div class="div_tool" style="height: 80px">
+        <button onclick="table1.ChangePage('0')">第一页</button>
+        <button onclick="table1.ChangePage('-')">上一页</button>
+        <span id="c_page_span"></span>/<span id="t_page_span"></span>
+        <button onclick="table1.ChangePage('+')">下一页</button>
+        <button onclick="table1.ChangePage('9999')">最后一页</button>
+    </div>
+    <div class="div_tab" id="div_tab">
+
+    </div>
+</div>
+
+</body>
+<script>
+
+    var table1=new Att7();
+    var objp={
+        base:"div_tab",
+        id:"table1",
+        //left:50,
+        //top:50,
+        rowsp:20,
+        isThlocked:1,
+        isCollocked:2,//不包括索引列？
+        baseColor:"#00ff00",
+        stripeColor:"#00aa00",
+        pickColor:"#97ceef"
+    }
+    if(table1.init(objp)=="ok")
+    {
+        var obj_datas=[
+                "测试表格",
+                ["简单字符","处理超长字符","根据值选择","文本框","下拉框","复选框","按钮","超链接"],
+                ["str"
+                    ,"limit"
+                    ,["switch",["value1","text1"],["value2","text2"]]
+                    ,["input",["class1"],["height","10px"]]
+                    ,["select","class2",[["value1","text1"],["value2","text2"],["value3","text3"]],"onChange();"]
+                    ,["check","class3"]
+                    ,["button","class4","按钮","80px",["height","10px"]]
+                    ,["a","class5",["height","10px"]]
+                ],
+                [100,200,300,400,500,600,700,800],
+                ["value1","value2value2value2value2value2value2value2value2value2value2","value1","value2","value1","value2","value1","value2"],
+                ["value1","value2","value1","value2","value1","value2","value1","value2"]
+                ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+            ,["value1","value2","value1","value2","value1","value2","value1","value2"]
+        ];
+        table1.draw(obj_datas,0);
+        document.getElementById('t_page_span').innerHTML=table1.totalpages;
+        document.getElementById('c_page_span').innerHTML=table1.page_current+1;
+        requestAnimFrame(function(){table1.AdjustWidth();});
+    }
+    function onChange()
+    {
+        console.log("onChange");
+    }
+    function TestLock()
+    {
+        if(table1.ScrollLock)
+        {
+            table1.ScrollLock();
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在场景中完善规则，手牌到棋子的转换</title>
+    <link href="../CSS/newland.css" rel="stylesheet">
+    <link href="../CSS/stat.css" rel="stylesheet">
+    <script src="../JS/LIB/babylon.32.all.maxs.js"></script>
+    <script src="../JS/LIB/stat.js"></script>
+    <script src="../JS/MYLIB/Events.js"></script>
+    <script src="../JS/MYLIB/FileText.js"></script>
+    <script src="../JS/MYLIB/newland.js"></script>
+    <script src="../JS/MYLIB/View.js"></script>
+    <script src="../JS/PAGE/Game.js"></script>
+    <script src="../JS/PAGE/Character/BallMan.js"></script>
+    <script src="../JS/PAGE/Character/CameraMesh.js"></script>
+    <script src="../JS/PAGE/Character/CardMesh.js"></script>
+    <script src="../JS/PAGE/Control.js"></script>
+    <script src="../JS/PAGE/Moves.js"></script>
+    <script src="../JS/PAGE/tab_carddata.js"></script>
+    <script src="../JS/PAGE/tab_somedata.js"></script>
+    <script src="../JS/PAGE/tab_skilldata.js"></script>
+    <script src="../JS/PAGE/HandleCard2.js"></script>
+    <script src="../JS/PAGE/FullUI.js"></script>
+    <script src="../JS/PAGE/Tiled.js"></script>
+    <script src="../JS/PAGE/rule.js"></script>
+    <script src="../JS/MYLIB/Att7.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+    <div style="position:absolute;top: 0px;left:0px">
+        <div id="all_base" style="display: none;z-index: 301;height: 400px;width:250px;border-color: #15428b"><!--预计这个表格没有左右滑动,并且在最开始不显示-->
+            <div class="div_tool" style="height: 124px">
+                <span>HP：</span><span id="str_chp"></span><span>/</span><span id="str_thp"></span><br>
+                <span>MP：</span><span id="str_cmp"></span><span>/</span><span id="str_tmp"></span><br>
+                <span>ATK：</span><span id="str_atk"></span><span>SPEED：</span><span id="str_speed"></span>
+                <!--span>RANGE：</span><span id="str_range"--></span><br>
+                <span>SKILL_CURRENT：</span><span id="str_sc"></span>
+            </div>
+            <div class="div_tab" id="div_tab">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    //https://ljzc002.github.io/CardSimulate/HTML/TEST3tiled.html
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame={};
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    var MyGame={};
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        MyGame=new Game(0,"first_pick","","http://127.0.0.1:8082/");
+        /*0-startWebGL
+         * */
+        webGLStart();
+    }
+    //从下面开始分成简单测试和对象框架两种架构
+    function webGLStart()
+    {
+        //initWebSocket();//如何确保上一环结成功才开启下一环节？
+        initScene();//初始化场景，包括最初入门教程里的那些东西
+        initArena();//初始化地形，包括天空盒，参照物等
+        initEvent();//初始化事件
+        initUI();//初始化场景UI
+        initObj();//初始化一开始存在的可交互的物体
+        initLoop();//初始化渲染循环
+        MyGame.init_state=1;
+        engine.hideLoadingUI();
+        //MyGame.flag_startr=1;//这个是通过nohurry计时器自动启动的，不需要手动启动
+    }
+    function initScene()
+    {//光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+        MyGame.lights.light0=light0;
+        //mesh_arr_cards=new BABYLON.Mesh("mesh_arr_cards", scene);
+        //mesh_arr_cards._children=[];
+        //相机网格对象
+        var camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);
+        //camera0.layerMask = 2;
+        //camera0.position=new BABYLON.Vector3(0, 0, -20);
+        camera0.minZ=0.001;
+        scene.activeCameras.push(camera0);
+        //用BallMan作为CameraMesh的mesh！！！！
+        var player = new BallMan();
+        var obj_p={};//初始化参数
+        //计划不使用物理引擎
+        var mesh_ballman=new BABYLON.Mesh("mesh_ballman",scene);
+        obj_p.mesh=mesh_ballman;
+        obj_p.name="本机";//显示的名字
+        obj_p.id="本机";//WebSocket Sessionid
+        obj_p.image="../ASSETS/IMAGE/Rainbow.jpg";
+        player.init(
+                obj_p,scene
+        );
+
+        var cameramesh=new CameraMesh();
+        var obj_p={};//初始化参数
+        obj_p.mesh=mesh_ballman;
+        obj_p.mesh.isVisible=false;
+        obj_p.mesh.position=new BABYLON.Vector3(0,0,-20);
+        if(obj_p.mesh.ballman)
+        {
+            obj_p.mesh.ballman.head.position=obj_p.mesh.position.clone();
+        }
+        obj_p.methodofmove="host20171018";
+        obj_p.name="FreeCamera";//显示的名字
+        obj_p.id="FreeCamera";//WebSocket Sessionid
+        obj_p.camera=camera0;
+        //obj_p.image="assets/image/play.png";
+        obj_p.flag_objfast=5;
+        cameramesh.init(
+                obj_p,scene
+        );
+        MyGame.arr_myplayers[obj_p.name]=cameramesh;
+        MyGame.player=cameramesh;
+        MyGame.Cameras.camera0=camera0;
+        camera0.position=cameramesh.mesh.position.clone();
+        cameramesh.mesh.rotation=camera0.rotation.clone();
+        //mesh_arr_cards.position=MyGame.player.mesh.ballman.backview._absolutePosition.clone();
+    }
+    function initArena()
+    {
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=MyGame.materials.mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=MyGame.materials.mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=MyGame.materials.mat_green;
+        mesh_base2.renderingGroupId=2;
+        //mesh_base2.layerMask=2;
+        //在这里建立天空盒
+        //天空盒
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skybox.ambientColor=new BABYLON.Color3(1, 0, 0);
+        //“skybox_nx.png”, “skybox_ny.png”, “skybox_nz.png”, “skybox_px.png”, “skybox_py.png”, “skybox_pz.png”.
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../ASSETS/IMAGE/skybox/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+        skybox.isPickable=false;
+        MyGame.skybox=skybox;
+        //在这里建立棋盘地面
+        mesh_tiledGround=new BABYLON.Mesh("mesh_tiledGround", scene);
+        mesh_tiledGround.position.y=-7;
+        MakeTileds2(0,20,20);//先产生正方形的棋盘网格，20*20大小。
+    }
+    function initEvent()
+    {
+        InitMouse();
+        window.addEventListener("keydown", onKeyDown, false);//按键按下
+        window.addEventListener("keyup", onKeyUp, false);//按键抬起
+        window.addEventListener("resize", function () {
+            if (engine) {
+                engine.resize();
+            }
+        },false);
+    }
+    function initUI()
+    {
+        MakeFullUI();
+        var advancedTexture = MyGame.fsUI;
+
+    }
+    function initObj()
+    {//添加80个（？）实验对象
+        mesh_arr_cards=new BABYLON.Mesh("mesh_arr_cards", scene);
+        mesh_arr_cards.parent=MyGame.player.mesh.ballman.backview;
+        mesh_arr_cards._children=[];
+        //mesh_arr_cards.position=MyGame.player.mesh.ballman.backview._absolutePosition.clone();
+        for(var i=0;i<5;i++)//建立五个标示组号的标记网格，标记从一（而不是零）开始
+        {
+            var plane=new BABYLON.MeshBuilder.CreatePlane("mesh_groupicon"+(i+1),{size:5},scene);
+            var mat_plane = new BABYLON.StandardMaterial("mat_plane"+(i+1), scene);
+            var texture_plane= new BABYLON.DynamicTexture("texture_plane"+(i+1), {width:100, height:100}, scene);
+            mat_plane.diffuseTexture =texture_plane;
+            plane.material=mat_plane;
+            var font = "bold 60px monospace";
+            texture_plane.drawText((i+1), 40, 70, font, "white", "green", true, true);//第一个是文字颜色，第二个则是完全填充的背景色
+            plane.position.x=-16;
+            plane.position.z=-2;
+            plane.renderingGroupId=2;
+            //plane.rotation.x=-Math.PI/2;//这会导致自由相机的视角发生bug？？
+            plane.isPickable=false;
+            plane.isVisible=false;
+            arr_mesh_groupicon.push(plane);
+            //plane.parent=mesh_arr_cards;
+        }
+        DrawCard4();//在棋盘上绘制而不是绘制手牌
+        //SortCard();
+    }
+    function initLoop()
+    {
+        var _this=MyGame;
+        scene.registerBeforeRender(function() {     //比runRenderLoop更早
+        });
+        scene.registerAfterRender(
+                function() {
+                    if(MyGame.flag_startr==1)//如果开始渲染了
+                    {//如果正在使用相机网格进行漫游
+                        if(MyGame.player.prototype=CameraMesh&&MyGame.flag_view=="first_lock")
+                        {
+                            host20171018(MyGame.player);
+                        }
+                    }
+                }
+        );
+
+        engine.runRenderLoop(function ()        //场景逻辑和AI也从这里引入
+        {
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            MyGame.HandleNoHurry();//这里包含了运动使用的计时器
+            if(_this.flag_startr==1||_this.flag_view!="first_pick")
+            {
+                //主相机和小地图相机都随着玩家的位置变化
+                CamerasFollowActor(_this.player);
+            }
+
+            _this.scene.render();
+
+        });
+    }
+</script>
+</html>

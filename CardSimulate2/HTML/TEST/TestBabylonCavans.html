@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在这里测试Babylon.js的DynamicTexture的canvas定位问题</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <link href="../../CSS/stat.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.32.all.maxs.js"></script>
+    <script src="../../JS/MYLIB/Events.js"></script>
+    <script src="../../JS/MYLIB/FileText.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/View.js"></script>
+    <script src="../../JS/LIB/stat.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+</div>
+</body>
+</html>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame={};
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        //MyGame=new Game(0,"first_pick","","http://127.0.0.1:8082/");
+        /*0-startWebGL
+         * */
+        webGLStart();
+    }
+    //从下面开始分成简单测试和对象框架两种架构
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+    function webGLStart()
+    {
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+        camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -80), scene);
+        camera0.attachControl(canvas, true);
+        camera0.speed=0.5;
+        camera0.minZ=0.01;//问题出在这里！！设置的过小，会导致鼠标pick失败！！！！
+        light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.groundColor=new BABYLON.Color3(0.5,0.5,0.5);
+        light0.specular = new BABYLON.Color3(1, 1, 1);
+        light0.diffuse = new BABYLON.Color3(1, 1, 1);
+        var advancedTexture=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+        var mat_green = new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.backFaceCulling=false;
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        //mesh_base2.layerMask=2;
+
+        //下面是真正的测试代码：
+        var mesh_str = new BABYLON.MeshBuilder.CreateGround(this.name + "mesh_str", {
+            width: 30,
+            height: 6
+        }, scene);
+        //mesh_str.parent=mesh;
+        mesh_str.renderingGroupId = 3;//这些文字是特别强调内容
+        var mat_str = new BABYLON.StandardMaterial("mat_str", scene);
+        var texture_str = new BABYLON.DynamicTexture("texture_str", {
+            width: 100,
+            height: 40
+        }, scene);
+        mat_str.diffuseTexture = texture_str;
+        mesh_str.material = mat_str;
+        mesh_str.rotation.x = -Math.PI / 2;
+        mesh_str.isPickable = false;
+        texture_str.hasAlpha=true;
+        mat_str.useAlphaFromDiffuseTexture=true;
+
+        var font = "bold 32px monospace";
+        //texture_str.drawText("teststr2", 0, 0, font, "white", "green", true, true)
+        var context_comment = texture_str.getContext();
+        //context_comment.fillStyle = "green";//"transparent";
+        //context_comment.fillRect(10, 10, 80, 20);
+
+        context_comment.fillStyle = "rgba(255,255,255,0)";
+        context_comment.fillRect(0, 0, 100, 40);
+        context_comment.fillStyle = "#ff0000";
+        context_comment.font = font;
+        context_comment.fillText("teststr",0,32);
+        texture_str.update();
+
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+    }
+</script>

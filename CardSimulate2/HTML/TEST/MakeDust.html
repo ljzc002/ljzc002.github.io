@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>将彩色图片改为灰色图片</title>
+</head>
+<body>
+<div id="div_allbase">
+    <div style="width: 800px;height: 80px;border-bottom:1px solid" id="div_title">
+        <span style="margin-left: 20px">选择本地图片</span>
+        <input type="file" id="str_local" class="str_file" onchange="ShowImg()" value="" style="margin-left: 30px">
+        <br><br>
+        <span style="margin-left: 20px">输入图片链接</span>
+        <input type=text" id="str_url" class="str_url" onchange="ShowImg2()" value="" style="margin-left: 30px;width: 600px">
+    </div>
+    <canvas style="width: 512px;height: 512px;cursor: crosshair" width="512" height="512" id="can_pic">
+
+    </canvas>
+</div>
+
+</body>
+<script>
+    var canvas=document.getElementById("can_pic");
+    var context=canvas.getContext("2d");
+    window.onload=loadImage;
+    function loadImage()
+    {
+
+    }
+    function ShowImg()//从本地显示图片
+    {
+        console.log("ShowImg");
+        //delete_div("div_choose");
+        var value=document.getElementById("str_local").value;
+        var arr_split=value.split(".");
+        var file_type=arr_split[arr_split.length-1];
+
+        if(file_type=="jpg"||file_type=="png"||file_type=="gif"||file_type=="JPG"||file_type=="PNG"||file_type=="GIF")
+        {
+            //var img=document.createElement("img");//改成用Image标签？？
+            var img=new Image();
+            if(window.navigator.userAgent.indexOf("MSIE")>=1)//如果是IE浏览器，看来IE的安全限制更低？
+            {
+                img.src="file:///"+value;
+                img.onload = function () {
+                    DisplayImg(img);
+                }
+                //DisplayImg(img);
+            }
+            else
+            {
+                var file=document.getElementById("str_local").files[0];
+                var reader=new FileReader();
+                reader.onload=function(e)
+                {
+                    img.src= e.target.result;
+                    img.onload = function () {
+                        DisplayImg(img);
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+        else
+        {
+            alert("请选择图片文件");
+        }
+    }
+    function ShowImg2()//从url显示图片
+    {
+
+        console.log("ShowImg2");
+        //delete_div("div_choose");
+        var value=document.getElementById("str_url").value;//通过url访问时并没有明确的后缀名限制
+        //var img=document.createElement("img");
+        var img=new Image();
+        img.src=value;
+        img.onload = function () {
+            DisplayImg(img);
+        }
+
+    }
+    function DisplayImg(img)//通用的显示
+    {
+        canvas.style.width=img.width+"px";//重调canvas大小
+        canvas.width=img.width;
+        canvas.style.height=img.height+"px";
+        canvas.height=img.height;
+        context.drawImage(img,0,0);
+        var imagedata_temp=context.getImageData(0,0,canvas.width,canvas.height);
+        var data=imagedata_temp.data;
+        var len=data.length;
+        for(var i=0;i<len;i+=4)
+        {
+            var num=Math.floor((data[i]+data[i+1]+data[i+2])/3);
+            data[i]=num;
+            data[i+1]=num;
+            data[i+2]=num;
+        }
+        context.putImageData(imagedata_temp,0,0);
+    }
+
+</script>
+</html>

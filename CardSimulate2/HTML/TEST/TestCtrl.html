@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+<script>
+    window.addEventListener("keydown", onKeyDown, false);//按键按下
+    function onKeyDown(event)
+    {
+        //event.stopPropagation();
+        event.preventDefault();
+        var keyCode = event.keyCode;
+        var ch = String.fromCharCode(keyCode);//键码转字符
+        console.log(ch+"-"+keyCode);
+
+    }
+</script>
+</html>
