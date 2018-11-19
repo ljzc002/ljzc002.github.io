@@ -1,0 +1,70 @@
+/*通用属性*/
+body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;
+    height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;
+    -ms-touch-action: none;font-size: 12px;min-width: 600px;}
+ul {    list-style: none;    margin: 0;    padding: 0;}
+li{    list-style: none;    margin: 0;    padding: 0;}
+ul li {    float: left;}
+button{    cursor: pointer;    height: 23px;}
+a:link{    text-decoration: none;}
+
+/*顶层属性*/
+
+#div_control{height: 100%;width:100%;background-color: transparent;z-index: 100;position: absolute;top: 0px;left: 0px;pointer-events: none;}
+#renderCanvas {    width: 100%;    height: 100%;    outline: none;}
+.div_col{width: 80px;height: 26px;padding: 5px;overflow: visible;position: relative;pointer-events: none;}
+.to_left{float: left;text-align: left}
+.to_right{float: right;text-align: right}
+.btn_first{text-align: center;width: 60px;pointer-events:auto}
+.btn_second{text-align: center;overflow: visible;overflow-wrap: normal;display: block;position: absolute;pointer-events:auto}
+.hidden{display: none}
+.btn_third{text-align: center;display: block;pointer-events:auto}
+.div_mask{    height: 100%;    width: 100%;    display:block;    z-index: 400;    background: #cccccc;    position: absolute;
+    left: 0px;    top: 0px;    filter: alpha(opacity=40);    opacity: 0.40;    overflow: hidden;}
+
+/*弹出层的一些属性*/
+.div_cook2{    margin-top: 5px;    margin-left: 0px;    margin-right: auto;    width: 100%;    height: 35px;    font-family: 宋体;    font-size: 12px;    float: left;}
+.div_cook2 ul{float: left;margin-top: 5px;margin-bottom: 15px}
+.div_cook2 li{    float: left;    /*margin-top: 10px;*/    margin-left: 5px;    margin-right: 10px;    /*color:darkred;*/    color:#020202;}
+.div_cook2 span{    width: 120px;    float: left;    text-align: right;    /*color: darkred;*/    color: #15428b;    padding-right: 5px;    font-weight: bold;}
+.div_cook2 button{    float: left;    margin-right: 5px;    margin-left: 5px;    width: 52px;    height: 20px;    text-align: center;    background-color: #d6e7ef;    border: solid 1px #020202;}
+.btn_close{    float:right;position:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0
+;background: url(../ASSETS/IMAGE/close.png) no-repeat;border: 0px;vertical-align:top;z-index: 101;}
+.str_number{    border: solid 1px #020202;    width: 60px;}
+.str_normal{    border: solid 1px #020202;    width: 120px;}
+.str_date{    width: 120px;}
+.str_text{    border: solid 1px #020202;    width:220px ;  }
+#fps {    position: absolute;    right: 20px;    top: 5em;    font-size: 20px;    color: white;/*帧数显示*/
+    text-shadow: 2px 2px 0 black;}
+
+
+/*表格的属性*/
+#all_base{min-height: 400px;min-width: 250px;height: 100%;width:100%;position: relative;overflow-x:hidden;overflow-y: hidden;}
+td input{    height: 100%;    width: 100%;    border:0;    text-align: center;    background-color: inherit;}
+.div_tab{float: left;position: relative;width:4000px;overflow-x: hidden;overflow-y: scroll}
+.div_tab td{    text-align: center;    /*border: solid 1px #15428B;*/    border-right:solid 1px #15428B;    border-bottom: solid 1px #15428B;
+    line-height: 16px;    font-size: 13px;    height: 24px;    padding: 1px;    background-color: inherit;    word-break: keep-all;
+    /*display: inline-block*/}
+.div_tab th{    text-align: center;    /*border: solid 1px #15428B;*/    line-height: 16px;    font-size: 13px;    height: 36px;
+    padding: 1px;    text-align: center;    border-right: solid 1px #15428B;    border-bottom: solid 1px #15428B;    word-break: keep-all;
+    white-space:nowrap;    overflow: hidden;    text-overflow: ellipsis;/*display: inline-block*/}
+.div_tab table{    float: left;    width: auto;    border-right-width:0px;    border: solid 1px #15428B;    table-layout: fixed;}
+.div_tab tr{    width: auto;    vertical-align: middle;    /*border: solid 1px #15428B;*/    padding: 1px;}
+td a{    cursor: pointer;}
+td button{    cursor: pointer;}
+.div_mask2{    display:block;    left: 0px;    top: 0px;    /*filter: alpha(opacity=50);    opacity: 0.50;*/    overflow: hidden;/*锁定的表头表列*/
+    position: absolute;    float: left;    overflow-x: hidden}
+table{    border-spacing:0;}
+.div_mask2 td{    text-align: center;    /*border: solid 1px #15428B;*/    border-right:solid 1px #15428B;    border-bottom: solid 1px #15428B;
+    line-height: 16px;    font-size: 13px;    height: 24px;    padding: 1px;    background-color: inherit;    word-break: keep-all;}
+.div_mask2 th{    text-align: center;    /*border: solid 1px #15428B;*/    line-height: 16px;    font-size: 13px;    height: 36px;
+    padding: 1px;    text-align: center;    border-right: solid 1px #15428B;    border-bottom: solid 1px #15428B;    word-break: keep-all;
+    white-space:nowrap;    overflow: hidden;    text-overflow: ellipsis;}
+.div_mask2 table{    float: left;    width: auto;    border-right-width:0px;    border: solid 1px #15428B;    table-layout: fixed;
+    position: absolute;}
+.div_mask2 tr{    width: auto;    vertical-align: middle;    /*border: solid 1px #15428B;*/    padding: 1px;}
+.combo-panel li{    float:none;}
+.btn_limlen{    /*float: left;*/    height: 20px;    width: 20px;    border: 1px solid;    /*margin-top: 6px;*/    /*margin-left: 4px;*/
+    background: url(../ASSETS/IMAGE/play.png) no-repeat;    position: absolute;    -moz-border-radius: 3px;      /* Gecko browsers圆角 */
+    -webkit-border-radius: 3px;   /* Webkit browsers */    border-radius:3px;            /* W3C syntax */     position: absolute;
+    top: 6px;    right: 4px;}
