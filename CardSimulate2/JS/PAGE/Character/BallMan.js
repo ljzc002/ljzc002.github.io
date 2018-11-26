@@ -56,31 +56,31 @@ BallMan.prototype.init=function(param,scene)
     this.lab=label;
 
     //定位第一人称视角的位置
-    var headview=new BABYLON.Mesh(this.name+"headview",scene);
+    var headview=new BABYLON.TransformNode(this.name+"headview",scene);
     headview.parent=this.head;
     headview.position=new BABYLON.Vector3(0,0,2.0);
     this.headview=headview;
     //定位第三人称视角的位置
-    var backview=new BABYLON.Mesh(this.name+"backview",scene);
+    var backview=new BABYLON.TransformNode(this.name+"backview",scene);
     backview.parent=this.head;
     backview.position=new BABYLON.Vector3(0,2,-6);
     this.backview=backview;
-    var backview_right=new BABYLON.Mesh(this.name+"backview_right",scene);
+    var backview_right=new BABYLON.TransformNode(this.name+"backview_right",scene);
     backview_right.parent=this.head;
     backview_right.position=new BABYLON.Vector3(2.6,2,-6);
     this.backview_right=backview_right;
     //定位手持物体的位置，或者是正前方光标的位置？
-    var handpoint=new BABYLON.Mesh(this.name+"handpoint",scene);
+    var handpoint=new BABYLON.TransformNode(this.name+"handpoint",scene);
     handpoint.parent=this.head;
     handpoint.position=new BABYLON.Vector3(0,0,10);
     this.handpoint=handpoint;
     //左手和右手
-    var lefthand=new BABYLON.Mesh(this.name+"lefthand",scene);
+    var lefthand=new BABYLON.TransformNode(this.name+"lefthand",scene);
     lefthand.parent=this.head;
     lefthand.position=new BABYLON.Vector3(-1,0.2,3.0);
     lefthand.lookAt(lefthand.position.negate().add(headview.position));
     this.lefthand=lefthand;
-    var righthand=new BABYLON.Mesh(this.name+"righthand",scene);
+    var righthand=new BABYLON.TransformNode(this.name+"righthand",scene);
     righthand.parent=this.head;
     righthand.position=new BABYLON.Vector3(1,0.2,3.0);
     righthand.lookAt(righthand.position.negate().add(headview.position));

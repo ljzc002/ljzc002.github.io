@@ -63,6 +63,7 @@ CardMesh.prototype.init=function(param,scene)
         materialf.backFaceCulling = true;
         materialf.bumpTexture = new BABYLON.Texture("../ASSETS/IMAGE/grained_uv.png", scene);//磨砂表面
         materialf.useLogarithmicDepth = true;
+        materialf.freeze();
         //背面纹理
         var materialb = new BABYLON.StandardMaterial(this.name + "cardb", this.scene);//测试用卡片纹理
         if (MyGame.textures[param.card.imageb])//如果已经初始化过这种纹理，则使用已经初始化完毕的
@@ -75,6 +76,7 @@ CardMesh.prototype.init=function(param,scene)
             MyGame.textures[param.card.imageb] = materialb.diffuseTexture;
         }
         materialb.backFaceCulling = false;
+        materialb.freeze();
         //materialb.sideOrientation=BABYLON.Mesh.BACKSIDE;
 
 
@@ -117,6 +119,7 @@ CardMesh.prototype.init=function(param,scene)
         var materialline = new BABYLON.StandardMaterial("mat_line", this.scene);
         materialline.diffuseColor = this.linecolor;
         materialline.useLogarithmicDepth = true;
+        materialline.freeze();
         line.material = materialline;
         //line.color = new BABYLON.Color3(1, 0, 0);//这个颜色表示方式各个分量在0到1之间
         line.renderingGroupId = 2;
@@ -139,6 +142,7 @@ CardMesh.prototype.init=function(param,scene)
         this.mesh.position = param.position;
         this.mesh.rotation = param.rotation;
         this.mesh.scaling = param.scaling;
+        //this.mesh.convertToUnIndexedMesh();
         //this.mesh.isVisible=false;//否则会不可点击？
         this.cardf = cardf;
         this.cardb = cardb;
@@ -157,6 +161,7 @@ CardMesh.prototype.init=function(param,scene)
             width: 8.4,
             height: 9
         }, scene);
+        //mesh_mainpic.convertToUnIndexedMesh();
         mesh_mainpic.parent = this.mesh;
         mesh_mainpic.position = new BABYLON.Vector3(0, 2.8, -0.01);
         var mat_mainpic = new BABYLON.StandardMaterial(this.name + "mat_mainpic", this.scene);//测试用卡片纹理
@@ -175,6 +180,7 @@ CardMesh.prototype.init=function(param,scene)
             width: 6,
             height: 4.8
         }, scene);
+        //mesh_comment.convertToUnIndexedMesh();
         mesh_comment.parent = this.mesh;
         mesh_comment.position = new BABYLON.Vector3(0, -4.6, -0.01);
         mesh_comment.renderingGroupId = 2;
@@ -195,6 +201,7 @@ CardMesh.prototype.init=function(param,scene)
         context_comment.font = "bold 32px monospace";
         newland.canvasTextAutoLine(this.str_comment, context_comment, 1, 30, 35, 34);
         texture_comment.update();
+        mat_comment.freeze();
         this.mesh_comment=mesh_comment;
         //    var font = "bold 32px monospace";
         //texture_comment.drawText(this.str_comment, 75, 135, font, "green", "white", true, true);//第一个是文字颜色，第二个则是完全填充的背景色
@@ -343,6 +350,7 @@ CardMesh.prototype.ani_floatstr=function(str,styles,callback)
         width: size_x/2.5,
         height: 16
     }, scene);
+    //mesh_str.convertToUnIndexedMesh();
     mesh_str.parent=mesh;
     //mesh_str.position =new BABYLON.Vector3(0,0,0);
     mesh_str.renderingGroupId = 3;//这些文字是特别强调内容
@@ -373,7 +381,7 @@ CardMesh.prototype.ani_floatstr=function(str,styles,callback)
     //newland.canvasTextAutoLine(str, context_comment, 1, 30, 35, 34);
     context_comment.fillText(str,0,30);
     texture_str.update();
-
+    mat_str.freeze();
     var animation=new BABYLON.Animation("animation","position",30,BABYLON.Animation.ANIMATIONTYPE_VECTOR3,BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
     //var pos1=mesh_str.position.clone();
     //var pos2=mesh_str.position.clone();
@@ -430,7 +438,7 @@ CardMesh.prototype.ani_shake=function(callback)//上下晃动一下
     var animation=new BABYLON.Animation("animation","position",30,BABYLON.Animation.ANIMATIONTYPE_VECTOR3,BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
     var pos1=mesh.position.clone();
     var pos2=mesh.position.clone();
-    pos2.y+=1;
+    pos2.y+=0.5;
     var keys=[{frame:0,value:pos1},{frame:15,value:pos2},{frame:30,value:pos1}];
     animation.setKeys(keys);
     mesh.animations.push(animation);

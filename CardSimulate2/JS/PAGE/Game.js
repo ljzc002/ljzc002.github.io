@@ -40,13 +40,17 @@ Game=function(init_state,flag_view,wsUri,h2Uri)
     this.materials={};
     var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
     mat_frame.wireframe = true;
+    mat_frame.freeze();
     this.materials.mat_frame=mat_frame;
     var mat_red=new BABYLON.StandardMaterial("mat_red", scene);
     mat_red.diffuseColor = new BABYLON.Color3(1, 0, 0);
+    mat_red.freeze();
     var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
     mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+    mat_green.freeze();
     var mat_blue=new BABYLON.StandardMaterial("mat_blue", scene);
     mat_blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+    mat_blue.freeze();
     this.materials.mat_red=mat_red;
     this.materials.mat_green=mat_green;
     this.materials.mat_blue=mat_blue;

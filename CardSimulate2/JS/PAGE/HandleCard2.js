@@ -494,6 +494,14 @@ function HandCard(flag)//用动画方式表现手牌的“展开和收拢”
             //card_Closed2.isPicked=false;
             card_Closed2=null;
         }*/
+        if(card_Closed)
+        {
+            if(card_Closed.isPicked)
+            {
+                card_Closed.isPicked=false;
+            }
+            card_Closed=null;
+        }
         MyGame.flag_view="first_ani";
         flag_showhandcard=true;
         var len=mesh_arr_cards._children.length;
@@ -626,7 +634,7 @@ function GetCardClose2(card)//让相机靠近card！！？？
     animation3.setKeys(keys1);
 
     var rot_camera=MyGame.player.mesh.rotation.clone();
-    var tran_temp=new BABYLON.Mesh("tran_temp",scene);
+    var tran_temp=new BABYLON.TransformNode("tran_temp",scene);
     tran_temp.position=pos;
     tran_temp.lookAt(pos_card,Math.PI,0,0);//,Math.PI,Math.PI);YXZ?
     var rot=tran_temp.rotation.clone();//看起来这个rot是反向的，如何把它正过来？

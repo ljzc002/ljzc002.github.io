@@ -16,6 +16,7 @@ function MakeTileds2(type,sizex,sizez)//换一种地块构造方式，想到tile
     //mat_alpha_blue.diffuseColor = new BABYLON.Color3(0, 0,1);
     //mat_alpha_blue.alpha=0.2;//不透明度
     mat_alpha_blue.useLogarithmicDepth=true;//为了和卡牌之间正常显示，它也必须这样设置深度？
+    mat_alpha_blue.freeze();
     MyGame.materials.mat_alpha_blue=mat_alpha_blue;
     var mat_alpha_red=new BABYLON.StandardMaterial("mat_alpha_red", scene);
     mat_alpha_red.diffuseTexture = new BABYLON.Texture("../ASSETS/IMAGE/LANDTYPE/alpha_red.png",scene);
@@ -24,6 +25,7 @@ function MakeTileds2(type,sizex,sizez)//换一种地块构造方式，想到tile
     //mat_alpha_red.diffuseColor = new BABYLON.Color3(1, 0,0);
     //mat_alpha_red.alpha=0.2;//不透明度
     mat_alpha_red.useLogarithmicDepth=true;
+    mat_alpha_red.freeze();
     MyGame.materials.mat_alpha_red=mat_alpha_red;
     var mat_alpha_green=new BABYLON.StandardMaterial("mat_alpha_green", scene);
     mat_alpha_green.diffuseTexture = new BABYLON.Texture("../ASSETS/IMAGE/LANDTYPE/alpha_green.png",scene);
@@ -32,6 +34,7 @@ function MakeTileds2(type,sizex,sizez)//换一种地块构造方式，想到tile
     //mat_alpha_green.diffuseColor = new BABYLON.Color3(0, 1,0);
     //mat_alpha_green.alpha=0.2;//不透明度
     mat_alpha_green.useLogarithmicDepth=true;
+    mat_alpha_green.freeze();
     MyGame.materials.mat_alpha_green=mat_alpha_green;
     var mat_alpha_yellow=new BABYLON.StandardMaterial("mat_alpha_yellow", scene);
     mat_alpha_yellow.diffuseTexture = new BABYLON.Texture("../ASSETS/IMAGE/LANDTYPE/alpha_yellow.png",scene);
@@ -40,14 +43,16 @@ function MakeTileds2(type,sizex,sizez)//换一种地块构造方式，想到tile
     //mat_alpha_yellow.diffuseColor = new BABYLON.Color3(1, 1,0);
     //mat_alpha_yellow.alpha=0.2;//不透明度
     mat_alpha_yellow.useLogarithmicDepth=true;
+    mat_alpha_yellow.freeze();
     MyGame.materials.mat_alpha_yellow=mat_alpha_yellow;
     var mat_alpha_null=new BABYLON.StandardMaterial("mat_alpha_null", scene);//或者直接将遮罩设为不可见？
     mat_alpha_null.diffuseColor = new BABYLON.Color3(1, 1,1);
     mat_alpha_null.alpha=0;//不透明度
     mat_alpha_null.useLogarithmicDepth=true;
+    mat_alpha_null.freeze();
     MyGame.materials.mat_alpha_null=mat_alpha_null;
 
-    mesh_tiledCard=new BABYLON.Mesh("mesh_tiledCard",scene);//所有单位的父元素
+    mesh_tiledCard=new BABYLON.TransformNode("mesh_tiledCard",scene);//所有单位的父元素
     mesh_tiledCard.parent=mesh_tiledGround;
     if(type==0)// 两层循环
     {
@@ -79,6 +84,7 @@ function MakeTileds2(type,sizex,sizez)//换一种地块构造方式，想到tile
                 mesh_tiled.position.y=-1;
                 mesh_tiled.parent=mesh_tiledGround;
                 mesh_tiled.renderingGroupId=2;
+                //mesh_tiled.convertToUnIndexedMesh();
                 //随机给这个地块分配一种地形，参考DataWar的方式？？
                 var landtype=newland.RandomChooseFromObj(arr_landtypes);
                 mesh_tiled.landtype=landtype.name;
@@ -92,6 +98,7 @@ function MakeTileds2(type,sizex,sizez)//换一种地块构造方式，想到tile
                     var mat_tiled = new BABYLON.StandardMaterial("mat_"+landtype.name,scene);
                     mat_tiled.diffuseTexture = new BABYLON.Texture(landtype.Url,scene);
                     mat_tiled.useLogarithmicDepth=true;
+                    mat_tiled.freeze();
                     MyGame.materials["mat_"+landtype.name]=mat_tiled;
                     mesh_tiled.material=mat_tiled;
                 }
@@ -104,6 +111,9 @@ function MakeTileds2(type,sizex,sizez)//换一种地块构造方式，想到tile
                 mesh_mask.position.y=0.1;
                 mesh_mask.renderingGroupId=2;
                 mesh_mask.isPickable=false;
+                mesh_tiled.freezeWorldMatrix();
+                mesh_mask.freezeWorldMatrix();
+                //mesh_mask.convertToUnIndexedMesh();
                 arr_rownodes.push(mesh_tiled);
             }
             arr_tilednodes.push(arr_rownodes);
@@ -308,8 +318,12 @@ function HideAllMask()//隐藏所有已经显示的mask，并且取消单位的�
     arr_DisplayedMasks=[];
     arr_nodepath={};
     arr_noderange={};
-    noPicked(card_Closed2);
-    card_Closed2=null;
+    if(card_Closed2)
+    {
+        noPicked(card_Closed2);
+        card_Closed2=null;
+    }
+
 }
 function DisplayAllMask()//绘制出移动范围和影响范围的遮罩
 {
@@ -604,14 +618,6 @@ function DisplayRange3(mesh)
     //var card=card_Closed2;
     var range=0;
     range=skill_current.range2;
-    /*if(skill_current.name=="nattack")
-    {
-        range=card_Closed2.range;
-    }
-    else
-    {
-        range=skill_current.range;
-    }*/
 
     var node_start=mesh;
     arr_noderange3={};
