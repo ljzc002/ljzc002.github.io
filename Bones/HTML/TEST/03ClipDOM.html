@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编写html控件用来编辑并导出骨骼设置</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <link href="../../CSS/stat.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+    <script src="../../JS/LIB/stat.js"></script>
+    <script src="../../JS/MYLIB/Events.js"></script>
+    <script src="../../JS/MYLIB/FileText.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/View.js"></script>
+    <script src="../../JS/MYLIB/Att7.js"></script>
+    <style>
+        .div_flexible{float:left;width:100%; }
+        .div_flextop{width:100%;height:36px;background-color: #15428B;float: left}
+        .floatleft{float:left;margin-left: 10px;margin-top:6px}
+        .div_flexbottom{width:270px;margin-left:5px;height: 300px;display: none;overflow: hidden;border:1px solid #15428B;float: left}
+        .div_flexcell{float:left;height:50px;width:100%}
+    </style>
+</head>
+<body>
+<div style="position:absolute;top: 0px;left:0px;width:300px;height: 100%;overflow: hidden;">
+    <button style="float: left;margin-top:10px;margin-left: 10px" onclick="addBone()">新增骨骼</button><button style="float: left;margin-top:10px;margin-left: 10px">导出模型</button>
+
+    <div style="position:absolute;top:50px;overflow-y: scroll;width:300px;height:500px" id="div_flexcontainer">
+        <div class="div_flexible"  number="1">
+            <div class="div_flextop">
+                <span class="floatleft" style="color:darkgoldenrod;font-size: 16px;width:32px">1</span>
+                <button class="floatleft" onclick="flex()">展开</button>
+                <button class="floatleft">编辑关键帧</button>
+                <input class="floatleft" style="width: 20px;height: 20px;" type="checkbox"><!--勾选表示导出骨骼时包含这一块，否则不导出它-->
+                <button class="floatleft" onclick="ShowClip2()">刷新</button>
+            </div>
+            <div class="div_flexbottom">
+                <!--在这里设置最多六个切割平面-->
+                <div class="div_flexcell" number="1">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="2">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="3">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="4">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="5">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="6">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="div_allbase" style="position:absolute;top: 0px;right: 0px;left:301px;height: 100%">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+   
+</div>
+<div id="div_hiden" style="display: none">
+    <div class="div_hidecell">
+        <div class="div_flexible"  number="1">
+            <div class="div_flextop">
+                <span class="floatleft" style="color:darkgoldenrod;font-size: 16px;width:32px">1</span>
+                <button class="floatleft" onclick="flex()">展开</button>
+                <button class="floatleft">编辑关键帧</button>
+                <input class="floatleft" style="width: 20px;height: 20px;" type="checkbox"><!--勾选表示导出骨骼时包含这一块，否则不导出它-->
+                <button class="floatleft" onclick="ShowClip2()">刷新</button>
+            </div>
+            <div class="div_flexbottom">
+                <!--在这里设置最多六个切割平面-->
+                <div class="div_flexcell" number="1">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="2">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="3">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="4">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="5">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="6">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function flex()//展缩一块骨骼的配置菜单
+    {
+        var evt=evt||window.event||arguments[0];
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        if(obj.innerHTML=="展开")
+        {
+
+            var divs=document.querySelectorAll(".div_flexbottom");//要把其他展开状态的都关掉，同时还要改变高亮顶点（或者边线）状态
+            var len=divs.length;
+            for(var i=0;i<len;i++)
+            {
+                divs[i].style.display="none";
+                divs[i].parentNode.querySelectorAll("button")[0].innerHTML="展开";
+            }
+            obj.innerHTML="收缩";
+            obj.parentNode.parentNode.querySelectorAll(".div_flexbottom")[0].style.display="block";
+            ClearAllClip();
+            if(lines_inpicked&&lines_inpicked.dispose)
+            {
+                lines_inpicked.dispose();
+            }
+        }
+        else if(obj.innerHTML=="收缩")
+        {
+            obj.innerHTML="展开";
+            obj.parentNode.parentNode.querySelectorAll(".div_flexbottom")[0].style.display="none";
+            ClearAllClip();
+            if(lines_inpicked&&lines_inpicked.dispose)
+            {
+                lines_inpicked.dispose();
+            }
+        }
+    }
+    function addBone()//向列表里添加一块骨骼
+    {
+        var container=document.getElementById("div_flexcontainer");
+        container.appendChild(document.querySelectorAll("#div_hiden .div_flexible")[0].cloneNode(true));
+        var divs=container.querySelectorAll(".div_flexible");
+        var len=divs.length;
+        divs[len-1].number=len;
+        divs[len-1].querySelectorAll("span")[0].innerHTML=len+"";
+    }
+    var arr_plane=[];
+    var count_nameMeshPlane=0
+    function ShowClip()//在斜面参数发生变化时尝试更新斜面,同时每次单个斜面更新都要重算所有的选中顶点
+    {
+        /*var evt=evt||window.event||arguments[0];
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;
+        var inputs=obj.parentNode.querySelectorAll("input");
+        var len=inputs.length;
+        var flag=0;
+        var arr=[];
+        for(var i=0;i<len;i++)
+        {
+            if(isNaN(parseFloat(inputs[i].value)))//如果这个文本框没有内容或者内容不是数字
+            {
+                flag=1;
+                break;
+            }
+            else
+            {
+                arr.push(parseFloat(inputs[i].value));
+            }
+        }
+        if(flag==0)
+        {
+            var number=obj.parentNode.getAttribute("number");
+            if(arr_plane[number].dispose)
+            {
+                var plane=arr_plane[number];
+                plane.mesh.dispose();
+                plane.lines_normal.dispose();
+                plane.dispose();
+            }
+            var plane=new BABYLON.Plane(arr[0], arr[1], arr[2], arr[3]);
+            var mesh_plane=new BABYLON.MeshBuilder.CreatePlane("mesh_plane"+number
+                    ,{sourcePlane:plane,sideOrientation:BABYLON.Mesh.DOUBLESIDE,size:50},scene);
+
+            mesh_plane.material=mat_alpha_yellow;
+            var pos1=mesh_plane.position.clone();
+            var vec_nomal=plane.normal.clone().normalize();
+            var pos2=pos1.add(vec_nomal);
+            var lines=[[pos1,pos2]];
+            var lines_normal=new BABYLON.MeshBuilder.CreateLineSystem("lines_normal"+number,{lines:lines,updatable:false},scene);
+            lines_normal.color=new BABYLON.Color3(1, 0, 0);
+            var cylinder = BABYLON.MeshBuilder.CreateCylinder("cylinder1"+number,{height:1,diameterTop:0,diameterBottom:0.2 } ,scene);
+            cylinder.parent=mesh_plane;
+            cylinder.rotation.x-=Math.PI/2;
+            cylinder.position.z-=1.5;
+            cylinder.material=mat_red;
+
+            plane.mesh=mesh_plane;
+            plane.lines_normal=lines_normal;
+            //count_nameMeshPlane++;
+            arr_plane[number]=plane;
+        }*/
+    }
+    function ShowClip2()
+    {
+        var evt=evt||window.event||arguments[0];
+        cancelPropagation(evt);
+        var obj=evt.currentTarget?evt.currentTarget:evt.srcElement;//obj是刷新按钮
+        ClearAllClip();
+        var divs=obj.parentNode.parentNode.querySelectorAll(".div_flexbottom")[0].querySelectorAll("div");
+        var str_number=obj.parentNode.parentNode.getAttribute("number");//这是骨骼索引编号，但在实际导出模型时并不以它为准，因为可能存在放弃导出的骨骼区块
+        var len=6;
+        for(var i=0;i<len;i++)//遍历每个斜面设置，绘制出相应斜面
+        {
+            var div=divs[i];
+            var inputs=div.querySelectorAll("input");
+            var len2=4;
+            var flag=0;
+            var arr=[];
+            for(var j=0;j<len2;j++)//判断这个斜面是否正常设置
+            {
+                if(isNaN(parseFloat(inputs[j].value)))//如果这个文本框没有内容或者内容不是数字
+                {
+                    flag=1;
+                    break;
+                }
+                else
+                {
+                    arr.push(parseFloat(inputs[j].value));
+                }
+            }
+            if(flag==0)
+            {
+                var plane=new BABYLON.Plane(arr[0], arr[1], arr[2], arr[3]);
+                plane.normalize();//必须先把平面标准化，否则生成的平面网格不准确（会参考向量长度生成）
+                var mesh_plane=new BABYLON.MeshBuilder.CreatePlane("mesh_plane"+i
+                        ,{sourcePlane:plane,sideOrientation:BABYLON.Mesh.DOUBLESIDE,size:50},scene);
+                //sourcePlane倾斜时sourcePlane有Bug！！！！？？
+                mesh_plane.material=mat_alpha_yellow;//由plane生成的mesh没有rotation？？
+                var pos1=mesh_plane.position.clone();
+                var vec_nomal=plane.normal.clone().normalize();
+                var pos2=pos1.add(vec_nomal);
+                var lines=[[pos1,pos2]];
+                var lines_normal=new BABYLON.MeshBuilder.CreateLineSystem("lines_normal"+i,{lines:lines,updatable:false},scene);
+                lines_normal.color=new BABYLON.Color3(1, 0, 0);
+                var cylinder = BABYLON.MeshBuilder.CreateCylinder("cylinder"+i,{height:1,diameterTop:0,diameterBottom:0.2 } ,scene);
+                cylinder.parent=mesh_plane;
+                cylinder.rotation.x-=Math.PI/2;
+                cylinder.position.z-=1.5;
+                cylinder.material=mat_red;
+
+                plane.mesh=mesh_plane;
+                plane.lines_normal=lines_normal;
+                plane.cylinder=cylinder;
+                arr_plane.push(plane);
+            }
+        }
+        requestAnimFrame(function(){FindVertex(str_number);});
+        //FindVertex(str_number);//寻找属于这块骨骼的顶点
+
+    }
+    function ClearAllClip()//只清理所有的斜面，不处理突出的顶点
+    {
+        var len=arr_plane.length;
+        for(var i=0;i<len;i++)
+        {
+            var plane=arr_plane[i];
+            plane.cylinder.dispose();
+            plane.mesh.dispose();
+            plane.lines_normal.dispose();
+
+            plane=null;
+        }
+        arr_plane=[];
+    }
+    var lines_inpicked=null;
+    function FindVertex(str_number)
+    {
+        if (divFps) {
+            // Fps
+            divFps.innerHTML = "0fps";
+        }
+        if(!mesh_origin||!mesh_origin.dispose)
+        {
+            console.log("尚未加载模型");
+            return;
+        }
+        if(lines_inpicked&&lines_inpicked.dispose)
+        {
+            lines_inpicked.dispose();
+        }
+        var len=arr_plane.length;
+        if(len>0)//如果有平面，则开始遍历模型顶点
+        {
+            var mesh=mesh_origin;
+            var vb=mesh.geometry._vertexBuffers;
+            var data_pos=vb.position._buffer._data;
+            var len_pos=data_pos.length;
+            var data_index=mesh.geometry._indices;
+            var len_index=data_index.length;
+            var lines=[];
+            var matricesIndices=newland.repeatArr([0],len_pos/3);
+            var matricesWeights=newland.repeatArr([1,0,0,0],len_pos/3);
+
+            for(var i=0;i<len_pos;i+=3)//对于每个顶点
+            {
+                console.log(i/3+1+"/"+len_pos/3);//显示当前操作到第几个顶点
+                var pos=new BABYLON.Vector3(data_pos[i],data_pos[i+1],data_pos[i+2]);
+                var flag=0;
+                for(var j=0;j<len;j++)//对于每一个切分平面
+                {
+                    var num=arr_plane[j].signedDistanceTo(pos);
+                    if(num<0)
+                    {
+                        flag=1;
+                        break;
+                    }
+                }
+                if(flag==0)
+                {
+                    var index_vertex=i/3;
+                    var vec=pos;
+                    matricesIndices[index_vertex]=parseInt(str_number);//修改这个顶点的骨骼绑定
+                    //下面进行突出显示，遍历索引？
+                    for(var j=0;j<len_index;j+=3)
+                    {
+                        if(index_vertex==data_index[j])//三角形的第一个顶点
+                        {
+                            var num2=data_index[j+1]*3;
+                            var num3=data_index[j+2]*3;
+                            var vec2=new BABYLON.Vector3(data_pos[num2],data_pos[num2+1],data_pos[num2+2]);
+                            var vec3=new BABYLON.Vector3(data_pos[num3],data_pos[num3+1],data_pos[num3+2]);
+                            lines.push([vec,vec2]);
+                            lines.push([vec,vec3]);
+                        }
+                        else if(index_vertex==data_index[j+1])//三角形的第一个顶点
+                        {
+                            var num2=data_index[j]*3;
+                            var num3=data_index[j+2]*3;
+                            var vec2=new BABYLON.Vector3(data_pos[num2],data_pos[num2+1],data_pos[num2+2]);
+                            var vec3=new BABYLON.Vector3(data_pos[num3],data_pos[num3+1],data_pos[num3+2]);
+                            lines.push([vec,vec2]);
+                            lines.push([vec,vec3]);
+                        }
+                        else if(index_vertex==data_index[j+2])//三角形的第一个顶点
+                        {
+                            var num2=data_index[j]*3;
+                            var num3=data_index[j+1]*3;
+                            var vec2=new BABYLON.Vector3(data_pos[num2],data_pos[num2+1],data_pos[num2+2]);
+                            var vec3=new BABYLON.Vector3(data_pos[num3],data_pos[num3+1],data_pos[num3+2]);
+                            lines.push([vec,vec2]);
+                            lines.push([vec,vec3]);
+                        }
+                    }
+                }
+            }
+            lines_inpicked=new BABYLON.MeshBuilder.CreateLineSystem("lines_inpicked",{lines:lines,updatable:false},scene);
+            lines_inpicked.color=new BABYLON.Color3(0, 1, 0);
+        }
+        else
+        {
+            console.log("没有设置符合规则的斜面");
+            return;
+        }
+    }
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame={};
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        //MyGame=new Game(0,"first_pick","","http://127.0.0.1:8082/");
+        /*0-startWebGL
+         * */
+        webGLStart();
+    }
+    //从下面开始分成简单测试和对象框架两种架构
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+    function webGLStart()
+    {
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+        camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -80), scene);
+        camera0.attachControl(canvas, true);
+        camera0.speed=0.5;
+        camera0.minZ=0.01;//问题出在这里！！设置的过小，会导致鼠标pick失败！！！！
+        light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.groundColor=new BABYLON.Color3(0.5,0.5,0.5);
+        light0.specular = new BABYLON.Color3(1, 1, 1);
+        light0.diffuse = new BABYLON.Color3(1, 1, 1);
+        var advancedTexture=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+        var mat_green = new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.backFaceCulling=false;
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        //mesh_base2.layerMask=2;
+
+        mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+        mat_frame.wireframe = true;
+        mat_frame.freeze();
+
+        mat_alpha_yellow=new BABYLON.StandardMaterial("mat_alpha_yellow", scene);
+        mat_alpha_yellow.diffuseColor = new BABYLON.Color3(1,1,0);
+        mat_alpha_yellow.alpha=0.2;//不透明度
+        mat_alpha_yellow.freeze();
+
+        mat_red=new BABYLON.StandardMaterial("mat_red", scene);
+        mat_red.diffuseColor = new BABYLON.Color3(1,0,0);
+        mat_red.wireframe=true;
+        mat_red.freeze();
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+    }
+    var mesh_origin=null;
+    /*
+     * ImportMesh("","../../ASSETS/SCENE/","10.babylon")
+     * ImportCraft("","../../ASSETS/SCENE/","SpaceCraft.babylon")
+     * */
+    function ImportMesh(objname,filepath,filename)
+    {
+
+        BABYLON.SceneLoader.ImportMesh(objname, filepath, filename, scene
+                , function (newMeshes, particleSystems, skeletons)
+                {//载入完成的回调函数
+                    if(mesh_origin&&mesh_origin.dispose)
+                    {
+                        mesh_origin.dispose();
+                    }
+                    mesh_origin=newMeshes[0];
+                    mesh_origin.material=mat_frame;
+                    //mesh_origin.layerMask=2;
+                }
+        );
+    }
+</script>
+</html>
