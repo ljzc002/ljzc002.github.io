@@ -44,16 +44,22 @@ function ExportMesh(obj_scene,flag)//这个工程专用的导出方法
         //在现场演示环节里添加扩展关键帧的计算？？
         BABYLON.SceneLoader.ImportMesh("", "", "data:"+str_data, scene
             , function (newMeshes, particleSystems, skeletons) {//载入完成的回调函数
-                if(mesh_test)
-                {
-                    mesh_test.dispose();
+                try{
+                    if(mesh_test)
+                    {
+                        mesh_test.dispose();
+                    }
+                    mesh_test=newMeshes[0];
+                    mesh_test.position.x=50;
+                    mesh_test.material=mat_frame;
+                    //var totalFrame=skeletons[0]._scene._activeSkeletons.data.length;
+                    skeleton=skeletons[0];
+                    scene.beginAnimation(skeleton, 0, sum_frame, true, 0.5);
                 }
-                mesh_test=newMeshes[0];
-                mesh_test.position.x=20;
-                mesh_test.material=mat_frame;
-                //var totalFrame=skeletons[0]._scene._activeSkeletons.data.length;
-                skeleton=skeletons[0];
-                scene.beginAnimation(skeleton, 0, sum_frame, true, 0.5);//缺失了中间的部分！！没有自动插值！！！！
+                catch(e)//在这里拦截异常，否则异常进入Babylon.js会导致浏览器卡顿！！
+                {
+                    console.log(e);
+                }
 
             });
     }
