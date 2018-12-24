@@ -33,56 +33,7 @@
     <button style="float: left;margin-top:10px;margin-left: 10px" onclick="ExportMesh(obj_scene,1)">导出模型</button>
     <div style="position:absolute;top:50px;overflow-y: scroll;width:300px;height:500px" id="div_flexcontainer">
         <!--这以内的内容都是可复制粘贴的-->
-        <div class="div_flexible" number="1">
-            <div class="div_flextop">
-                <span class="floatleft str_flexlen" style="color:darkgoldenrod;font-size: 16px;width:32px">1</span>
-                <button class="floatleft" onclick="flex()">收缩</button>
-                <button class="floatleft" onclick="OpenDivKey()">编辑关键帧</button>
-                <input class="floatleft checkbone" style="width: 20px;height: 20px;" type="checkbox">
-                <!--勾选表示导出骨骼时包含这一块，否则不导出它-》考虑到可能存在的复杂层级关系，决定导出所有骨头-->
-                <button class="floatleft" onclick="ShowClip2()">刷新</button>
-            </div>
-            <div class="div_flexbottom" style="display: block;">
-                <!--在这里设置最多六个切割平面-->
-                <div class="div_flexcell" number="1">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <div class="div_comment" style="display: none;">[-1,0,0,0]</div></div>
-                <div class="div_flexcell" number="2">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                </div>
-                <div class="div_flexcell" number="3">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                </div>
-                <div class="div_flexcell" number="4">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                </div>
-                <div class="div_flexcell" number="5">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                </div>
-                <div class="div_flexcell" number="6">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
-                </div>
-            </div>
-            <div class="div_comment0" style="display: none;">{"str_indexp":0,"str_posjx":0,"str_posjy":0,"str_posjz":0,"text_key":"0@ms.m1()#30@ms.rz(0.5)#60@ms.m1()#90@ms.rz(-0.5)#120@ms.m1()#150@ms.rz(0.5)#180@ms.m1()#210@ms.rz(-0.5)#240@ms.m1()"}</div></div>
-        <!--复制粘贴的截止线-->
+        
     </div>
 </div>
 <div id="div_allbase" style="position:absolute;top: 0px;right: 0px;left:301px;height: 100%">
@@ -269,34 +220,9 @@
         arr_bone=obj_scene.skeletons[0].bones;
         BABYLON.Animation.AllowMatricesInterpolation = true;//动画矩阵插值
         //建立两个gui显示进度,但是这样是不行的，因为此时主线程已经阻塞了，gui是不会刷新的！！
-        /*if(true)
-         {
-         var UiPanel2 = new BABYLON.GUI.StackPanel();
-         UiPanel2.width = "220px";
-         UiPanel2.height="30px";
-         UiPanel2.fontSize = "14px";
-         UiPanel2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-         UiPanel2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP
-         UiPanel2.color = "white";
-         UiPanel2.background = "green";
-         advancedTexture.addControl(UiPanel2);
-         text1 = new BABYLON.GUI.TextBlock();
-         text1.text = "0";
-         text1.background = "blue";
-         text1.color="white";
-         text1.height="30px";
-         text1.width="30px";
-         text1.left="0px";
-         UiPanel2.addControl(text1);
-         text2 = new BABYLON.GUI.TextBlock();
-         text2.color="white";
-         text2.text = "/1";
-         text2.height="30px";
-         UiPanel2.addControl(text2);
-         }*/
-
+        
         reInit();//如果dom内容都是粘贴过来的，需要重新初始化一下arr_bone，相当于重新执行addbone
-        ImportMesh("","../ASSETS/SCENE/","SpaceCraft.babylon")
+        //ImportMesh("","../ASSETS/SCENE/","SpaceCraft.babylon")
         MyBeforeRender();
     }
     function MyBeforeRender()
