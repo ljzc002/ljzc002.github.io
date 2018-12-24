@@ -652,6 +652,10 @@ newland.AddMesh2Model=function(obj_scene,mesh,name)
     }
     obj_scene.meshes.push(obj_mesh);
 }
+newland.ClearMeshinModel=function(obj_scene)//清空一个场景格式中所有的网格对象
+{
+    obj_scene.meshes=[];
+}
 //向场景格式中加入一个材质
 newland.AddMat2Model=function(obj_scene,mat)
 {
