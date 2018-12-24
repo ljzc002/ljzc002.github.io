@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>载入宇宙飞船模型进行测试</title>
+    <link href="../CSS/newland.css" rel="stylesheet">
+    <link href="../CSS/stat.css" rel="stylesheet">
+    <script src="../JS/LIB/babylon.40v.all.max.js"></script>
+    <script src="../JS/LIB/stat.js"></script>
+    <script src="../JS/MYLIB/Events.js"></script>
+    <script src="../JS/MYLIB/FileText.js"></script>
+    <script src="../JS/MYLIB/newland.js"></script>
+    <script src="../JS/MYLIB/View.js"></script>
+    <script src="../JS/MYLIB/Att7.js"></script>
+    <!--script src="../JS/MYLIB/ExportBabylonBones2.js"></script-->
+    <script src="../JS/PAGE/ClickButton.js"></script>
+    <script src="../JS/PAGE/ComputeMatrix.js"></script>
+    <script src="../JS/PAGE/CookBones.js"></script>
+    <style>
+        .div_flexible{float:left;width:100%; }
+        .div_flextop{width:100%;height:36px;background-color: #15428B;float: left}
+        .floatleft{float:left;margin-left: 10px;margin-top:6px}
+        .div_flexbottom{width:270px;margin-left:5px;height: 300px;display: none;overflow: hidden;border:1px solid #15428B;float: left}
+        .div_flexcell{float:left;height:50px;width:100%}
+        .div_key{}
+    </style>
+</head>
+<body oncontextmenu="return false;">
+<!--https://ljzc002.github.io/Bones/HTML/Cstest2.html-->
+<div style="position:absolute;top: 0px;left:0px;width:300px;height: 100%;overflow: hidden;">
+    <button style="float: left;margin-top:10px;margin-left: 10px" onclick="addBone()">新增骨骼</button>
+    <button style="float: left;margin-top:10px;margin-left: 10px" onclick="ExportMesh(obj_scene,0)">预览模型</button>
+    <button style="float: left;margin-top:10px;margin-left: 10px" onclick="ExportMesh(obj_scene,1)">导出模型</button>
+    <div style="position:absolute;top:50px;overflow-y: scroll;width:300px;height:500px" id="div_flexcontainer">
+        <!--这以内的内容都是可复制粘贴的-->
+        <div class="div_flexible" number="1">
+            <div class="div_flextop">
+                <span class="floatleft str_flexlen" style="color:darkgoldenrod;font-size: 16px;width:32px">1</span>
+                <button class="floatleft" onclick="flex()">收缩</button>
+                <button class="floatleft" onclick="OpenDivKey()">编辑关键帧</button>
+                <input class="floatleft checkbone" style="width: 20px;height: 20px;" type="checkbox">
+                <!--勾选表示导出骨骼时包含这一块，否则不导出它-》考虑到可能存在的复杂层级关系，决定导出所有骨头-->
+                <button class="floatleft" onclick="ShowClip2()">刷新</button>
+            </div>
+            <div class="div_flexbottom" style="display: block;">
+                <!--在这里设置最多六个切割平面-->
+                <div class="div_flexcell" number="1">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <div class="div_comment" style="display: none;">[-1,0,0,0]</div></div>
+                <div class="div_flexcell" number="2">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="3">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="4">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="5">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="6">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+            </div>
+            <div class="div_comment0" style="display: none;">{"str_indexp":0,"str_posjx":0,"str_posjy":0,"str_posjz":0,"text_key":"0@ms.m1()#30@ms.rz(0.5)#60@ms.m1()#90@ms.rz(-0.5)#120@ms.m1()#150@ms.rz(0.5)#180@ms.m1()#210@ms.rz(-0.5)#240@ms.m1()"}</div></div>
+        <div class="div_flexible" number="1">
+            <div class="div_flextop">
+                <span class="floatleft str_flexlen" style="color:darkgoldenrod;font-size: 16px;width:32px">2</span>
+                <button class="floatleft" onclick="flex()">展开</button>
+                <button class="floatleft" onclick="OpenDivKey()" disabled="">编辑关键帧</button>
+                <input class="floatleft checkbone" style="width: 20px;height: 20px;" type="checkbox">
+                <!--勾选表示导出骨骼时包含这一块，否则不导出它-》考虑到可能存在的复杂层级关系，决定导出所有骨头-->
+                <button class="floatleft" onclick="ShowClip2()">刷新</button>
+            </div>
+            <div class="div_flexbottom" style="display: none;">
+                <!--在这里设置最多六个切割平面-->
+                <div class="div_flexcell" number="1">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <div class="div_comment" style="display: none;">[0,0,-1,-6]</div></div>
+                <div class="div_flexcell" number="2">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="3">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="4">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="5">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="6">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+            </div>
+            <div class="div_comment0" style="display: none;">{"str_indexp":0,"str_posjx":0,"str_posjy":0,"str_posjz":0,"text_key":"0@ms.m1()#30@ms.rx(-0.5)#60@ms.m1()#90@ms.rx(0.5)#120@ms.m1()#150@ms.rx(-0.5)#180@ms.m1()#210@ms.rx(0.5)#240@ms.m1()"}</div></div>
+        <div class="div_flexible" number="1">
+            <div class="div_flextop">
+                <span class="floatleft str_flexlen" style="color:darkgoldenrod;font-size: 16px;width:32px">3</span>
+                <button class="floatleft" onclick="flex()">展开</button>
+                <button class="floatleft" onclick="OpenDivKey()" disabled="">编辑关键帧</button>
+                <input class="floatleft checkbone" style="width: 20px;height: 20px;" type="checkbox">
+                <!--勾选表示导出骨骼时包含这一块，否则不导出它-》考虑到可能存在的复杂层级关系，决定导出所有骨头-->
+                <button class="floatleft" onclick="ShowClip2()">刷新</button>
+            </div>
+            <div class="div_flexbottom" style="display: none;">
+                <!--在这里设置最多六个切割平面-->
+                <div class="div_flexcell" number="1">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <div class="div_comment" style="display: none;">[0,0,1,-6]</div></div>
+                <div class="div_flexcell" number="2">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="3">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="4">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="5">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="6">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+            </div>
+            <div class="div_comment0" style="display: none;">{"str_indexp":0,"str_posjx":0,"str_posjy":0,"str_posjz":0,"text_key":"0@ms.m1()#30@ms.rx(0.5)#60@ms.m1()#90@ms.rx(-0.5)#120@ms.m1()#150@ms.rx(0.5)#180@ms.m1()#210@ms.rx(-0.5)#240@ms.m1()"}</div></div>
+        <!--复制粘贴的截止线-->
+    </div>
+</div>
+<div id="div_allbase" style="position:absolute;top: 0px;right: 0px;left:301px;height: 100%">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 301;"></div>
+</div>
+<div id="div_hiden" style="display: none">
+    <div class="div_hidecell">
+        <div class="div_flexible"  number="1">
+            <div class="div_flextop">
+                <span class="floatleft str_flexlen" style="color:darkgoldenrod;font-size: 16px;width:32px">1</span>
+                <button class="floatleft" onclick="flex()">展开</button>
+                <button class="floatleft" onclick="OpenDivKey()"  disabled="disabled">编辑关键帧</button>
+                <input class="floatleft checkbone" style="width: 20px;height: 20px;" type="checkbox">
+                <!--勾选表示导出骨骼时包含这一块，否则不导出它-》考虑到可能存在的复杂层级关系，决定导出所有骨头-->
+                <button class="floatleft" onclick="ShowClip2()">刷新</button>
+            </div>
+            <div class="div_flexbottom">
+                <!--在这里设置最多六个切割平面-->
+                <div class="div_flexcell" number="1">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="2">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="3">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="4">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="5">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+                <div class="div_flexcell" number="6">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                    <input class="floatleft" style="width:50px" onchange="ShowClip()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="div_hidecell">
+        <div class="div_key"><!--它的样式由open_div设定了-->
+            <span class="floatleft"></span><br>
+            <span class="floatleft ">父骨骼索引：</span><input  class="floatleft str_indexp" value="0">
+            <!--span class="floatleft ">每秒帧数：</span><input  class="floatleft str_fps" value="30"--><br>
+            <span class="floatleft ">关节点坐标：</span><input  class="floatleft str_posjx" value="0"><input  class="floatleft str_posjy" value="0"><input  class="floatleft str_posjz" value="0">
+            <button class="floatleft" onclick="InsertKey()">写入初始关键帧</button>
+            <!--在这里使用一种格式化的文本，体现关键帧与矩阵，num_key@matrix#-->
+            <textarea class="floatleft text_key" style="width:90%;top:40px;height: 250px;"></textarea>
+            <button class="floatleft" onclick="delete_div('div_open');delete_div('div_mask');">取消</button>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame={};
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        //MyGame=new Game(0,"first_pick","","http://127.0.0.1:8082/");
+        /*0-startWebGL
+         * */
+        webGLStart();
+    }
+    //从下面开始分成简单测试和对象框架两种架构
+    //全局对象
+    var light0//全局光源
+            ,camera0//主相机
+            ,arr_bone;//除了根骨骼之外所有骨骼的集合
+    var obj_scene=null;
+    var num_fps=30;//一开始设置好动画帧数和总帧数
+    var sum_frame=241;//其实是包括0到240的241帧
+    var mesh_origin=null;
+    function webGLStart()
+    {
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+        if(true)
+        {
+            camera0 =new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, -80), scene);
+            camera0.attachControl(canvas, true);
+            camera0.speed=0.5;
+            camera0.minZ=0.01;//问题出在这里！！设置的过小，会导致鼠标pick失败！！！！
+            light0 = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+            light0.groundColor=new BABYLON.Color3(0.5,0.5,0.5);
+            light0.specular = new BABYLON.Color3(1, 1, 1);
+            light0.diffuse = new BABYLON.Color3(1, 1, 1);
+            var advancedTexture=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+            var mat_green = new BABYLON.StandardMaterial("mat_green", scene);
+            mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+            mat_green.backFaceCulling=false;
+            var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+            mesh_base.material=mat_green;
+            mesh_base.position.x=0;
+            //mesh_base.layerMask=2;
+            var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+            mesh_base1.position.y=10;
+            mesh_base1.position.x=0;
+            mesh_base1.material=mat_green;
+            //mesh_base1.layerMask=2;
+            var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+            mesh_base2.position.y=-10;
+            mesh_base2.position.x=0;
+            mesh_base2.material=mat_green;
+            //mesh_base2.layerMask=2;
+
+            mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+            mat_frame.wireframe = true;
+            mat_frame.freeze();
+
+            mat_alpha_yellow=new BABYLON.StandardMaterial("mat_alpha_yellow", scene);
+            mat_alpha_yellow.diffuseColor = new BABYLON.Color3(1,1,0);
+            mat_alpha_yellow.alpha=0.2;//不透明度
+            mat_alpha_yellow.freeze();
+
+            mat_red=new BABYLON.StandardMaterial("mat_red", scene);
+            mat_red.diffuseColor = new BABYLON.Color3(1,0,0);
+            mat_red.wireframe=true;
+            mat_red.freeze();
+        }
+
+        //在这里设置一个初始的默认网格，
+        mesh_origin=new BABYLON.MeshBuilder.CreateSphere("mesh_origin",{diameter:8,diameterY:64,segments:16},scene);
+        mesh_origin.material=mat_frame;
+        var vb=mesh_origin.geometry._vertexBuffers;
+        var data_pos=vb.position._buffer._data;
+        var len_pos=data_pos.length;
+        mesh_origin.matricesIndices=newland.repeatArr([0],len_pos/3);
+        mesh_origin.matricesWeights=newland.repeatArr([1,0,0,0],len_pos/3);
+        mesh_origin.skeletonId=0;
+        obj_scene=newland.CreateObjScene();
+        newland.AddMesh2Model(obj_scene,mesh_origin,"mesh_origin2");
+        newland.AddSK2Model(obj_scene,"sk_test1");//向模型中添加骨骼
+        var bone={
+            'animation':{
+                dataType:3,
+                framePerSecond:num_fps,
+                keys:[],
+                loopBehavior:1,
+                name:'_bone'+0+'Animation',
+                property:'_matrix'
+            },
+            'index':0,
+            'matrix':BABYLON.Matrix.Identity().toArray(),
+            'name':'_bone'+0,
+            'parentBoneIndex':-1
+        };
+        //bone.
+        newland.ExtendKeys(bone,sum_frame);//初始扩展根骨骼的关键帧，认为根骨骼是一直保持不变的
+        newland.AddBone2SK(obj_scene,0,bone);// 向骨骼中添加骨头
+        arr_bone=obj_scene.skeletons[0].bones;
+        BABYLON.Animation.AllowMatricesInterpolation = true;//动画矩阵插值
+        //建立两个gui显示进度,但是这样是不行的，因为此时主线程已经阻塞了，gui是不会刷新的！！
+        /*if(true)
+         {
+         var UiPanel2 = new BABYLON.GUI.StackPanel();
+         UiPanel2.width = "220px";
+         UiPanel2.height="30px";
+         UiPanel2.fontSize = "14px";
+         UiPanel2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+         UiPanel2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP
+         UiPanel2.color = "white";
+         UiPanel2.background = "green";
+         advancedTexture.addControl(UiPanel2);
+         text1 = new BABYLON.GUI.TextBlock();
+         text1.text = "0";
+         text1.background = "blue";
+         text1.color="white";
+         text1.height="30px";
+         text1.width="30px";
+         text1.left="0px";
+         UiPanel2.addControl(text1);
+         text2 = new BABYLON.GUI.TextBlock();
+         text2.color="white";
+         text2.text = "/1";
+         text2.height="30px";
+         UiPanel2.addControl(text2);
+         }*/
+
+        reInit();//如果dom内容都是粘贴过来的，需要重新初始化一下arr_bone，相当于重新执行addbone
+        ImportMesh("","../ASSETS/SCENE/","SpaceCraft.babylon")
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+    }
+    /*
+     * ImportMesh("","../../ASSETS/SCENE/","10.babylon")
+     * ImportMesh("","../ASSETS/SCENE/","SpaceCraft.babylon")
+     * */
+    function ImportMesh(objname,filepath,filename)
+    {
+
+        BABYLON.SceneLoader.ImportMesh(objname, filepath, filename, scene
+                , function (newMeshes, particleSystems, skeletons)
+                {//载入完成的回调函数
+                    newland.ClearMeshinModel(obj_scene);
+                    if(mesh_origin&&mesh_origin.dispose)
+                    {
+                        mesh_origin.dispose();
+                    }
+                    mesh_origin=newMeshes[0];
+                    mesh_origin.material=mat_frame;
+                    //mesh_origin.layerMask=2;
+                    var vb=mesh_origin.geometry._vertexBuffers;
+                    var data_pos=vb.position._buffer._data;
+                    var len_pos=data_pos.length;
+                    mesh_origin.matricesIndices=newland.repeatArr([0],len_pos/3);
+                    mesh_origin.matricesWeights=newland.repeatArr([1,0,0,0],len_pos/3);
+                    mesh_origin.skeletonId=0;
+                    newland.AddMesh2Model(obj_scene,mesh_origin,"mesh_origin2");
+                }
+        );
+    }
+</script>
+</html>
