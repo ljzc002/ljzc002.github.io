@@ -1,0 +1,45 @@
+body{
+    text-align: center;
+}
+ul,li,input,p{ margin:0px; padding:0px;}
+li{ list-style:none;}
+/*opacity会强制性的像后代传播（后代的opacity会失效），而background不会*/
+.biaoge{ width:358px; background:rgba(250,250,250,0.8);opacity:1; padding:20px 0px; border:1px solid #e7e7e7; margin:0 auto;
+    border-radius:7px; box-shadow:0px 0px 2px #4D4D4D; margin-top:15%;}/*使用了圆角和阴影！！*/
+.p_title{ width:100%; text-align:center; height:50px; font-size:16px; font-weight:700; color:#2C8BE2;}
+.biaoge li{ margin-bottom:20px; width:100%; text-align:center; font-size:14px; font-weight:700;
+    color:#171717;}
+.input1{ opacity:1;height:23px; width:165px; padding-left:5px; border:1px solid #bac7d2;
+    box-shadow:0 0 2px #A6C4F0 inset; background:#FFF;}
+.p_word{
+    height:23px;
+    text-align:left;
+    float: left;
+    margin-left: 57px;
+    width: 58px;
+    color:#171717;
+    font-size:14px;
+    font-weight:700;
+}
+#input_checkcood{
+    height:23px; width:100px; padding-left:5px; border:1px solid #bac7d2; box-shadow:0 0 2px #A6C4F0 inset;
+    background:#FFF;
+    float: left;
+    margin-left: 13px;
+}
+#img_yzm{
+    float: left;
+    height: 33px;
+    margin-left: 5px;
+    margin-right: 0px;
+    width: 90px;
+    border: 1px solid #bac7d2;
+    background-color: #ffffff;
+    cursor: pointer;
+    box-shadow:0 0 2px #A6C4F0 inset;
+}
+.input2{ background:url("../ASSETS/IMAGE/bluebtn.png"); width:79px; height:26px; border:0px; color:#fff;
+margin-top: 20px;
+}
+.top1{ font-size:30px; font-weight:600; padding-top:10px; color:#FF7F00; float:left;}
+

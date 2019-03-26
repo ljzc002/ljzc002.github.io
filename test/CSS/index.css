@@ -1,0 +1,77 @@
+* {
+    /*这里表示所有元素，不要轻易设置，否则可能会被多次加载，出现逻辑问题*/
+    /*font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;*/
+}
+body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;}
+ul {    list-style: none;    margin: 0;    padding: 0;}
+li{    list-style: none;    margin: 0;    padding: 0;}
+ul li {    float: left;}
+button{    cursor: pointer;}
+a:link{    text-decoration: none;}
+
+#all_base{    border:0px;    margin:0px;    top:0px;    left:0px;    bottom:0px;    width:100%;    height:100%;/*是否可以用一个特别大的值来占位？*/    background: #ffffff;}
+
+/*屏幕顶部的标题行*/
+#title{    vertical-align: middle;    width:100%;    height:80px;    background: #498de0;    color: #000000;    text-align: left;    margin-bottom: 1px;}
+#ul_tabnavigation{width: 100%;display: block}
+
+/*标题行左部*/
+#title_left{    /*background: url(../ASSETS/IMAGE/logo2.png) no-repeat;*/    height: 80px;    width: 700px;    position: absolute;    left: 0px;    top: 0px;
+}
+
+/*标题行右部*/
+#title_right{    background: url(../ASSETS/IMAGE/t_hj.png);    height: 80px;    width: 300px;    position: absolute;    right: 0px;    top:0px;}
+
+/*标题行功能键*/
+#title_bar{    position: absolute;    top: 10px;    right: 100px;    z-index: 10;    font-size: 14px;    font-family: "Microsoft YaHei";}
+
+@media(min-width:1000px){/*>=1000*/
+    #title_bar/*标题行功能键*/{        position: absolute;        top: 10px;        right: 100px;        z-index: 10;        font-size: 14px;        font-family: "Microsoft YaHei";    }
+}
+@media(max-width:999px){
+    #title_bar{        width: 300px;        position: absolute;        top: 10px;        right: 100px;        z-index: 10;        font-size: 14px;        font-family: "Microsoft YaHei";    }
+}
+
+/*屏幕左侧的导航栏*/
+#div_left{    left: 0px;    top:83px;    width:200px;    z-index:2;    position: absolute;    overflow: hidden;    text-align: left;    font-family: Microsoft YaHei, Arial, Helvetica, sans-serif;    font-size: 12px;    background: #eee;    border-right: 1px #eeeeee solid;    border-top: 1px #eeeeee solid;}
+
+#div_left_header{    width: 190px;    height: 20px;    background: #E0ECFF;    border-color: #CDD2D2;    border-width: 0 0 1px 0;    padding: 5px;    position: relative;    border-style: solid;    text-align: left;}
+
+#div_left_header1{    left: 4px;    width: auto;    position: absolute;    top: 50%;    margin-top: -8px;    height: 16px;    overflow: hidden;    text-align: center;    color: #0e2d5f;}
+
+#btn_alter{    right: 2px;    position: absolute;    width: 16px;    height: 16px;    top: 50%;    margin-top: -8px;    vertical-align: top;    background: url(../ASSETS/IMAGE/layout_arrows.png) no-repeat 0 0;    border: 0px;}
+
+#div_left_ul{    width: 200px;    overflow-y: scroll;    background: #eee;    height: 457px;    border-color: #CDD2D2;    border-width: 0px;    text-align: center;    margin-top: 2px;}
+
+.div_left_li{    margin-left: 5px;    width: 177px;}
+.div_cdz{    cursor: pointer;}
+.img_cdz{width: 150px;height:50px }
+.div_cds{    display: none;    height: 170px;    overflow-y: scroll;    border-left: 1px solid #E5E5E5;    border-right: 1px solid #E5E5E5;    padding: 0 2px 0 2px;}
+.div_cd{    cursor: pointer;    width: 150px;    line-height: 30px;    border-bottom: 1px dashed #cccccc;    text-align: center;}
+
+/*屏幕右侧的内容栏*/
+#tabcontainer{    margin-left: 205px;    margin-right:1px;    background-color:#ffffff;    position:static;    height:500px;    font-size: 12px; }
+.tabnavigation{    position:static;text-align: left;    padding:0px;margin:0px;border: 0;    display:none;    width: 100%;height:1px}
+.tabnavigation ul li{    padding:3px;display: inline;    border:1px solid #000;background-color: #fff;    height: 16px;    line-height: 16px;}
+.tabnavigation ul li:hover{    cursor:pointer;}
+.tabnavigation li{    border-radius:5px 5px 0 0    /*从左上角开始顺时针设置圆弧半径*/}
+.tabpages{    margin:0px;    border:0;    position:relative;    z-index: 2;    height: 100%;    display:none;    width: 100%;    margin-bottom: 0px;    overflow: hidden;}
+.tabpage{    margin: 0px;    z-index: 2;    background-color: #fff;    width: 100%;    height: 100%;    margin-bottom:0px;    overflow-y:hidden;    overflow-x: hidden;}
+
+/*屏幕下方的信息栏*/
+#div_bottom{    color: #eeeeee;    background: #498de0;    text-align: center;    height: 20px;    font-family: Microsoft YaHei, Arial, Helvetica, sans-serif;    font-size: 12px;    position: absolute;    bottom: 0px;    width: 100%;    z-index: 100;}
+
+/*在整个导航页上加遮罩层*/
+.div_cook2{    margin-top: 5px;    margin-left: 0px;    margin-right: auto;    width: 100%;    height: 35px;    font-family: 宋体;    font-size: 12px;    float: left;}
+.div_cook2 ul{float: left;margin-top: 5px;margin-bottom: 15px}
+.div_cook2 li{    float: left;    /*margin-top: 10px;*/    margin-left: 5px;    margin-right: 10px;    /*color:darkred;*/    color:#020202;}
+.div_cook2 span{    width: 120px;    float: left;    text-align: right;    /*color: darkred;*/    color: #15428b;    padding-right: 5px;    font-weight: bold;}
+.div_cook2 button{    float: left;    margin-right: 5px;    margin-left: 5px;    width: 52px;    height: 20px;    text-align: center;    background-color: #d6e7ef;    border: solid 1px #020202;}
+.div_mask{    height: 100%;    width: 100%;    display:block;    z-index: 98;    background: #cccccc;    position: absolute;
+    left: 0px;    top: 0px;    filter: alpha(opacity=40);    opacity: 0.40;    overflow: hidden;}
+.btn_close{    float:right;position:static; width: 14px;height: 14px; margin: 0;margin-top: 2px;margin-right:2px;padding: 0;background: url(../ASSETS/IMAGE/close.png) no-repeat;border: 0px;vertical-align:top;z-index: 101;}
+.mainiframe
+{
+    border:2px solid #696969;
+}
