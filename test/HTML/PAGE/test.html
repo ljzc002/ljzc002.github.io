@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KH(离线测试物理引擎的边界效果)</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <link href="../../CSS/stat.css" rel="stylesheet">
+    <script src="../../JS/LIB/cannon.min.js"></script>
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+    <!--script src="../../JS/LIB/oimo.min.js"></script-->
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var serverip,httpport,wsport,userid,UrlHead,WsHead,token;
+    //import * as cannon from "cannon";
+    //import CannonJSPlugin from "babylonjs";
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        var str_hash=window.location.hash.substr(1);//这些信息在open时默认传来传去？
+        var arr_p=str_hash.split("@");
+        if(arr_p.length>0)
+        {
+            serverip=arr_p[0];
+            httpport=arr_p[1];
+            wsport=arr_p[2];
+            userid=arr_p[3];
+        }
+        else
+        {
+            serverip="127.0.0.1";
+            httpport="8282";
+            wsport="2323";
+            userid="test";
+        }
+
+        UrlHead="http://"+serverip+":"+httpport;
+        WsHead="ws://"+serverip+":"+wsport;//后面没有撇
+        token=localStorage.getItem(userid)!=null?localStorage.getItem(userid):"";
+
+        MyGame=new Game(0,"first_pick",WsHead,UrlHead,userid,token);
+        /*0-startWebGL
+         * */
+        //webGLStart();
+        //initWs(webGLStart);
+        webGLStart();//局部离线测试模式
+    }
+    function webGLStart()
+    {
+        //initNet();//如何确保上一环结成功才开启下一环节？->回调
+        initScene();//初始化场景，包括最初入门教程里的那些东西
+        //alert("1");
+        initArena();//初始化地形，包括天空盒，参照物等
+        //alert("2");
+        initEvent();//初始化事件
+        //alert("3");
+        initUI();//初始化场景UI
+        //alert("4");
+        initObj();//初始化一开始存在的可交互的物体
+        //alert("5");
+        initLoop();//初始化渲染循环
+        //alert("6");
+        MyGame.init_state=1;
+        engine.hideLoadingUI();
+        //MyGame.flag_startr=1;//这个是通过nohurry计时器自动启动的，不需要手动启动
+    }
+    function initScene()
+    {
+
+    //光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+        MyGame.lights.light0=light0;
+        //mesh_arr_cards=new BABYLON.Mesh("mesh_arr_cards", scene);
+        //mesh_arr_cards._children=[];
+        //相机网格对象
+        var camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);
+        //camera0.layerMask = 2;
+        //camera0.position=new BABYLON.Vector3(0, 0, -20);
+        camera0.minZ=0.001;
+        scene.activeCameras.push(camera0);
+        //用BallMan作为CameraMesh的mesh！！！！
+        var player = new BallMan();
+        var obj_p={};//初始化参数
+        var mesh_ballman=new BABYLON.Mesh("mesh_ballman",scene);
+        obj_p.mesh=mesh_ballman;
+        obj_p.name=MyGame.userid;//显示的名字
+        obj_p.id=MyGame.userid;//WebSocket Sessionid
+        obj_p.image="../../ASSETS/IMAGE/t_hj.png";
+        if(MyGame.arr_allplayers)
+        {
+            obj_p.image=MyGame.arr_allplayers[MyGame.userid].jsonp.image;
+        }
+        player.init(
+                obj_p,scene
+        );
+
+        var cameramesh=new CameraMesh();
+        var obj_p={};//初始化参数
+        obj_p.mesh=mesh_ballman;
+        obj_p.mesh.isVisible=false;
+        obj_p.mesh.position=new BABYLON.Vector3(0,0,-20);
+        if(obj_p.mesh.ballman)
+        {
+            obj_p.mesh.ballman.head.position=obj_p.mesh.position.clone();
+        }
+        obj_p.methodofmove="host20171018";
+        obj_p.name=MyGame.userid;//显示的名字
+        obj_p.id=MyGame.userid;//WebSocket Sessionid
+        obj_p.camera=camera0;
+        //obj_p.image="assets/image/play.png";
+        obj_p.flag_objfast=20;
+        cameramesh.init(
+                obj_p,scene
+        );
+        MyGame.arr_myplayers[obj_p.name]=cameramesh;
+        MyGame.player=cameramesh;
+        MyGame.Cameras.camera0=camera0;
+        camera0.position=cameramesh.mesh.position.clone();
+        cameramesh.mesh.rotation=camera0.rotation.clone();
+
+        //var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
+        //var physicsPlugin=new BABYLON.OimoJSPlugin()
+        var physicsPlugin = new BABYLON.CannonJSPlugin();
+        physicsPlugin.setTimeStep(1/120);
+        //mesh_arr_cards.position=MyGame.player.mesh.ballman.backview._absolutePosition.clone();
+        //scene.enablePhysics(gravityVector,physicsPlugin);//启用物理引擎，它只对单位生效，对用户本体不生效
+        scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), physicsPlugin);
+        //scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), new BABYLON.OimoJSPlugin());
+    }
+    function initArena()//这个程序里不考虑各个格子的差别，棋盘只是一个平面
+    {
+        if(true)
+        {
+            //三个参照物
+            var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+            mesh_base.material=MyGame.materials.mat_green;
+            mesh_base.position.x=0;
+            mesh_base.renderingGroupId=2;
+            //mesh_base.layerMask=2;
+            var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+            mesh_base1.position.y=10;
+            mesh_base1.position.x=0;
+            mesh_base1.material=MyGame.materials.mat_green;
+            mesh_base1.renderingGroupId=2;
+            //mesh_base1.layerMask=2;
+            var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+            mesh_base2.position.y=-10;
+            mesh_base2.position.x=0;
+            mesh_base2.material=MyGame.materials.mat_green;
+            mesh_base2.renderingGroupId=2;
+            //mesh_base2.layerMask=2;
+            //在这里建立天空盒
+            //天空盒
+            var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.disableLighting = true;
+            skybox.material = skyboxMaterial;
+            skybox.infiniteDistance = true;
+            skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            skybox.ambientColor=new BABYLON.Color3(1, 0, 0);
+            //“skybox_nx.png”, “skybox_ny.png”, “skybox_nz.png”, “skybox_px.png”, “skybox_py.png”, “skybox_pz.png”.
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/skybox/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+            skybox.isPickable=false;
+            MyGame.skybox=skybox;
+        }
+        //在这里建立棋盘地面
+        /*mesh_tiledGround=new BABYLON.Mesh("mesh_tiledGround", scene);
+        mesh_tiledGround.position.y=-7;
+        MakeTileds2(0,20,20);//先产生正方形的棋盘网格，20*20大小。*/
+        //设置一个水平的地面网格
+        /*var ground = BABYLON.Mesh.CreateGround("ground",  200,  200, 2, this.game.scene);
+        ground.isVisible=true;
+        ground.renderingGroupId=2;
+        ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.MeshImpostor
+                , { mass: 0, restitution: 0.9 ,friction:0.5}, this.game.scene);
+        mesh_tiledGround=ground;*/
+        //改为使用一个立方体，限制单位只能在立方体内部弹射
+        var obj_p={};
+        obj_p.sizex=200;
+        obj_p.sizez=200;
+        obj_p.sizey=100;
+        obj_p.x=0;
+        obj_p.y=50;
+        obj_p.z=0;
+        var mat_oy=new BABYLON.StandardMaterial("mat_oy", scene);
+        mat_oy.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/grass.jpg",scene);
+        mat_oy.diffuseTexture.hasAlpha=true;
+        mat_oy.diffuseTexture.uScale = 10.0;//纹理重复效果
+        mat_oy.diffuseTexture.vScale = 10.0;
+        mat_oy.backFaceCulling=false;
+        mat_oy.useAlphaFromDiffuseTexture=true;
+        obj_p.mat_oy=MyGame.materials.mat_frame;
+        obj_p.mat_y=MyGame.materials.mat_frame;
+        obj_p.mat_x=MyGame.materials.mat_frame;
+        obj_p.mat_ox=MyGame.materials.mat_frame;
+        obj_p.mat_z=MyGame.materials.mat_frame;
+        obj_p.mat_oz=MyGame.materials.mat_frame;
+        scene.render();
+        mesh_tiledGround=newland.CreateCubeArenaWithPhy3(obj_p);
+
+    }
+    function initEvent()
+    {
+        InitMouse();
+        window.addEventListener("keydown", onKeyDown, false);//按键按下
+        window.addEventListener("keyup", onKeyUp, false);//按键抬起
+        window.addEventListener("resize", function () {
+            if (engine) {
+                engine.resize();
+            }
+        },false);
+    }
+    function initUI()
+    {
+        MakeFullUI();
+    }
+    function initObj()
+    {//这里要根据前面查询的结果进行绘制
+        //这里的内容放在规则文件里
+        initObjbyWs();
+    }
+    function initLoop()
+    {
+        var _this=MyGame;
+        scene.registerBeforeRender(function() {     //比runRenderLoop更早
+        });
+        scene.registerAfterRender(
+                function() {
+                    if(MyGame.flag_startr==1)//如果开始渲染了
+                    {//如果正在使用相机网格进行漫游
+                        if(MyGame.player.prototype=CameraMesh&&MyGame.flag_view=="first_lock")
+                        {
+                            host20171018(MyGame.player);
+                        }
+
+                    }
+                }
+        );
+
+        engine.runRenderLoop(function ()        //场景逻辑和AI也从这里引入
+        {
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            MyGame.HandleNoHurry();//这里包含了运动使用的计时器
+            if(_this.flag_startr==1||_this.flag_view!="first_pick")
+            {
+                //主相机和小地图相机都随着玩家的位置变化
+                CamerasFollowActor(_this.player);
+            }
+            var DeltaTime=MyGame.DeltaTime;
+            for(var key in arr_balls)
+            {
+
+                var mesh_ball=arr_balls[key];
+                //console.log(key+":"+mesh_ball.physicsImpostor.getLinearVelocity().y);
+                mesh_ball.timeRemain-=DeltaTime;
+                if(mesh_ball.timeRemain<=0)
+                {
+                    mesh_ball.physicsImpostor.dispose();
+                    mesh_ball.dispose();
+                    mesh_ball=null;
+                    delete arr_balls[key];
+                }
+            }
+            _this.scene.render();
+
+        });
+    }
+</script>
+
+<!--script src="../../JS/LIB/cannon.min.js"></script-->
+<script src="../../JS/LIB/stat.js"></script>
+<script src="../../JS/MYLIB/Events.js"></script>
+<script src="../../JS/MYLIB/FileText.js"></script>
+<script src="../../JS/MYLIB/newland.js"></script>
+<script src="../../JS/MYLIB/View.js"></script>
+<script src="../../JS/PAGE/Game.js"></script>
+<script src="../../JS/PAGE/khws.js"></script>
+<script src="../../JS/PAGE/tab_wstype.js"></script>
+<script src="../../JS/PAGE/CHARACTER/BallMan.js"></script>
+<script src="../../JS/PAGE/CHARACTER/CardMesh.js"></script>
+<script src="../../JS/PAGE/CHARACTER/CameraMesh.js"></script>
+<script src="../../JS/PAGE/khControl.js"></script>
+<script src="../../JS/PAGE/khFullUI.js"></script>
+<script src="../../JS/PAGE/khrule.js"></script>
+<script src="../../JS/PAGE/khMoves.js"></script>
+</html>
