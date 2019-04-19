@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TestCard</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <link href="../../CSS/stat.css" rel="stylesheet">
+    <script src="../../JS/LIB/oimo.min.js"></script>
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var serverip,httpport,wsport,userid,UrlHead,WsHead,token;
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        //光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+
+        var camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        camera0.minZ=0.1;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        var physicsPlugin = new BABYLON.OimoJSPlugin(false);
+        physicsPlugin.setTimeStep(1/120);
+        scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), physicsPlugin);
+
+
+        var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.freeze();
+        //三个参照物
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.renderingGroupId=2;
+        //天空盒
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skybox.ambientColor=new BABYLON.Color3(1, 0, 0);
+        //“skybox_nx.png”, “skybox_ny.png”, “skybox_nz.png”, “skybox_px.png”, “skybox_py.png”, “skybox_pz.png”.
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/skybox/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+        skybox.isPickable=false;
+
+        var obj_p={};
+        obj_p.sizex=200;
+        obj_p.sizez=200;
+        obj_p.sizey=100;
+        obj_p.x=0;
+        obj_p.y=50;
+        obj_p.z=0;
+        var  flag_inout=1;
+        var size_adjust=1.6;
+        var size_thick=3;
+        var mesh_oy=new BABYLON.MeshBuilder.CreateGround("mesh_oy"
+                ,{height:obj_p.sizez,width:obj_p.sizex
+                    ,sideOrientation: BABYLON.Mesh.DOUBLESIDE,subdivisions :1},scene);
+        mesh_oy.position=new BABYLON.Vector3(obj_p.x,obj_p.y-obj_p.sizey/2,obj_p.z);
+        mesh_oy.rotation=new BABYLON.Vector3(-Math.PI/2-flag_inout*Math.PI/2,0,0);
+        mesh_oy.renderingGroupId=2;
+        var mesh_oy2=new BABYLON.MeshBuilder.CreateBox("mesh_oy2"
+                ,{width:obj_p.sizex,height:size_thick,depth:obj_p.sizez},scene);
+        mesh_oy2.position=new BABYLON.Vector3(obj_p.x,obj_p.y-obj_p.sizey/2-size_adjust,obj_p.z);
+        mesh_oy2.rotation=mesh_oy.rotation.clone();
+        mesh_oy2.renderingGroupId=0;
+        mesh_oy2.physicsImpostor = new BABYLON.PhysicsImpostor(mesh_oy2, BABYLON.PhysicsImpostor.BoxImpostor
+                , { mass: 0, restitution: 0.9 ,friction:0.5,move:false}, scene);
+        var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+        mat_frame.wireframe = true;
+        mat_frame.freeze();
+        mesh_oy.material=mat_frame;
+
+        var mat_black=new BABYLON.StandardMaterial("mat_black", scene);
+        mat_black.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        mat_black.freeze();
+        //mat_black.useLogarithmicDepth = true;
+        arr_units=[];
+        for(var i=1;i<=54;i++)
+        {
+            var mainpic= "../../ASSETS/PIC/card/poker/"+i+".jpg";
+            var mainback= "../../ASSETS/PIC/card/poker/"+i+".jpg";
+            this.uuid=i;
+            this.width=2.6;
+            this.height=3.48;
+            //显示纹理
+            var mesh_card=new BABYLON.MeshBuilder.CreatePlane("mesh_card"+this.uuid
+                    ,{height:this.height,width:this.width
+                        ,sideOrientation: BABYLON.Mesh.DOUBLESIDE},scene);
+            mesh_card.renderingGroupId=2;
+            mesh_card.cullingStrategy=BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY;
+            //物理外套
+            var mesh_cardp=new BABYLON.MeshBuilder.CreateBox("mesh_cardp"+this.uuid
+                    ,{width:this.width,height:this.height,depth:0.1},scene);
+            mesh_cardp.renderingGroupId=0;
+            mesh_card.parent=mesh_cardp;
+            mesh_cardp.content=mesh_card;
+            this.mesh=mesh_cardp;
+            //从侧面看需要显示一条边线
+            var path_line=[new BABYLON.Vector3(this.width/2,this.height/2,0),
+                new BABYLON.Vector3(this.width/2,-this.height/2,0),
+                new BABYLON.Vector3(-this.width/2,-this.height/2,0),
+                new BABYLON.Vector3(-this.width/2,this.height/2,0),];
+            var mesh_line = BABYLON.MeshBuilder.CreateTube("mesh_line" + this.uuid, {
+                path: path_line,
+                radius: 0.02,
+                updatable: false
+            }, scene);
+
+            mesh_line.renderingGroupId=2;
+            mesh_line.parent=mesh_cardp;
+            mesh_line.material=mat_black;
+
+            var y_start=0.06+arr_units.length*0.11;
+            var x_start=0+arr_units.length*1;//在显示时card的上下关系发生混淆，离得近的显示的更靠上
+            //var x_start=null;
+            mesh_cardp.position=new BABYLON.Vector3(x_start?x_start:0,
+                    y_start?y_start:10,0);
+            mesh_cardp.rotation=new BABYLON.Vector3(Math.PI/2
+                    ,0,0);
+            mesh_cardp.physicsImpostor = new BABYLON.PhysicsImpostor(mesh_cardp, BABYLON.PhysicsImpostor.BoxImpostor
+                , { mass: 0, restitution: 0.001 ,friction:0.99,move:false}, scene);
+
+            var materialf = new BABYLON.StandardMaterial(this.uuid + "cardf", scene);
+            materialf.diffuseTexture = new BABYLON.Texture(mainpic, scene);
+            materialf.diffuseTexture.hasAlpha = false;
+            materialf.backFaceCulling = true;
+            //materialf.bumpTexture =MyGame.textures["grained_uv"];
+            //materialf.useLogarithmicDepth = true;
+            materialf.diffuseTexture.hasAlpha=true;
+            materialf.useAlphaFromDiffuseTexture=true;
+            materialf.freeze();
+            mesh_card.material =materialf;
+            arr_units.push(mesh_cardp);
+
+        }
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(function() {
+            if(scene.isReady())
+            {
+            }
+        });
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+    }
+</script>
+</html>
