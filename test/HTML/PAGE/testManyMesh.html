@@ -98,6 +98,8 @@
                     var mesh=new BABYLON.MeshBuilder.CreateBox("mesh_"+i+"_"+j+"_"+k,{size:1},scene)
                     mesh.position=new BABYLON.Vector3(i,j,k);
                     mesh.renderingGroupId = 2;
+                    //mesh.renderingGroupId = 0;
+                    //mesh.isVisible=false;
                 }
             }
         }
