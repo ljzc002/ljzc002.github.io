@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加地形附着物，并剔除三角形-测试工程导入与三角形剔除</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var serverip,httpport,wsport,userid,UrlHead,WsHead,token;
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+
+        webGLStart();
+    }
+    function OptimizeMesh(mesh)
+    {
+        mesh.convertToFlatShadedMesh();//使用顶点颜色计算代替片元颜色计算
+        mesh.freezeWorldMatrix();//冻结世界坐标系
+        // mesh.material.needDepthPrePass = true;//启用深度预通过
+        //mesh.convertToUnIndexedMesh();//使用三角形绘制代替索引绘制
+    }
+    //var arr_instance=[];
+    var fsUI=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+    var segs_x=100;//横向格子数量
+    var segs_z=100;//纵向格子数量
+    var size_per=1;//每个格子的尺寸
+
+    var obj_plane={};//用五个动态纹理牌子显示，其所在位置的坐标
+    function webGLStart()
+    {
+        //光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+
+        camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        camera0.minZ=0.1;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.freeze();
+        var mat_blue=new BABYLON.StandardMaterial("mat_blue", scene);
+        mat_blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        mat_blue.freeze();
+        //三个参照物
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.renderingGroupId=2;
+
+        //天空盒
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+        skyboxMaterial.disableLighting = true;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+        skybox.isPickable=false;
+
+        mat_grass = new BABYLON.StandardMaterial("mat_grass", scene);//1
+        mat_grass.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/grass.jpg", scene);
+        mat_grass.diffuseTexture.uScale = segs_x+1;//纹理重复效果
+        mat_grass.diffuseTexture.vScale = segs_z+1;
+        mat_grass.backFaceCulling=false;
+        mat_grass.freeze();
+        mat_tree = new BABYLON.StandardMaterial("mat_tree", scene);//1
+        mat_tree.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/yulin.png", scene);
+        mat_tree.diffuseTexture.uScale = segs_x+1;//纹理重复效果
+        mat_tree.diffuseTexture.vScale = segs_z+1;
+        mat_tree.backFaceCulling=false;
+        mat_tree.freeze();
+        mat_stone = new BABYLON.StandardMaterial("mat_stone", scene);//1
+        mat_stone.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/stone.png", scene);
+        mat_stone.diffuseTexture.uScale = segs_x+1;//纹理重复效果
+        mat_stone.diffuseTexture.vScale = segs_z+1;
+        mat_stone.backFaceCulling=false;
+        mat_stone.freeze();
+        mat_shallowwater = new BABYLON.StandardMaterial("mat_shallowwater", scene);//1
+        mat_shallowwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/lake.png", scene);
+        mat_shallowwater.diffuseTexture.uScale = segs_x+1;//纹理重复效果
+        mat_shallowwater.diffuseTexture.vScale = segs_z+1;
+        mat_shallowwater.backFaceCulling=false;
+        mat_shallowwater.freeze();
+        mat_deepwater = new BABYLON.StandardMaterial("mat_deepwater", scene);//1
+        mat_deepwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/sea.png", scene);
+        mat_deepwater.diffuseTexture.uScale = segs_x+1;//纹理重复效果
+        mat_deepwater.diffuseTexture.vScale = segs_z+1;
+        mat_deepwater.backFaceCulling=false;
+        mat_deepwater.freeze();
+        mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+        mat_frame.wireframe = true;
+
+        var mesh_sphereup=new BABYLON.MeshBuilder.CreateSphere("mesh_sphereup",{diameter:0.5},scene);
+        mesh_sphereup.material=mat_blue;
+        mesh_sphereup.renderingGroupId=2;
+        mesh_sphereup.direction=new BABYLON.Vector3(0,-1,2);
+        mesh_sphereup.isPickable=false;
+        mesh_sphereup.rayHelper = null;
+        obj_plane.mesh_sphereup=mesh_sphereup;
+        var mesh_sphereright=new BABYLON.MeshBuilder.CreateSphere("mesh_sphereright",{diameter:0.5},scene);
+        mesh_sphereright.material=mat_blue;
+        mesh_sphereright.renderingGroupId=2;
+        mesh_sphereright.direction=new BABYLON.Vector3(2,-1,0);
+        mesh_sphereright.isPickable=false;
+        mesh_sphereright.rayHelper = null;
+        obj_plane.mesh_sphereright=mesh_sphereright;
+        var mesh_spheredown=new BABYLON.MeshBuilder.CreateSphere("mesh_spheredown",{diameter:0.5},scene);
+        mesh_spheredown.material=mat_blue;
+        mesh_spheredown.renderingGroupId=2;
+        mesh_spheredown.direction=new BABYLON.Vector3(0,-1,-2);
+        mesh_spheredown.isPickable=false;
+        mesh_spheredown.rayHelper = null;
+        obj_plane.mesh_spheredown=mesh_spheredown;
+        var mesh_sphereleft=new BABYLON.MeshBuilder.CreateSphere("mesh_sphereleft",{diameter:0.5},scene);
+        mesh_sphereleft.material=mat_blue;
+        mesh_sphereleft.renderingGroupId=2;
+        mesh_sphereleft.direction=new BABYLON.Vector3(-2,-1,0);
+        mesh_sphereleft.isPickable=false;
+        mesh_sphereleft.rayHelper = null;
+        obj_plane.mesh_sphereleft=mesh_sphereleft;
+        var mesh_spheremiddle=new BABYLON.MeshBuilder.CreateSphere("mesh_spheremiddle",{diameter:0.5},scene);
+        mesh_spheremiddle.material=mat_blue;
+        mesh_spheremiddle.renderingGroupId=2;
+        mesh_spheremiddle.direction=new BABYLON.Vector3(0,-1,0);
+        mesh_spheremiddle.isPickable=false;
+        mesh_spheremiddle.rayHelper = null;
+        obj_plane.mesh_spheremiddle=mesh_spheremiddle;
+
+        for(var key in obj_plane)//为每个网格绑定一个gui lable
+        {
+            var label = new BABYLON.GUI.Rectangle(key);
+            label.background = "black";
+            label.height = "30px";
+            label.alpha = 0.5;
+            label.width = "240px";
+            label.cornerRadius = 20;
+            label.thickness = 1;
+            label.linkOffsetY = 30;//位置偏移量？？
+            fsUI.addControl(label);
+            label.linkWithMesh(obj_plane[key]);
+            var text1 = new BABYLON.GUI.TextBlock();
+            text1.text = "";
+            text1.color = "white";
+            label.addControl(text1);
+            label.isVisible=true;
+            //label.layerMask=2;
+            label.text=text1;
+            obj_plane[key].lab=label;
+        }
+
+        var mesh0=new BABYLON.Mesh("mesh0",scene);
+        //以高度0为海平面，以xy00为大地原点
+        webGLStart2();
+        MyBeforeRender();
+    }
+    var obj_ground={};
+    var obj_wet={};//用来保存被淋湿的顶点索引
+    var mesh_DropFrom=null;
+    function webGLStart2() {
+        //导入之前做好的一个存档
+        ImportObjGround("../../ASSETS/SCENE/","ObjGround.babylon",webGLStart3);
+        //PrepareRain();//这个方法必须在场景存档加载完毕后执行
+    }
+    function webGLStart3() {
+        PrepareRain();
+        //DropRain(100,100,1,100,new BABYLON.Vector3(0,50,0),new BABYLON.Vector3(0,0,0))
+    }
+    //这种转变法，对arr中所有顶点施加相同的变化矩阵
+    //TransVertex(obj_ground.ground_base,[[101,101],[101,100],[100,101]],BABYLON.Matrix.Translation(0,2,0))
+    function TransVertex(mesh,arr,matrix)
+    {
+        var len=arr.length;
+        var arr_path=mesh.metadata.arr_path;
+        for(var i=0;i<len;i++)//移动路径数组里的每个顶点
+        {
+            arr_path[arr[i][0]][arr[i][1]]=BABYLON.Vector3.TransformCoordinates(arr_path[arr[i][0]][arr[i][1]],matrix);
+        }
+        //var name=mesh.name;
+        //载入时arr_path丢失了Babylon特性，元素从Vector3变成了普通array！！！！
+        //mesh.dispose();//如果不使用instances方式，则地面网格作为后出现的网格会将森林和浅水都覆盖掉！
+        mesh=BABYLON.MeshBuilder.CreateRibbon(mesh.name
+            ,{pathArray:arr_path,updatable:true
+                ,instance:mesh
+                ,closePath:false,closeArray:false,sideOrientation:BABYLON.Mesh.DOUBLESIDE});
+        //重新导入的模型无法设置updatable特性！？网格没有updatable属性？！
+        /*mesh.material=mat_grass;
+        mesh.renderingGroupId=2;
+        mesh.metadata={};
+        mesh.metadata.arr_path=arr_path;
+        obj_ground[mesh.name]=mesh;*/
+    }
+    //选取区域，将区域条件转为路径索引，这里应该有多种多样的选取方法
+    //距某个点一定距离的顶点
+    function FindZoneBYDistance(mesh,pos,distance)
+    {
+        var arr_res=[];
+        var arr_path=mesh.metadata.arr_path;
+        var len=arr_path.length;
+        for(var i=0;i<len;i++)//对于每一条路径
+        {
+            var path=arr_path[i];
+            var len2=path.length;
+            for(var j=0;j<len2;j++)//对于路径上的每一个顶点
+            {
+                var vec=path[j];
+                var length=pos.clone().subtract(vec).length();//取到这个顶点到参数位置的距离
+                if(length<=distance)//如果在参数位置的一定范围内
+                {
+                    arr_res.push([i,j,length]);
+                }
+            }
+        }
+        return arr_res;
+    }
+    //只考虑XZ平面上的距离
+    function FindZoneBYDistanceXZ(mesh,pos,distance)
+    {
+        var arr_res=[];
+        var arr_path=mesh.metadata.arr_path;
+        var len=arr_path.length;
+        for(var i=0;i<len;i++)//对于每一条路径
+        {
+            var path=arr_path[i];
+            var len2=path.length;
+            for(var j=0;j<len2;j++)//对于路径上的每一个顶点
+            {
+                var vec=path[j];
+                var vec2=pos.clone().subtract(vec)
+                var length=Math.pow(vec2.x*vec2.x+vec2.z*vec2.z,0.5);//取到这个顶点到参数位置的距离
+                if(length<=(distance))//如果在参数位置的一定范围内
+                {
+                    arr_res.push([i,j,length]);
+                }
+            }
+        }
+        return arr_res;
+    }
+    //按照一定规则进行矩阵变换：这里应该有多种多样的插值方法
+    //这个是越靠近pos点提高的越多，仿照粒子系统的梯度用法
+    function TransVertexGradiently(mesh,arr,arr_gradient)
+    {
+        var len=arr.length;
+        var len2=arr_gradient.length;
+        var arr_path=mesh.metadata.arr_path;
+        for(var i=0;i<len;i++)//对于每一个要变换的顶点
+        {
+            var matrix=null;
+            var arr2=arr[i];
+            var vec=arr_path[arr2[0]][arr2[1]];//vec并非基础量，但为什么不能直接修改？
+            var dis=arr2[2];
+            if(dis<arr_gradient[0][0])
+            {
+                dis=arr_gradient[0][0];
+            }
+            else if(dis>arr_gradient[len2-1][0])
+            {
+                dis=arr_gradient[len2-1][0];
+            }
+            //接下来遍历梯度数组，规定梯度必是从低到高排列的
+            for(var j=1;j<len2;j++)
+            {
+                var gradient=arr_gradient[j];
+                if(dis<=gradient[0])
+                {//计算这一梯度插值层级
+                    //前一个梯度
+                    var gradient0=arr_gradient[j-1];
+                    //比率
+                    var ratio=((dis-gradient0[0])/(gradient[0]-gradient0[0]));
+                    //小端
+                    var a=gradient0[1]+(gradient[1]-gradient0[1])*ratio;
+                    //大端
+                    var b=gradient0[2]+(gradient[2]-gradient0[2])*ratio;
+                    //随机高度
+                    var c=b-a;
+                    var res=a+c*Math.random();
+                    matrix=new BABYLON.Matrix.Translation(0,res,0);
+                    break;
+                }
+            }
+            if(matrix)
+            {
+                arr_path[arr2[0]][arr2[1]]=BABYLON.Vector3.TransformCoordinates(arr_path[arr2[0]][arr2[1]],matrix);
+            }
+        }
+        mesh=BABYLON.MeshBuilder.CreateRibbon(mesh.name
+            ,{pathArray:arr_path,updatable:true,instance:mesh,closePath:false,closeArray:false,sideOrientation:BABYLON.Mesh.DOUBLESIDE});
+    }
+    //地形附加物分为三种，一是贴合地形的新地面纹理（需要选定区域的方法），二是特定形状的附加表面（比如水面），三是导入的模型或新建的网格，前两种的纹理重复与地面网格同步
+    //贴合纹理（森林）,tree的纹理重复要根据实际的地块数生成，所以要对材质克隆一下！->干脆用图片重新建立材质吧
+    // 《-如果能够规定地形附着物不会超过地面网格的边界，则设定一个最大纹理重复的附着物纹理，给所有本类附着物使用，这可能最简单！
+    //关键难点在于如何提取和重组地形网格的顶点、索引、uv，这种贴合纹理也可以用在模型表面绘制上
+    function MakeLandtype1(mesh,arr,mat,name,sameheight,height)
+    {
+        var vb=mesh.geometry._vertexBuffers;//地面网格的顶点数据
+        var data_pos=vb.position._buffer._data;//顶点位置数据
+        var data_index=mesh.geometry._indices;//网格索引数据
+        var data_uv=vb.uv._buffer._data;//地面网格的纹理坐标数据
+        var len_index=data_index.length;
+
+        var len=arr.length;
+        var arr_path=mesh.metadata.arr_path;
+
+        var arr_index=[];
+        var data_pos2=[];
+        var data_index2=[];//第二次循环时填充
+        var data_uv2=[];
+        console.log("开始生成地形附着物");
+        for(var i=0;i<len;i++){//对于每一个选中的路径节点
+
+            var int0=arr[i][0];
+            var int1=arr[i][1];
+            var vec=arr_path[int0][int1];//获取到路径数组中的一个Vector3对象
+            //这里有两种思路，一是从顶点数据入手，完全复刻地形的高度；二是从条带的路径索引入手，可以更贴近的生成附着物的多边形轮廓，但在高度方面可能不精确（不贴合），
+            //->结合使用二者？《-可以实现但过于复杂
+            //假设路径数组和顶点数据是一一对应的？同时假设每一条路径的长度都和第一条相同，如果先剔除三角形就无法这样使用了！
+            var index_v=int0*arr_path[0].length+int1//这个顶点的索引
+            arr_index.push(index_v);
+            data_pos2.push(vec.x);
+            if(sameheight)
+            {
+                data_pos2.push(height);
+            }
+            else
+            {
+                data_pos2.push(vec.y);
+            }
+            data_pos2.push(vec.z);
+            data_uv2.push(data_uv[index_v*2]);
+            data_uv2.push(data_uv[index_v*2+1]);
+
+        }
+        len=arr_index.length;
+        console.log("开始设定地形附着物的索引");
+        for(var i=0;i<len;i++)//对于每个顶点索引，它可能被用到多次
+        {
+            console.log(i+"/"+len);
+            var index_v=arr_index[i];
+            for(var j=0;j<len_index;j+=3)//遍历索引数组
+            {
+                var num2=-1;
+                var num3=-1;
+                //var arr_temp=[];
+                var flag_type=null;
+                    if(index_v==data_index[j])//三角形的第一个顶点
+                    {//在这里要考虑另两个顶点是否在附着物范围内，如果在，则使用附着物纹理，如果不在则使用混合纹理？？
+                        num2=data_index[j+1];//*3;//实际去顶点数组中取顶点时要乘以3，但作为顶点索引时不用乘以3
+                        num3=data_index[j+2];
+                        flag_type=1;
+                    }
+                    else if(index_v==data_index[j+1])//三角形的第一个顶点
+                    {
+                        num2=data_index[j];
+                        num3=data_index[j+2];
+                        flag_type=2;
+                    }
+                    else if(index_v==data_index[j+2])//三角形的第一个顶点
+                    {
+                        num2=data_index[j];
+                        num3=data_index[j+1];
+                        flag_type=3;
+                    }
+                if(num2!=-1&&num3!=-1)
+                {//查看num2和num3这两个索引对应的顶点，在不在选定顶点范围内，如果不在则不在附着物里绘制这个三角形
+                    //(其实更好的方案是，如果不在，则绘制地形网格和附着物的混合纹理)
+                    var flag2=-1;
+                    var flag3=-1;
+                    for(var i2=0;i2<len;i2++)
+                    {
+                        var index2=arr_index[i2];
+                        if(index2==num2)
+                        {
+                            flag2=i2;//在新的顶点数组中找到这个顶点的索引
+                        }
+                        if(index2==num3)
+                        {
+                            flag3=i2;
+                        }
+                        if(flag2!=-1&&flag3!=-1)
+                        {
+                            break;//都已经找到
+                        }
+                    }
+                    if(flag2!=-1&&flag3!=-1)
+                    {
+                        if(flag_type==1)
+                        {
+                            data_index2.push(i);
+                            data_index2.push(flag2);
+                            data_index2.push(flag3);
+                        }
+                        else if(flag_type==2)
+                        {
+                            data_index2.push(flag2);
+                            data_index2.push(i);
+                            data_index2.push(flag3);
+                        }
+                        else if(flag_type==3)
+                        {
+                            data_index2.push(flag2);
+                            data_index2.push(flag3);
+                            data_index2.push(i);
+                        }
+
+                    }
+                }
+            }
+        }
+        //数据整理完毕，开始生成几何体
+        var normals=[];
+        BABYLON.VertexData.ComputeNormals(data_pos2, data_index2, normals);//计算法线
+        BABYLON.VertexData._ComputeSides(0, data_pos2, data_index2, normals, data_uv2);//根据法线分配纹理朝向
+        var vertexData= new BABYLON.VertexData();
+        vertexData.indices = data_index2;//索引
+        vertexData.positions = data_pos2;
+        vertexData.normals = normals;//position改变法线也要改变！！！！
+        vertexData.uvs = data_uv2;
+
+        var mesh=new BABYLON.Mesh(name,scene);
+        vertexData.applyToMesh(mesh, true);
+        mesh.vertexData=vertexData;
+        mesh.renderingGroupId=2;
+        mesh.material=mat;
+        obj_ground[name]=mesh;
+    }
+
+    //导入模型分为三类，一是导入一个模型作为地形附加物需要设置其姿态位置缩放名称、二是导入一个存档的设计并可以在其基础上继续编辑、三是导入一个剔除三角形之后的最终模型
+    /*ImportMesh("","../../ASSETS/SCENE/","SpaceCraft.babylon"
+    ,{position:new BABYLON.Vector3(7,-2,7),rotation:new BABYLON.Vector3(0,-Math.PI/4,Math.PI/6)
+            ,scaling:new BABYLON.Vector3(1,1,1),name:"ground_spacecraft"
+            ,material:mat_stone})*/
+    //如果这里load一个相同内容的txt文件，会报警告，但似乎也成功导入了！！
+    function ImportMesh(objname,filepath,filename,obj_p)
+    {
+        BABYLON.SceneLoader.ImportMesh(objname, filepath, filename, scene
+            , function (newMeshes, particleSystems, skeletons)
+            {//载入完成的回调函数
+                var mesh=newMeshes[0];
+                mesh.position=obj_p.position;
+                mesh.rotation=obj_p.rotation;
+                mesh.scaling=obj_p.scaling;
+                mesh.name=obj_p.name;
+                mesh.id=obj_p.name;
+                var mat=obj_p.material.clone();
+                mat.backFaceCulling=false;
+                mat.name=obj_p.material.name;
+                mesh.material=mat;
+                mesh.renderingGroupId=2;
+                mesh.sideOrientation=BABYLON.Mesh.DOUBLESIDE;
+                obj_ground[obj_p.name]=mesh;
+            }
+        );
+    }
+    //导出正在编辑的地面工程，其中地面网格保持metadata，下载文本时参考xlsx的方式
+    function ExportObjGround()
+    {
+        var obj_scene=MakeBasicBabylon();
+        for(key in obj_ground)//在Babylon文件中不配置材质，在导入后能否自动对应新场景中的材质id?
+        {
+            var obj_mesh={};
+            var mesh=obj_ground[key];
+            obj_mesh.name=mesh.name;
+            obj_mesh.id=mesh.id;
+            obj_mesh.materialId=mesh.material.id;//如果这样设置不可行，则将materialId放到metadata里传递！
+            obj_mesh.position=[mesh.position.x,mesh.position.y,mesh.position.z];
+            obj_mesh.rotation=[mesh.rotation.x,mesh.rotation.y,mesh.rotation.z];
+            obj_mesh.scaling=[mesh.scaling.x,mesh.scaling.y,mesh.scaling.z];
+            obj_mesh.isVisible=true;
+            obj_mesh.isEnabled=true;
+            obj_mesh.checkCollisions=false;
+            obj_mesh.billboardMode=0;
+            obj_mesh.receiveShadows=true;
+            obj_mesh.renderingGroupId=mesh.renderingGroupId;
+            obj_mesh.metadata=mesh.metadata;
+            if(mesh.geometry)//是有实体的网格
+            {
+                var vb=mesh.geometry._vertexBuffers;
+                obj_mesh.positions=BuffertoArray2(vb.position._buffer._data);
+                obj_mesh.normals=BuffertoArray2(vb.normal._buffer._data);
+                obj_mesh.uvs= BuffertoArray2(vb.uv._buffer._data);
+                obj_mesh.indices=BuffertoArray2(mesh.geometry._indices);
+                obj_mesh.subMeshes=[{
+                    'materialIndex': 0,
+                    'verticesStart': 0,
+                    'verticesCount': mesh.geometry._totalVertices,
+                    'indexStart': 0,
+                    'indexCount': mesh.geometry._indices.length,
+                }];
+                obj_mesh.parentId=mesh.parent?mesh.parent.id:null;
+            }
+            else
+            {
+                obj_mesh.positions=[];
+                obj_mesh.normals=[];
+                obj_mesh.uvs=[];
+                obj_mesh.indices=[];
+                obj_mesh.subMeshes=[{
+                    'materialIndex': 0,
+                    'verticesStart': 0,
+                    'verticesCount': 0,
+                    'indexStart': 0,
+                    'indexCount': 0
+                }];
+                obj_mesh.parentId=null;
+            }
+            obj_scene.meshes.push(obj_mesh);
+        }
+        var str_data=JSON.stringify(obj_scene);
+        //试试看行不行
+        var tmpDown = new Blob([s2ab(str_data)]
+            ,{
+                type: ""
+            }
+        );
+        saveAs(tmpDown,"ObjGround.babylon")
+    }
+    //建立一个最基础的Babylon对象结构
+    function MakeBasicBabylon()
+    {
+        var obj_scene=
+            {//最简场景对象
+                'autoClear': true,
+                'clearColor': [0,0,0],
+                'ambientColor': [0,0,0],
+                'gravity': [0,-9.81,0],
+                'cameras':[],
+                'activeCamera': null,
+                'lights':[],
+                'materials':[],
+                'geometries': {},
+                'meshes': [],
+                'multiMaterials': [],
+                'shadowGenerators': [],
+                'skeletons': [],
+                'sounds': []//,
+                //'metadata':{'walkabilityMatrix':[]}
+            };
+        return obj_scene;
+    }
+    function BuffertoArray2(arr)
+    {
+        var arr2=[];
+        var len=arr.length;
+        for(var i=0;i<len;i++)
+        {
+            arr2.push(arr[i]);
+        }
+        return arr2;
+    }
+    function s2ab(s) {
+        if (typeof ArrayBuffer !== 'undefined') {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        } else {
+            var buf = new Array(s.length);
+            for (var i = 0; i != s.length; ++i) buf[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+    }
+    saveAs=function(obj, fileName)
+    {
+        var tmpa = document.createElement("a");
+        tmpa.download = fileName || "下载";
+        tmpa.href = URL.createObjectURL(obj);
+        tmpa.click();
+        setTimeout(function () {
+            URL.revokeObjectURL(obj);
+        }, 100);
+    };
+    //ImportObjGround("../../ASSETS/SCENE/","ObjGround.babylon");
+    function ImportObjGround(filepath,filename,func)
+    {
+        BABYLON.SceneLoader.ImportMesh("", filepath, filename, scene
+            , function (newMeshes, particleSystems, skeletons)
+            {//载入完成的回调函数
+                var len=newMeshes.length;
+                for(var i=0;i<len;i++)
+                {
+                    var mesh=newMeshes[i];
+                    mesh.renderingGroupId=2;
+                    mesh.sideOrientation=BABYLON.Mesh.DOUBLESIDE;
+                    obj_ground[mesh.name]=mesh;
+                    if(mesh.name=="ground_base")
+                    {//声明顶点位置是可变的！！
+                        mesh.markVerticesDataAsUpdatable(BABYLON.VertexBuffer.PositionKind//其实就是“position”，除此之外还有“normal”等
+                            ,true);
+                    }
+                    if(mesh.metadata&&mesh.metadata.arr_path)
+                    {//要把array重新变成Vector3！！！！
+                        var arr_path=mesh.metadata.arr_path;
+                        var len1=arr_path.length;
+                        for(var j=0;j<len1;j++)
+                        {
+                            var path=arr_path[j];
+                            var len2=path.length;
+                            for(var k=0;k<len2;k++)
+                            {
+                                var vec=path[k];
+                                var vec2=new BABYLON.Vector3(vec.x,vec.y,vec.z);
+                                path[k]=vec2;
+                            }
+                        }
+                    }
+                }
+                func();
+            }
+        );
+    }
+
+    //最后剔除三角形，因为剔除后的网格已不再是完整的条带网格，可以去掉网格的metadata属性！！<-也可以不去掉
+    //从指定方向降雨，为每个顶点标注淋湿情况，根据实际情况降雨可能要进行多次
+    //剔除时要保证从小到大的方向性！
+
+    function PrepareRain()
+    {
+        console.log("准备下雨");
+        mesh_DropFrom=new BABYLON.Mesh("mesh_DropFrom",scene);
+        for(var key in obj_ground)
+        {
+            var mesh=obj_ground[key];
+            var obj={};
+            obj.vb=mesh.geometry._vertexBuffers;//地面网格的顶点数据
+            obj.data_pos=obj.vb.position._buffer._data;//顶点位置数据
+            obj.data_index=mesh.geometry._indices;//网格索引数据
+            obj.data_uv=obj.vb.uv._buffer._data;//地面网格的纹理坐标数据
+            obj.len_index=obj.data_index.length;
+            obj.len_pos=obj.data_pos.length/3;
+            obj.data_wet=[];//每个顶点是否被淋湿
+            for(var i=0;i<obj.len_pos;i+=1)
+            {
+                obj.data_wet.push(0);
+            }
+            obj.arr_index=[];
+            obj.data_pos2=[];
+            obj.data_index2=[];//第二次循环时填充
+            obj.data_uv2=[];
+            obj_wet[key]=obj;
+        }
+        console.log("准备完毕");
+    }
+    function PrepareRain2()
+    {
+        console.log("读取本地淋湿数组");
+        mesh_DropFrom=new BABYLON.Mesh("mesh_DropFrom",scene);
+        for(var key in obj_ground)
+        {
+            var mesh=obj_ground[key];
+            var obj={};
+            obj.vb=mesh.geometry._vertexBuffers;//地面网格的顶点数据
+            obj.data_pos=obj.vb.position._buffer._data;//顶点位置数据
+            obj.data_index=mesh.geometry._indices;//网格索引数据
+            obj.data_uv=obj.vb.uv._buffer._data;//地面网格的纹理坐标数据
+            obj.len_index=obj.data_index.length;
+            obj.len_pos=obj.data_pos.length/3;
+            obj.data_wet=localStorage.getItem(key);//每个顶点是否被淋湿
+            obj.arr_index=[];
+            obj_wet[key]=obj;
+        }
+        console.log("准备完毕");
+    }
+    //预计降雨两次？
+    //宽度分段、深度分段、每块尺寸（在这个尺寸内有四条射线）,“射线”长度,所有射线出发点的中心
+    //DropRain(100,100,1,100,new BABYLON.Vector3(0,50,0),new BABYLON.Vector3(0,0,0))
+    //DropRain(200,200,0.5,100,new BABYLON.Vector3(0,50,0),new BABYLON.Vector3(0,0,0))
+    function DropRain(count_x,count_z,size,length,from,to)
+    {
+        mesh_DropFrom.position=from;
+        mesh_DropFrom.lookAt(to);//这时网格的WorldMatrix和AbsoulutPosition还未改变！！
+        //其实应该是网格的负Y方向指向to！！！！这个矩阵的最终效果应该是x，y，z左移一位
+        mesh_DropFrom.computeWorldMatrix();
+        var matrix=mesh_DropFrom.getWorldMatrix();
+        var size41=size/4;
+        var direction=to.subtract(from);
+        //遍历101*101个方块，降雨角度不同时设计不同的分段数
+        console.log("开始下雨");
+        for(var i=0;i<=count_x;i++)
+        {
+            for(var j=0;j<=count_z;j++)
+            {
+                console.log(i+"/"+count_x+"_"+j+"/"+count_z);
+                var arr_wet=[];
+                var pos0=new BABYLON.Vector3((j-(count_z/2))*size,(i-(count_x/2))*size,0);//预先右移一位？
+                //左上，右上，右下，左下
+
+                var pos1=BABYLON.Vector3.TransformCoordinates(pos0.clone().add(new BABYLON.Vector3(size41,-size41,0)),matrix);
+                var pos2=BABYLON.Vector3.TransformCoordinates(pos0.clone().add(new BABYLON.Vector3(size41,size41,0)),matrix);
+                var pos3=BABYLON.Vector3.TransformCoordinates(pos0.clone().add(new BABYLON.Vector3(-size41,size41,0)),matrix);
+                var pos4=BABYLON.Vector3.TransformCoordinates(pos0.clone().add(new BABYLON.Vector3(-size41,-size41,0)),matrix);
+                //var ray=new BABYLON.Ray(new BABYLON.Vector3(-50,50,0), new BABYLON.Vector3(0,-1,0), 100);
+                var ray1 = new BABYLON.Ray(pos1, direction, length);
+                var ray2 = new BABYLON.Ray(pos2, direction, length);
+                var ray3 = new BABYLON.Ray(pos3, direction, length);
+                var ray4 = new BABYLON.Ray(pos4, direction, length);
+                //对于每一束射线，如果击中的第一个网格不是"ground_alpha",则只淋湿第一个网格
+                // ，否则还如此检查第二个，四条射线的检查结果都放在同一数组中
+                //，击中了处于相同位置的ground_base和其他ground，优先选拔其他ground
+                testRay(ray1,size);
+                testRay(ray2,size);
+                testRay(ray3,size);
+                testRay(ray4,size);
+            }
+        }
+        //为了节省时间，把淋湿数组保存在本地存储里
+        for(key in obj_wet)
+        {
+            localStorage.setItem(key,obj_wet[key].data_wet);
+        }
+        console.log("降雨结束");
+    }
+    function sort_compare(a,b)
+    {
+        return a.distance-b.distance;
+    }
+    function testRay(ray,size)
+    {
+        var arr=scene.multiPickWithRay(ray,predicate);//这样获取的arr并不是按distance顺序排序的！！！！
+        var len=arr.length;
+        arr.sort(sort_compare)
+        var lastHit=null;
+        for(var k=0;k<len;k++)//对于这条射线击中的每个三角形
+        {
+            var hit=arr[k];
+            var mesh=hit.pickedMesh;
+            var distance=hit.distance;
+            if(mesh)
+            {
+                if(lastHit)//已经有上一层
+                {//如果上一层是半透明的，则下一层必定被淋湿，如果上一层是ground_base，则要看两层之间的距离
+                    if(lastHit.pickedMesh.name.substr(0,11)=="ground_base")
+                    {
+                        if((distance-lastHit.distance)>(size/1000))//如果距离太大，则不会淋湿
+                        {
+                            getWet(lastHit);
+                        }
+                        else
+                        {
+                            getWet(hit);
+                        }
+                    }
+                }
+                else//没有上一层
+                {
+                    if(mesh.name.substr(0,11)!="ground_base")//如果是地面网格，则还不确定是否淋湿
+                    {
+                        getWet(hit);
+                    }
+                    else if(k==(len-1))//已经遍历到最后一层
+                    {
+                        getWet(hit);
+                    }
+                }
+                var name=mesh.name;
+                if(name&&(name.substr(0,12)=="ground_alpha"||name.substr(0,11)=="ground_base"))
+                {
+                    lastHit=hit;
+                }
+                else
+                {
+                    lastHit=null;
+                    break;//如果上一层就是其他类型的网格，则不再继续深入
+                }
+            }
+            else
+            {
+                lastHit=null;
+                break;
+            }
+        }
+    }
+    function getWet(hit)
+    {
+        var mesh=hit.pickedMesh;
+        var name=mesh.name;
+        var faceId=hit.faceId;
+        var indices = mesh.getIndices();
+        var index0 = indices[faceId * 3];
+        var index1 = indices[faceId * 3 + 1];
+        var index2 = indices[faceId * 3 + 2];
+        var wet=obj_wet[name];//这个顶点被淋湿
+        wet.data_wet[index0]=1;
+        wet.data_wet[index1]=1;
+        wet.data_wet[index2]=1;
+    }
+    function SpliceRain(obj_ground)//通过改变数据结构，可以只测试其中的一个网格
+    {
+        for(var key in obj_ground)
+        {
+            console.log("清理"+key);
+            var obj=obj_wet[key];
+            var len=obj.len_pos;
+            var data_wet=obj.data_wet;//淋湿数组，长度是顶点数组的三分之一
+            var data_pos=obj.data_pos;//顶点数组
+            var data_index=obj.data_index//顶点索引
+            var data_uv=obj.data_uv//纹理坐标
+            //var count_splice=0;
+            for(var i=0;i<data_wet.length;i++)//对于每一个顶点,这里一定要注意顺序
+            {//如果这个顶点没有被淋湿，则要清除这个顶点，如果不清除顶点只是清除索引，能不能快一些？
+                console.log(i+"/"+data_wet.length);
+                if(!data_wet[i])//如果没有淋湿
+                {
+                    data_pos.splice(i*3,3);
+                    data_uv.splice(i*2,2);
+                    data_wet.splice(i,1);
+
+                    //count_splice++;
+                    var len2=obj.len_index;
+                    for(var j=0;j<obj.len_index;j++)
+                    {
+                        if(data_index[j]>i)
+                        {
+                            data_index[j]-=1;//count_splice;
+                        }
+                        else if(data_index[j]==i)
+                        {
+                            var int_temp=j%3;
+                            if(int_temp==0)//三角形的第一个顶点
+                            {
+                                data_index.splice(j,3);
+                                j-=1;
+                            }
+                            else if(int_temp==1)//三角形的第二个顶点
+                            {
+                                data_index.splice(j-1,3);
+                                j-=2;
+                            }
+                            else if(int_temp==2)//三角形的第三个顶点
+                            {
+                                data_index.splice(j-2,3);
+                                j-=3;
+                            }
+                        }
+                    }
+                    i--;
+                }
+            }
+            //剔除之后开始生成网格
+            var normals=[];
+            BABYLON.VertexData.ComputeNormals(data_pos, data_index, normals);//计算法线
+            BABYLON.VertexData._ComputeSides(0, data_pos, data_index, normals, data_uv);//根据法线分配纹理朝向
+            var vertexData= new BABYLON.VertexData();
+            vertexData.indices = data_index;//索引
+            vertexData.positions = data_pos;
+            vertexData.normals = normals;//position改变法线也要改变！！！！
+            vertexData.uvs = data_uv;
+
+            var mesh=obj_ground[key];
+            var mat=mesh.material;
+            var pos=mesh.position;
+            var rot=mesh.rotation;
+            var scal=mesh.scaling;
+            mesh.dispose();
+            mesh=new BABYLON.Mesh(key,scene);
+            //mesh
+            //mesh=new BABYLON.Mesh(name,scene);
+            vertexData.applyToMesh(mesh, true);
+            mesh.vertexData=vertexData;
+            mesh.sideOrientation=BABYLON.Mesh.DOUBLESIDE;
+            mesh.renderingGroupId=2;
+            mesh.material=mat;
+            mesh.position=pos;
+            mesh.rotation=rot;
+            mesh.scaling=scal;
+            obj_ground[key]=mesh;
+        }
+    }
+
+
+
+    function predicate(mesh){//过滤只允许点击地面系网格，
+        if (mesh.name.substr(0,6)=="ground"){
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+                //更新5个标记球的位置
+                var origin=camera0.position;
+                var length=200;
+                for(key in obj_plane)
+                {
+                    var mesh=obj_plane[key];
+                    var direction=mesh.direction;
+                    var ray = new BABYLON.Ray(origin, direction, length);
+                    var hit = scene.pickWithRay(ray,predicate);
+                    if (hit.pickedMesh){
+                        mesh.isVisible=true;
+                        var posp=hit.pickedPoint;
+                        mesh.position=posp.clone();
+                        mesh.lab.isVisible=true;
+                        //显示命中点的坐标以及命中点所在方块的左下角的两层索引
+                        var index_x=Math.floor((posp.x+(segs_x+1)*size_per/2)/size_per);
+                        var index_z=Math.floor((posp.z+(segs_z+1)*size_per/2)/size_per);
+                        mesh.lab.text.text="("+posp.x.toFixed(2)+","+posp.y.toFixed(2)+","+posp.z.toFixed(2)+")*"
+                            +index_x+"-"+index_z;
+                    }
+                    else
+                    {
+                        mesh.lab.isVisible=false;
+                        mesh.isVisible=false;
+                    }
+                }
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+    }
+
+</script>
+</html>

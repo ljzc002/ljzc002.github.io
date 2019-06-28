@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EmptyTalk</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/oimo.min.js"></script>
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+
+</div>
+</body>
+<script>
+    //http://localhost:6334/Community2/HTML/PAGE/EmptyTalk.html
+    var VERSION=0.1,AUTHOR="1113908055@qq.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var serverip,httpport,wsport,userid,UrlHead,WsHead,token;
+    var arr_myunits=[];
+    var arr_webusers=[];
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+        var str_hash=window.location.hash.substr(1);//这些信息在open时默认传来传去？
+        var arr_p=str_hash.split("@");
+        if(arr_p.length>=4)
+        {
+            serverip=arr_p[0];
+            httpport=arr_p[1];
+            wsport=arr_p[2];
+            userid=arr_p[3];
+        }
+        else
+        {
+            serverip="127.0.0.1";
+            httpport="8282";
+            wsport="2323";
+            userid="test";
+        }
+
+        UrlHead="http://"+serverip+":"+httpport;
+        WsHead="ws://"+serverip+":"+wsport;//后面没有撇，与Tomcat类似servlet的方式不同，Netty似乎不需要在port后面加其他东西？？！！
+        token=localStorage.getItem(userid)!=null?localStorage.getItem(userid):"test";//使用本地存储的方式调用token
+        //test告知后台不连接数据库，直接通过身份验证
+        //这说明不一定非得从导航进入
+
+        MyGame=new Game(0,"first_pick",WsHead,UrlHead,userid,token);
+        /*0-startWebGL
+         * */
+        //webGLStart();
+        initWs(webGLStart);
+        //webGLStart();//局部离线测试模式
+    }
+    function webGLStart()
+    {
+        //initNet();//如何确保上一环结成功才开启下一环节？->回调
+        initScene();//初始化场景，包括最初入门教程里的那些东西
+        //alert("1");
+        initArena();//初始化地形，包括天空盒，参照物等
+        //alert("2");
+        initEvent();//初始化事件
+        //alert("3");
+        initUI();//初始化场景UI
+        //alert("4");
+        initObj();//初始化一开始存在的可交互的物体
+        //alert("5");
+        initLoop();//初始化渲染循环
+        //alert("6");
+        MyGame.init_state=1;
+        engine.hideLoadingUI();
+        //MyGame.flag_startr=1;//这个是通过nohurry计时器自动启动的，不需要手动启动
+    }
+    function initScene()
+    {
+        //光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+        MyGame.lights.light0=light0;
+        //相机网格对象
+        var camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);
+        camera0.minZ=0.001;
+        scene.activeCameras.push(camera0);
+
+        var cameramesh=new CameraMesh();
+        var obj_p={};//初始化参数
+        obj_p.mesh=new BABYLON.Mesh("mesh_camera",scene);
+        obj_p.mesh.isVisible=false;
+        //如果有从后台传来的初始位置和姿态
+        var jsonstate=JSON.parse(myjsonstate==""?"{}":myjsonstate);
+        obj_p.mesh.position=newland.MakeVector3(jsonstate.posx,jsonstate.posy,jsonstate.posz,0,10,-30);
+        obj_p.mesh.rotation=newland.MakeVector3(jsonstate.rotx,jsonstate.roty,jsonstate.rotz,0,0,0);
+        obj_p.methodofmove="host20190610";
+        obj_p.name=MyGame.userid;//显示的名字
+        obj_p.id=MyGame.userid;//WebSocket Sessionid
+        obj_p.camera=camera0;
+        obj_p.hightfaster=true;//相机垂直位置越高水平移动越快
+
+        obj_p.flag_objfast=20;
+        cameramesh.init(
+            obj_p,scene
+        );
+        MyGame.arr_myplayers[obj_p.name]=cameramesh;
+        MyGame.player=cameramesh;
+        MyGame.Cameras.camera0=camera0;
+        camera0.position=cameramesh.mesh.position.clone();
+        cameramesh.mesh.rotation=camera0.rotation.clone();
+
+        //var physicsPlugin = new BABYLON.OimoJSPlugin(false);
+        //physicsPlugin.setTimeStep(1/120);
+        //scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), physicsPlugin);
+
+    }
+    function initArena()
+    {
+        if(true)
+        {
+            var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+            mesh_base.material=MyGame.materials.mat_green;
+            mesh_base.position.x=0;
+            mesh_base.renderingGroupId=2;
+            //mesh_base.layerMask=2;
+            var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+            mesh_base1.position.y=10;
+            mesh_base1.position.x=0;
+            mesh_base1.material=MyGame.materials.mat_green;
+            mesh_base1.renderingGroupId=2;
+            //mesh_base1.layerMask=2;
+            var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+            mesh_base2.position.y=-10;
+            mesh_base2.position.x=0;
+            mesh_base2.material=MyGame.materials.mat_green;
+            mesh_base2.renderingGroupId=2;
+
+            //天空盒
+            var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+            var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+            skyboxMaterial.backFaceCulling = false;
+            skyboxMaterial.disableLighting = true;
+            skybox.material = skyboxMaterial;
+            skybox.infiniteDistance = true;
+            skyboxMaterial.disableLighting = true;
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+            skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+            skybox.isPickable=false;
+            //建立方块地形，这个认为一个场景中只有一个棋盘
+            MyGame.cg=cg;
+            cg.segs_x=100;
+            cg.size_z=100;
+            cg.
+            cg.initCubeGround();
+        }
+    }
+</script>
+<script src="../../JS/LIB/stat.js"></script>
+<script src="../../JS/MYLIB/Events.js"></script>
+<script src="../../JS/MYLIB/FileText.js"></script>
+<script src="../../JS/MYLIB/newland.js"></script>
+<script src="../../JS/MYLIB/View.js"></script>
+<script src="../../JS/MYLIB/Game.js"></script>
+<script src="../../JS/PAGE/kh/khws.js"></script>
+<script src="../../JS/PAGE/kh/CubeGround.js"></script>
+<script src="../../JS/PAGE/tab_wstype.js"></script>
+<script src="../../JS/PAGE/CHARACTER/BallMan.js"></script>
+<script src="../../JS/PAGE/CHARACTER/CardMesh2.js"></script>
+<script src="../../JS/PAGE/CHARACTER/CameraMesh.js"></script>
+<script src="../../JS/PAGE/kh/khControl.js"></script>
+<script src="../../JS/PAGE/kh/khFullUI.js"></script>
+<script src="../../JS/PAGE/kh/khrule.js"></script>
+<script src="../../JS/PAGE/kh/khMoves.js"></script>
+</html>

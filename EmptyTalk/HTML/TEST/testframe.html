@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试使用线框构造地面，产生地形（补充顶点），并贴合地面的放置物体-测试均匀夹角</title>
+    <!--如何处理不同的地面纹理？使用不同网格的拼接？-->
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var serverip,httpport,wsport,userid,UrlHead,WsHead,token;
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+
+        webGLStart();
+    }
+    function OptimizeMesh(mesh)
+    {
+        mesh.convertToFlatShadedMesh();//使用顶点颜色计算代替片元颜色计算
+        mesh.freezeWorldMatrix();//冻结世界坐标系
+        // mesh.material.needDepthPrePass = true;//启用深度预通过
+        //mesh.convertToUnIndexedMesh();//使用三角形绘制代替索引绘制
+    }
+    //var arr_instance=[];
+    var fsUI=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+    var segs_x=100;//横向格子数量
+    var segs_z=100;//纵向格子数量
+    //var spriteManager = new BABYLON.SpriteManager("spriteManager", png, (segs_x+1)*(segs_z+1)*7, 24, scene);
+    //spriteManager.renderingGroupId=2;
+    var size_per=1;//每个格子的尺寸
+
+    function webGLStart()
+    {
+        //光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+
+        var camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        camera0.minZ=0.1;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.freeze();
+        //三个参照物
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.renderingGroupId=2;
+
+        //天空盒
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+        skyboxMaterial.disableLighting = true;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+        skybox.isPickable=false;
+
+        mat_grass = new BABYLON.StandardMaterial("mat_grass", scene);//1
+        mat_grass.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/grass.jpg", scene);
+        mat_grass.freeze();
+        mat_tree = new BABYLON.StandardMaterial("mat_tree", scene);//1
+        mat_tree.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/yulin.png", scene);
+        mat_tree.freeze();
+        mat_stone = new BABYLON.StandardMaterial("mat_stone", scene);//1
+        mat_stone.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/stone.png", scene);
+        mat_stone.freeze();
+        mat_shallowwater = new BABYLON.StandardMaterial("mat_shallowwater", scene);//1
+        mat_shallowwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/lake.png", scene);
+        mat_shallowwater.freeze();
+        mat_deepwater = new BABYLON.StandardMaterial("mat_deepwater", scene);//1
+        mat_deepwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/sea.png", scene);
+        mat_deepwater.freeze();
+        mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+        mat_frame.wireframe = true;
+
+        var mesh0=new BABYLON.Mesh("mesh0",scene);
+        //以高度0为海平面，以xy00为大地原点
+        webGLStart2();
+        MyBeforeRender();
+    }
+    function webGLStart2() {
+
+        //用条带网格构造地面，这里每一条路径都是竖立的，共有102条路径，每条路径上有102个节点
+        var adjust_z=size_per*Math.tan(Math.PI/6)/2;//要让顶点周围的棱均匀分布，则要把每条路径上下错开一些
+        var arr_path=[];
+        for(var i=0;i<=segs_x+1;i++)
+        {
+            var posx=(i-((segs_x+1)/2))*size_per;
+            var path=[];
+            for(var j=0;j<=segs_z+1;j++)
+            {
+                var posz=(j-((segs_z+1)/2))*size_per;
+                if(i%2==0)
+                {
+                    posz+=(adjust_z*i);
+                }
+                else
+                {
+                    posz+=(adjust_z*i);
+                }
+                path.push(new BABYLON.Vector3(posx,0,posz));
+            }
+            arr_path.push(path);
+        }
+        mesh_origin=BABYLON.MeshBuilder.CreateRibbon(name,{pathArray:arr_path,updatable:true,closePath:false,closeArray:false});
+        mesh_origin.sideOrientation=BABYLON.Mesh.DOUBLESIDE;
+        mesh_origin.material=mat_frame;//mat_tree;
+        mesh_origin.renderingGroupId=2;
+        //由于条带总是用一个顺序连接顶点，难以做到顶点周围棱的均匀-》契合多重纹理分片思想用三角形条带拼装地面？？
+        //如何解决条带的纹理坐标不均匀问题？-》每次变形时进行计算？？
+    }
+    function makeGroundVertex(segs_x,segs_z,size_per)
+    {
+        var positions=[];
+        var uvs=[];
+        var normals=[];
+        var indices=[];
+        //两种画法的分块方式是不同的，如果要像前种一样分成101个地块，则要有100个内部分割点，再加上两个端点，则一条边上有102个顶点
+        //这里是分割点数，
+        for(var i=0;i<=segs_z;i++)//对于每一行方块
+        {
+            for(var j=0;j<=segs_x;j++)//对于行内的每一个方块
+            {//这个方块内部
+                positions.push(j);
+                positions.push(0);
+                positions.push(0);
+            }
+        }
+    }
+    function MyBeforeRender()
+    {
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+    }
+
+</script>
+</html>

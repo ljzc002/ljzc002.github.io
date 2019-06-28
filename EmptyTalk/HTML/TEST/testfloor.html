@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>尝试建立一种阶梯式的地面网格-建立实例与标签-测试用精灵作为地块标签</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var serverip,httpport,wsport,userid,UrlHead,WsHead,token;
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+
+        webGLStart();
+    }
+    function OptimizeMesh(mesh)
+    {
+        mesh.convertToFlatShadedMesh();//使用顶点颜色计算代替片元颜色计算
+        mesh.freezeWorldMatrix();//冻结世界坐标系
+        // mesh.material.needDepthPrePass = true;//启用深度预通过
+        //mesh.convertToUnIndexedMesh();//使用三角形绘制代替索引绘制
+    }
+    var arr_instance=[];
+    var fsUI=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+    function webGLStart()
+    {
+        //光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+
+        var camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        camera0.minZ=0.1;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.freeze();
+        //三个参照物
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.renderingGroupId=2;
+
+        //天空盒
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+        skyboxMaterial.disableLighting = true;
+        //skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        //skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        //skybox.ambientColor=new BABYLON.Color3(1, 0, 0);
+        //“skybox_nx.png”, “skybox_ny.png”, “skybox_nz.png”, “skybox_px.png”, “skybox_py.png”, “skybox_pz.png”.
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+        skybox.isPickable=false;
+
+        //准备十种数字的纹理->怎么把动态纹理或者canvas转为dataurl？
+        /*var texture_number = new BABYLON.DynamicTexture("texture_number", {
+            width: 240,
+            height: 24
+        }, scene);
+        var context_comment = texture_number.getContext();*/
+        var can_temp=document.createElement("canvas");
+        can_temp.width=132//264;
+        can_temp.height=24;
+        var context=can_temp.getContext("2d");
+        context.fillStyle="rgba(0,0,0,0)";//完全透明？
+        context.fillRect(0,0,can_temp.width,can_temp.height);
+        context.fillStyle = "#ffffff";
+        context.font = "bold 24px monospace";
+        for(var i=0;i<10;i++)
+        {
+            context.fillText(i,i*12,24);
+        }
+        context.fillText("-",120,24);
+        //context.fillText("0123456789-",0,24);//默认为半角，为了在作为精灵使用时整齐的分块
+        var png=can_temp.toDataURL("image/png");
+
+        var segs_x=100;//横向格子数量
+        var segs_y=100;//纵向格子数量
+        var spriteManager = new BABYLON.SpriteManager("spriteManager", png, (segs_x+1)*(segs_y+1)*7, 24, scene);
+        spriteManager.renderingGroupId=2;
+        spriteManager.cellWidth=12;
+        spriteManager.cellHeight=24;
+        var size_per=1;//每个格子的尺寸
+        //这里有两个思路，一是建立一个网格，然后使用纹理坐标选择不同的纹理，如果使用一张纹理图，就要保证所有地形纹理都在这一张图内，并处理不同高低的纹理坐标选取
+        //二是为每种纹理建立一个网格类，使用网格类的实例拼凑出地面，如何处理过高的落差《-自动延展？能否处理pick？性能问题？
+
+        obj_landtype={};
+        var box_grass=new BABYLON.MeshBuilder.CreateBox("box_grass",{size:size_per},scene);
+        var box_tree=new BABYLON.MeshBuilder.CreateBox("box_tree",{size:size_per},scene);
+        var box_stone=new BABYLON.MeshBuilder.CreateBox("box_stone",{size:size_per},scene);
+        var box_shallowwater=new BABYLON.MeshBuilder.CreateBox("box_shallowwater",{size:size_per},scene);
+        var box_deepwater=new BABYLON.MeshBuilder.CreateBox("box_deepwater",{size:size_per},scene);
+        box_grass.renderingGroupId = 2;
+        box_tree.renderingGroupId = 2;
+        box_stone.renderingGroupId = 2;
+        box_shallowwater.renderingGroupId = 2;
+        box_deepwater.renderingGroupId = 2;
+        box_grass.position.y=-100*size_per;
+        box_tree.position.y=-101*size_per;
+        box_stone.position.y=-102*size_per;
+        box_shallowwater.position.y=-103*size_per;
+        box_deepwater.position.y=-104*size_per;
+        obj_landtype.box_grass=box_grass;
+        obj_landtype.box_tree=box_tree;
+        obj_landtype.box_stone=box_stone;
+        obj_landtype.box_shallowwater=box_shallowwater;
+        obj_landtype.box_deepwater=box_deepwater;
+        OptimizeMesh(box_grass);
+        OptimizeMesh(box_tree);
+        OptimizeMesh(box_stone);
+        OptimizeMesh(box_shallowwater);
+        OptimizeMesh(box_deepwater);
+
+        var mat_grass = new BABYLON.StandardMaterial("mat_grass", scene);//1
+        mat_grass.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/grass.jpg", scene);
+        mat_grass.freeze();
+        box_grass.material=mat_grass;
+        var mat_tree = new BABYLON.StandardMaterial("mat_tree", scene);//1
+        mat_tree.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/yulin.png", scene);
+        mat_tree.freeze();
+        box_tree.material=mat_tree;
+        var mat_stone = new BABYLON.StandardMaterial("mat_stone", scene);//1
+        mat_stone.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/stone.png", scene);
+        mat_stone.freeze();
+        box_stone.material=mat_stone;
+        var mat_shallowwater = new BABYLON.StandardMaterial("mat_shallowwater", scene);//1
+        mat_shallowwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/lake.png", scene);
+        mat_shallowwater.freeze();
+        box_shallowwater.material=mat_shallowwater;
+        var mat_deepwater = new BABYLON.StandardMaterial("mat_deepwater", scene);//1
+        mat_deepwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/sea.png", scene);
+        mat_deepwater.freeze();
+        box_deepwater.material=mat_deepwater;
+
+        var mesh0=new BABYLON.Mesh("mesh0",scene);
+        //以高度0为海平面，以xy00为大地原点
+        //形成初始地块
+        for(var i=0;i<=segs_x;i++)
+        {
+            arr_instance[i]=[];
+            for(var j=0;j<segs_y;j++)
+            {
+                arr_instance[i][j]=[];
+                var instance=obj_landtype.box_grass.createInstance("ground_"+i+"_"+j);
+                instance.mydata={};
+                instance.position=new BABYLON.Vector3((i-(segs_x/2))*size_per,0,(j-(segs_y/2))*size_per);//都是从负向正堆叠？
+                arr_instance[i][j].push(instance);//把每个实例用全局对象保存起来
+                //为每个地块添加一个标签
+                //添加gui标签<-gui标签不会随着拉远变小！！！！
+                //var text1 = new BABYLON.GUI.TextBlock();
+                //text1.text = i+"_"+j;
+                //text1.linkWithMesh();
+                //fsUI.addControl(text1);
+                //用高级动态纹理？
+                //用精灵，估计地图最大为1000*1000
+                var number1 = new BABYLON.Sprite("number1", spriteManager);
+                var number2 = new BABYLON.Sprite("number2", spriteManager);
+                var number3 = new BABYLON.Sprite("number3", spriteManager);
+                var number4 = new BABYLON.Sprite("number4", spriteManager);
+                var number5 = new BABYLON.Sprite("number5", spriteManager);
+                var number6 = new BABYLON.Sprite("number6", spriteManager);
+                var number7 = new BABYLON.Sprite("number7", spriteManager);
+
+                stri=(i+1000+"").substr(1);
+                strj=(j+1000+"").substr(1);
+
+                number1.cellIndex=parseInt(stri[0]);
+                number2.cellIndex=parseInt(stri[1]);
+                number3.cellIndex=parseInt(stri[2]);
+                number4.cellIndex=10;
+                number5.cellIndex=parseInt(strj[0]);
+                number6.cellIndex=parseInt(strj[1]);
+                number7.cellIndex=parseInt(strj[2]);
+                //定位精灵
+                number1.size=0.2*size_per;
+                number1.position=instance.position.clone();
+                number1.position.y=2*size_per;
+                number1.position.x+=0.3*size_per;
+                number1.position.z+=0.3*size_per;
+
+                number2.size=0.2*size_per;
+                number2.position=instance.position.clone();
+                number2.position.y=1.8*size_per;
+                number2.position.x+=0.3*size_per;
+                number2.position.z+=0.3*size_per;
+                number3.size=0.2*size_per;
+                number3.position=instance.position.clone();
+                number3.position.y=1.6*size_per;
+                number3.position.x+=0.3*size_per;
+                number3.position.z+=0.3*size_per;
+                number4.size=0.2*size_per;
+                number4.position=instance.position.clone();
+                number4.position.y=1.4*size_per;
+                number4.position.x+=0.3*size_per;
+                number4.position.z+=0.3*size_per;
+                number5.size=0.2*size_per;
+                number5.position=instance.position.clone();
+                number5.position.y=1.2*size_per;
+                number5.position.x+=0.3*size_per;
+                number5.position.z+=0.3*size_per;
+                number6.size=0.2*size_per;
+                number6.position=instance.position.clone();
+                number6.position.y=1.0*size_per;
+                number6.position.x+=0.3*size_per;
+                number6.position.z+=0.3*size_per;
+                number7.size=0.2*size_per;
+                number7.position=instance.position.clone();
+                number7.position.y=0.8*size_per;
+                number7.position.x+=0.3*size_per;
+                number7.position.z+=0.3*size_per;
+
+                /*number1.renderingGroupId = 3;
+                number2.renderingGroupId = 3;
+                number3.renderingGroupId = 3;
+                number4.renderingGroupId = 3;
+                number5.renderingGroupId = 3;
+                number6.renderingGroupId = 3;
+                number7.renderingGroupId = 3;*/
+                //这种做法会大幅降低帧率，同时多个精灵难以保持在一个面上！
+            }
+        }
+        MyBeforeRender();
+    }
+    function MyBeforeRender()
+    {
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            scene.render();
+        });
+    }
+
+</script>
+</html>

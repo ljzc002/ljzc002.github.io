@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试由较为平坦的地面网格与地形附着物组合生成的“地形网格组”，以及降雨法剔除不显示的三角形-测试条带地面极其顶点变换</title>
+    <!--如何处理不同的地面纹理？使用不同网格的拼接？-->
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.40v.all.max.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;//决定在这里结合使用原生OpenGL和Babylon.js;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var serverip,httpport,wsport,userid,UrlHead,WsHead,token;
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        if(engine._webGLVersion==2.0)//输出ES版本
+        {
+            console.log("ES3.0");
+        }
+        else{
+            console.log("ES2.0");
+        }
+
+        webGLStart();
+    }
+    function OptimizeMesh(mesh)
+    {
+        mesh.convertToFlatShadedMesh();//使用顶点颜色计算代替片元颜色计算
+        mesh.freezeWorldMatrix();//冻结世界坐标系
+        // mesh.material.needDepthPrePass = true;//启用深度预通过
+        //mesh.convertToUnIndexedMesh();//使用三角形绘制代替索引绘制
+    }
+    //var arr_instance=[];
+    var fsUI=BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+    var segs_x=100;//横向格子数量
+    var segs_z=100;//纵向格子数量
+    //var spriteManager = new BABYLON.SpriteManager("spriteManager", png, (segs_x+1)*(segs_z+1)*7, 24, scene);
+    //spriteManager.renderingGroupId=2;
+    var size_per=1;//每个格子的尺寸
+
+    var obj_plane={};//用五个动态纹理牌子显示，其所在位置的坐标
+    function webGLStart()
+    {
+        //光照
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+
+        camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        camera0.minZ=0.1;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.freeze();
+        var mat_blue=new BABYLON.StandardMaterial("mat_blue", scene);
+        mat_blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        mat_blue.freeze();
+        //三个参照物
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.renderingGroupId=2;
+
+        //天空盒
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+        skyboxMaterial.disableLighting = true;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+        skybox.isPickable=false;
+
+        mat_grass = new BABYLON.StandardMaterial("mat_grass", scene);//1
+        mat_grass.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/grass.jpg", scene);
+        mat_grass.diffuseTexture.uScale = segs_x+1;//纹理重复效果
+        mat_grass.diffuseTexture.vScale = segs_z+1;
+        mat_grass.freeze();
+        mat_tree = new BABYLON.StandardMaterial("mat_tree", scene);//1
+        mat_tree.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/yulin.png", scene);
+        mat_tree.freeze();
+        mat_stone = new BABYLON.StandardMaterial("mat_stone", scene);//1
+        mat_stone.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/stone.png", scene);
+        mat_stone.freeze();
+        mat_shallowwater = new BABYLON.StandardMaterial("mat_shallowwater", scene);//1
+        mat_shallowwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/lake.png", scene);
+        mat_shallowwater.freeze();
+        mat_deepwater = new BABYLON.StandardMaterial("mat_deepwater", scene);//1
+        mat_deepwater.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/sea.png", scene);
+        mat_deepwater.freeze();
+        mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+        mat_frame.wireframe = true;
+
+        var mesh_sphereup=new BABYLON.MeshBuilder.CreateSphere("mesh_sphereup",{diameter:0.5},scene);
+        mesh_sphereup.material=mat_blue;
+        mesh_sphereup.renderingGroupId=2;
+        mesh_sphereup.direction=new BABYLON.Vector3(0,-1,2);
+        mesh_sphereup.isPickable=false;
+        mesh_sphereup.rayHelper = null;
+        obj_plane.mesh_sphereup=mesh_sphereup;
+        var mesh_sphereright=new BABYLON.MeshBuilder.CreateSphere("mesh_sphereright",{diameter:0.5},scene);
+        mesh_sphereright.material=mat_blue;
+        mesh_sphereright.renderingGroupId=2;
+        mesh_sphereright.direction=new BABYLON.Vector3(2,-1,0);
+        mesh_sphereright.isPickable=false;
+        mesh_sphereright.rayHelper = null;
+        obj_plane.mesh_sphereright=mesh_sphereright;
+        var mesh_spheredown=new BABYLON.MeshBuilder.CreateSphere("mesh_spheredown",{diameter:0.5},scene);
+        mesh_spheredown.material=mat_blue;
+        mesh_spheredown.renderingGroupId=2;
+        mesh_spheredown.direction=new BABYLON.Vector3(0,-1,-2);
+        mesh_spheredown.isPickable=false;
+        mesh_spheredown.rayHelper = null;
+        obj_plane.mesh_spheredown=mesh_spheredown;
+        var mesh_sphereleft=new BABYLON.MeshBuilder.CreateSphere("mesh_sphereleft",{diameter:0.5},scene);
+        mesh_sphereleft.material=mat_blue;
+        mesh_sphereleft.renderingGroupId=2;
+        mesh_sphereleft.direction=new BABYLON.Vector3(-2,-1,0);
+        mesh_sphereleft.isPickable=false;
+        mesh_sphereleft.rayHelper = null;
+        obj_plane.mesh_sphereleft=mesh_sphereleft;
+        var mesh_spheremiddle=new BABYLON.MeshBuilder.CreateSphere("mesh_spheremiddle",{diameter:0.5},scene);
+        mesh_spheremiddle.material=mat_blue;
+        mesh_spheremiddle.renderingGroupId=2;
+        mesh_spheremiddle.direction=new BABYLON.Vector3(0,-1,0);
+        mesh_spheremiddle.isPickable=false;
+        mesh_spheremiddle.rayHelper = null;
+        obj_plane.mesh_spheremiddle=mesh_spheremiddle;
+
+        for(var key in obj_plane)
+        {
+            var label = new BABYLON.GUI.Rectangle(key);
+            label.background = "black";
+            label.height = "30px";
+            label.alpha = 0.5;
+            label.width = "240px";
+            label.cornerRadius = 20;
+            label.thickness = 1;
+            label.linkOffsetY = 30;//位置偏移量？？
+            fsUI.addControl(label);
+            label.linkWithMesh(obj_plane[key]);
+            var text1 = new BABYLON.GUI.TextBlock();
+            text1.text = "";
+            text1.color = "white";
+            label.addControl(text1);
+            label.isVisible=true;
+            //label.layerMask=2;
+            label.text=text1;
+            obj_plane[key].lab=label;
+        }
+
+        var mesh0=new BABYLON.Mesh("mesh0",scene);
+        //以高度0为海平面，以xy00为大地原点
+        webGLStart2();
+        MyBeforeRender();
+    }
+    var obj_ground={}
+    function webGLStart2() {
+        //用地面网格制作较为平缓的大势地形，用额外的网格建立地形附加物，之后用额外的方法剔除不可见三角形
+        //用这种方法只能建立正方形地形网格！！-》还是改用条带网格吧，操作路径也比操作顶点数组更简单
+        /*obj_ground.baseGround=BABYLON.MeshBuilder.CreateGround("baseGround"
+            , {width: segs_x*size_per, height: segs_x*size_per, subdivisions: segs_x,updatable:true}, scene);*/
+        var arr_path=[];
+        for(var i=0;i<=segs_x+1;i++)
+        {
+            var posx=(i-((segs_x+1)/2))*size_per;
+            var path=[];
+            for(var j=0;j<=segs_z+1;j++)
+            {
+                var posz=(j-((segs_z+1)/2))*size_per;
+                path.push(new BABYLON.Vector3(posx,0,posz));
+            }
+            arr_path.push(path);
+        }
+        ground_base=BABYLON.MeshBuilder.CreateRibbon("ground_base"
+            ,{pathArray:arr_path,updatable:true,closePath:false,closeArray:false,sideOrientation:BABYLON.Mesh.DOUBLESIDE});
+        ground_base.sideOrientation=BABYLON.Mesh.DOUBLESIDE;
+        ground_base.material=mat_grass;
+        ground_base.renderingGroupId=2;
+        ground_base.metadata={};
+        ground_base.metadata.arr_path=arr_path;
+        obj_ground.ground_base=ground_base;
+    }
+    function WaveArea(func,h) {//使一个区域上升或下降：判断顶点是否属于区域的方法：高度变化量
+        //这就需要遍历整个顶点数组
+    }
+    function WaveArea2(arr,h)//遍历区域
+    {
+        var len=arr.length;
+        for(var i=0;i<len;i++)
+        {
+            var index=arr[i];
+
+        }
+    }
+    //TransVertex(obj_ground.ground_base,[[0,0],[0,1],[1,0]],BABYLON.Matrix.Translation(0,2,0))
+    function TransVertex(mesh,arr,matrix)
+    {
+        var len=arr.length;
+        var arr_path=mesh.metadata.arr_path;
+        for(var i=0;i<len;i++)//移动路径数组里的每个顶点
+        {
+            arr_path[arr[i][0]][arr[i][1]]=BABYLON.Vector3.TransformCoordinates(arr_path[arr[i][0]][arr[i][1]],matrix);
+        }
+        mesh=BABYLON.MeshBuilder.CreateRibbon(mesh.name
+            ,{pathArray:arr_path,updatable:true,instance:mesh,closePath:false,closeArray:false,sideOrientation:BABYLON.Mesh.DOUBLESIDE});
+
+    }
+
+    function predicate(mesh){//过滤只允许点击地面系网格，
+        if (mesh.name.substr(0,6)=="ground"){
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+                /*for(key in obj_plane)
+                {
+                    var mesh=obj_plane[key];
+                    if(mesh.rayHelper&&mesh.rayHelper._renderLine)
+                    {//rayHelper的渲染组ID究竟应该如何调整？
+                        mesh.rayHelper._renderLine.renderingGroupId=2;
+                        mesh.rayHelper.show(scene);
+                    }
+
+                }*/
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+                //更新5个标记球的位置
+                var origin=camera0.position;
+                var length=200;
+                for(key in obj_plane)
+                {
+                    var mesh=obj_plane[key];
+                    var direction=mesh.direction;
+                    var ray = new BABYLON.Ray(origin, direction, length);
+                    /*if(mesh.rayHelper)
+                    {
+                        mesh.rayHelper.dispose();
+                    }*/
+                    //mesh.rayHelper = new BABYLON.RayHelper(ray);//这时还没有_renderLine属性
+                    //mesh.rayHelper._renderLine.renderingGroupId=2;
+                    //mesh.rayHelper.show(scene);//连续使用两次show会崩溃？
+                    //难道一帧里只能用一个pick？
+                    //console.log(key);
+                    var hit = scene.pickWithRay(ray,predicate);
+                    if (hit.pickedMesh){
+                        //console.log(key+"2");
+                        mesh.isVisible=true;
+                        var posp=hit.pickedPoint;
+                        mesh.position=posp.clone();
+                        mesh.lab.isVisible=true;
+                        //显示命中点的坐标以及命中点所在方块的左下角的两层索引
+                        var index_x=Math.floor((posp.x+(segs_x+1)*size_per/2)/size_per);
+                        var index_z=Math.floor((posp.z+(segs_z+1)*size_per/2)/size_per);
+                        mesh.lab.text.text="("+posp.x.toFixed(2)+","+posp.y.toFixed(2)+","+posp.z.toFixed(2)+")*"
+                            +index_x+"-"+index_z;
+                    }
+                    else
+                    {
+                        mesh.lab.isVisible=false;
+                        mesh.isVisible=false;
+                    }
+                }
+
+
+
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //console.log("render");
+            scene.render();
+        });
+    }
+
+</script>
+</html>
