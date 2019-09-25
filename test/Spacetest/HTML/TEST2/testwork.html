@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试work线程</title>
+</head>
+<body>
+    <input id="num">
+    <button onclick="calculate()">计算</button>
+</body>
+<script>
+    var worker=new Worker("SumCalculate.js");
+    worker.onmessage=function(event)
+    {
+        alert(event.data);
+    }
+    function calculate()
+    {
+        var num=parseInt(document.getElementById("num").value,10);
+        worker.postMessage(num)
+    }
+</script>
+</html>

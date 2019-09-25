@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>带有worker和physic的正式测试</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.min.js"></script><!--这里包含了babylon格式的模型导入,但不包含gltf等其他格式，包含了后期处理-->
+    <script src="../../JS/LIB/babylon.gui.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.loaders.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.materials.min.js"></script>
+    <script src="../../JS/LIB/earcut.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.proceduralTextures.min.js"></script>
+    <script src="../../JS/LIB/oimo.min.js"></script>
+    <script src="../../JS/LIB/ammo.js"></script>
+    <script src="../../JS/LIB/cannon.js"></script>
+    <!--script src="../../JS/LIB/dat.gui.min.js"></script-->
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        MyGame=new Game(0,"first_pick","","","","");
+        initWs(webGLStart,"no");
+        //webGLStart();
+    }
+    function webGLStart()
+    {//是否有必要严格控制初始化流程的同步性？
+        initScene();//初始化基础场景，包括光照、相机对象
+        initArena();//初始化地形，要包括出生点、可放置区域（6*9）
+        initEvent();//初始化事件
+        initUI();//初始化场景UI
+        initObj();//初始化一开始存在的可交互的物体
+        initLoop();//初始化渲染循环
+        initAI();//初始化AI计算任务
+        MyGame.init_state=1;
+        engine.hideLoadingUI();
+    }
+</script>
+<script src="../../JS/PAGE/SpaceTest/WsHandler.js"></script>
+<script src="../../JS/PAGE/SpaceTest/SpaceTest.js"></script>
+<script src="../../JS/MYLIB/Game.js"></script>
+<script src="../../JS/PAGE/SpaceTest/Control.js"></script>
+<script src="../../JS/PAGE/SpaceTest/FullUI.js"></script>
+<script src="../../JS/PAGE/SpaceTest/Campass.js"></script>
+<script src="../../JS/PAGE/CHARACTER/Rocket2.js"></script>
+</html>

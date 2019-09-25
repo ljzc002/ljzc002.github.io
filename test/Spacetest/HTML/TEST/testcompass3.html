@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分别绘制</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.min.js"></script><!--这里包含了babylon格式的模型导入,但不包含gltf等其他格式，包含了后期处理-->
+    <script src="../../JS/LIB/babylon.gui.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.loaders.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.materials.min.js"></script>
+    <script src="../../JS/LIB/earcut.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.proceduralTextures.min.js"></script>
+    <script src="../../JS/LIB/oimo.min.js"></script>
+    <script src="../../JS/LIB/ammo.js"></script>
+    <script src="../../JS/LIB/cannon.js"></script>
+    <!--script src="../../JS/LIB/dat.gui.min.js"></script-->
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        createScene();
+        //scene.debugLayer.show();
+        window.addEventListener("resize", function () {
+            if (engine) {
+                engine.resize();
+            }
+        },false);
+        MyBeforeRender();
+    }
+
+    var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+    mat_frame.wireframe = true;
+    mat_frame.freeze();
+    var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+    mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+    mat_green.useLogarithmicDepth = true;
+    mat_green.freeze();
+
+    var createScene = function () {
+        camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);
+        camera0.minZ=0.001;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        node_z=new BABYLON.TransformNode("node_z",scene);
+        node_z.position.z=32;
+        node_z.parent=camera0;
+        node_y=new BABYLON.TransformNode("node_y",scene);
+        node_y.position.z=32;
+        node_y.position.y=13;
+        node_y.parent=camera0;
+        node_x=new BABYLON.TransformNode("node_x",scene);
+        node_x.position.z=32;
+        node_x.position.x=28;
+        node_x.parent=camera0;
+
+        var light1 = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 50, 100), scene);
+        light1.diffuseColor = new BABYLON.Color3(0, 10, 10);
+
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1500.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/nebula", scene);
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.renderingGroupId = 1;
+        skybox.isPickable=false;
+        skybox.infiniteDistance = true;
+
+        //三个参照物
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.renderingGroupId=2;
+
+        //数字纹理图
+        var can_temp=document.createElement("canvas");
+        can_temp.width=132//264;
+        can_temp.height=24;
+        var context=can_temp.getContext("2d");
+        context.fillStyle="rgba(0,0,0,0)";//完全透明？
+        context.fillRect(0,0,can_temp.width,can_temp.height);
+        context.fillStyle = "#ffffff";
+        context.font = "bold 24px monospace";
+        for(var i=0;i<10;i++)
+        {
+            context.fillText(i,i*12,24);
+        }
+        context.fillText("-",120,24);
+        var png=can_temp.toDataURL("image/png");
+        spriteManager = new BABYLON.SpriteManager("spriteManager", png, 400, 24, scene);
+        spriteManager.renderingGroupId=2;
+        spriteManager.cellWidth=12;
+        spriteManager.cellHeight=24;
+
+
+        //绘制罗盘
+        var lines_z=MakeRingZ(12,36,0,0.5,node_z);
+        compassz = new BABYLON.MeshBuilder.CreateLineSystem("compassz",{lines:lines_z,updatable:false},scene);
+        compassz.renderingGroupId=2;
+        compassz.color=new BABYLON.Color3(0, 1, 0);
+        compassz.useLogarithmicDepth = true;
+        compassz.parent=node_z;
+
+        var lines_y=MakeRingY(28,36,0,1,node_y);
+        compassy = new BABYLON.MeshBuilder.CreateLineSystem("compassy",{lines:lines_y,updatable:false},scene);
+        compassy.renderingGroupId=2;
+        compassy.color=new BABYLON.Color3(0, 1, 0);
+        compassy.useLogarithmicDepth = true;
+        //compassy.position=node_y.position.clone();
+        compassy.parent=node_y;
+
+        var lines_x=MakeRingX(12,36,0,1,node_x);
+        compassx = new BABYLON.MeshBuilder.CreateLineSystem("compassx",{lines:lines_x,updatable:false},scene);
+        compassx.renderingGroupId=2;
+        compassx.color=new BABYLON.Color3(0, 1, 0);
+        compassx.useLogarithmicDepth = true;
+        //compassx.position=node_x.position.clone();
+        compassx.parent=node_x;
+    }
+
+    //大圆环半径，总分段数，x轴坐标，从顶点平行于x轴的线长（可能为负或0）
+    function MakeRingX(radius,sumpoint,posx,sizec,parent)
+    {
+        var lines_x=[];
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var x=posx||0;
+            var rad=radp*i;
+            var y=radius*Math.sin(rad);
+            var z=radius*Math.cos(rad);
+            var pos=new BABYLON.Vector3(x,y,z)
+            arr_point.push(pos);
+            var pos2=pos.clone();
+            pos2.x-=sizec;
+            lines_x.push([pos,pos2]);
+            MakeNumberSprites(pos2,0,Math.floor((rad/Math.PI)*180),"X"+rad);
+            //node.parent=parent;
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        lines_x.push(arr_point);
+        return lines_x;
+    }
+    function MakeRingY(radius,sumpoint,posy,sizec,parent)
+    {
+        var lines_y=[];
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var y=posy||0;
+            var rad=radp*i;
+            var z=radius*Math.sin(rad);
+            var x=radius*Math.cos(rad);
+            var pos=new BABYLON.Vector3(x,y,z)
+            arr_point.push(pos);
+            var pos2=pos.clone();
+            pos2.y-=sizec;
+            lines_y.push([pos,pos2]);
+            MakeNumberSprites(pos2,0,Math.floor((rad/Math.PI)*180),"Y"+rad);
+            //node.parent=parent;
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        lines_y.push(arr_point);
+        return lines_y;
+    }
+    function MakeRingZ(radius,sumpoint,posz,sizec,parent)
+    {
+        var lines_z=[];
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var z=posz||0;
+            var rad=radp*i;
+            var x=radius*Math.sin(rad);
+            var y=radius*Math.cos(rad);
+            var pos=new BABYLON.Vector3(x,y,z);
+            arr_point.push(pos);
+            var pos2=pos.clone();
+            pos2.normalizeFromLength(radius/(radius-sizec));//里面的数字表示坐标值除以几
+            lines_z.push([pos,pos2]);
+            MakeNumberSprites(pos2,rad,Math.floor((rad/Math.PI)*180),"Z"+rad);
+            //node.parent=parent;
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        lines_z.push(arr_point);
+        return lines_z;
+    }
+    function MakeNumberSprites(pos,radz,num,name)
+    {
+        //var node=new BABYLON.TransformNode("node_"+name,scene);
+        //node.position=pos;
+        //node.rotation.z=radz;
+        var str_num=num+"";
+        var len=str_num.length;
+        for(var i=0;i<len;i++)
+        {
+            var sprite_num=new BABYLON.Sprite("sprite_"+name+"_"+i, spriteManager);
+            sprite_num.cellIndex=parseInt(str_num[i]);
+            sprite_num.angle=radz;
+            sprite_num.position=pos;//Sprite没有parent属性！！！！这一点也导致它无法自动跟踪父元素！！
+            sprite_num.position.x+=(-(len-1)/2+i)*1;
+            //sprite_num.parent=node;
+        }
+        //return node;
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+                compassz.rotation.z=-camera0.rotation.z;
+                compassy.rotation.y=-camera0.rotation.y;
+                compassx.rotation.x=-camera0.rotation.x;
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //lastframe=new Date().getTime();
+            scene.render();
+        });
+    }
+</script>
+</html>

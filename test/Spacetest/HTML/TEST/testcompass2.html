@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>前置绘制</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.min.js"></script><!--这里包含了babylon格式的模型导入,但不包含gltf等其他格式，包含了后期处理-->
+    <script src="../../JS/LIB/babylon.gui.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.loaders.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.materials.min.js"></script>
+    <script src="../../JS/LIB/earcut.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.proceduralTextures.min.js"></script>
+    <script src="../../JS/LIB/oimo.min.js"></script>
+    <script src="../../JS/LIB/ammo.js"></script>
+    <script src="../../JS/LIB/cannon.js"></script>
+    <!--script src="../../JS/LIB/dat.gui.min.js"></script-->
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        createScene();
+        //scene.debugLayer.show();
+        window.addEventListener("resize", function () {
+            if (engine) {
+                engine.resize();
+            }
+        },false);
+        MyBeforeRender();
+    }
+
+    var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+    mat_frame.wireframe = true;
+    mat_frame.freeze();
+    var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+    mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+    mat_green.useLogarithmicDepth = true;
+    mat_green.freeze();
+
+    var createScene = function () {
+        camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);
+        camera0.minZ=0.001;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        mesh_foucs=new BABYLON.TransformNode("mesh_foucs",scene);
+        mesh_foucs.position.z=30;
+        mesh_foucs.parent=camera0;
+
+        var light1 = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 50, 100), scene);
+        light1.diffuseColor = new BABYLON.Color3(0, 10, 10);
+
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1500.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/nebula", scene);
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.renderingGroupId = 1;
+        skybox.isPickable=false;
+        skybox.infiniteDistance = true;
+
+        //绘制罗盘
+        var lines=[];
+        //var rat=Math.pow(3,0.5);
+        var rat=1;
+        var pathx=MakeRingX(30*rat,24,30);
+        lines.push(pathx);
+        var len=pathx.length;
+        for(var i=0;i<len-1;i++)
+        {
+            var pos=pathx[i];
+            var pos2=pos.clone();
+            pos2.x-=2;
+            lines.push([pos,pos2]);
+        }
+        var pathy=MakeRingY(30*rat,24,30);
+        lines.push(pathy);
+        var len=pathy.length;
+        for(var i=0;i<len-1;i++)
+        {
+            var pos=pathy[i];
+            var pos2=pos.clone();
+            pos2.y-=2;
+            lines.push([pos,pos2]);
+        }
+        var pathz=MakeRingZ(30*rat,24,30);
+        lines.push(pathz);
+        var len=pathz.length;
+        for(var i=0;i<len-1;i++)
+        {
+            var pos=pathz[i];
+            var pos2=pos.clone();
+            pos2.z-=2;
+            lines.push([pos,pos2]);
+        }
+
+        var pathz2=MakeRingZ(15*rat,24,15);
+        lines.push(pathz2);
+        var len=pathz2.length;
+        for(var i=0;i<len-1;i++)
+        {
+            var pos=pathz2[i];
+            var pos2=pos.clone();
+            pos2.z-=2;
+            lines.push([pos,pos2]);
+        }
+
+        var line_frame = new BABYLON.MeshBuilder.CreateLineSystem("line_frame",{lines:lines,updatable:false},scene);
+        //line_frame.position=mesh_foucs.position.clone();
+        //line_frame.parent=mesh_foucs;
+        line_frame.renderingGroupId=2;
+        line_frame.color=new BABYLON.Color3(0, 1, 0);
+        line_frame.useLogarithmicDepth = true;
+    }
+
+    //大圆环半径，总分段数，x轴坐标，从顶点平行于x轴的线长（可能为负或0）
+    function MakeRingX(radius,sumpoint,posx,sizec)
+    {
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var x=posx||0;
+            var rad=radp*i;
+            //var y=sswr(radius*Math.sin(rad),null,5);//在这里需要降低一些精确度？否则Babylon.js在计算顶点数据时可能和这里不一致？
+            //var z=sswr(radius*Math.cos(rad),null,5);
+            var y=radius*Math.sin(rad);
+            var z=radius*Math.cos(rad);
+            arr_point.push(new BABYLON.Vector3(x,y,z));
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        return arr_point;
+    }
+    function MakeRingY(radius,sumpoint,posy)
+    {
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var y=posy||0;
+            var rad=radp*i;
+            //var y=sswr(radius*Math.sin(rad),null,5);//在这里需要降低一些精确度？否则Babylon.js在计算顶点数据时可能和这里不一致？
+            //var z=sswr(radius*Math.cos(rad),null,5);
+            var z=radius*Math.sin(rad);
+            var x=radius*Math.cos(rad);
+            arr_point.push(new BABYLON.Vector3(x,y,z));
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        return arr_point;
+    }
+    function MakeRingZ(radius,sumpoint,posz)
+    {
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var z=posz||0;
+            var rad=radp*i;
+            //var y=sswr(radius*Math.sin(rad),null,5);//在这里需要降低一些精确度？否则Babylon.js在计算顶点数据时可能和这里不一致？
+            //var z=sswr(radius*Math.cos(rad),null,5);
+            var x=radius*Math.sin(rad);
+            var y=radius*Math.cos(rad);
+            arr_point.push(new BABYLON.Vector3(x,y,z));
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        return arr_point;
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //lastframe=new Date().getTime();
+            scene.render();
+        });
+    }
+</script>
+</html>

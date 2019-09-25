@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>寻找合适的舰船尺寸、距离和速度</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.min.js"></script><!--这里包含了babylon格式的模型导入,但不包含gltf等其他格式，包含了后期处理-->
+    <script src="../../JS/LIB/babylon.gui.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.loaders.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.materials.min.js"></script>
+    <script src="../../JS/LIB/earcut.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.proceduralTextures.min.js"></script>
+    <script src="../../JS/LIB/oimo.min.js"></script>
+    <script src="../../JS/LIB/ammo.js"></script>
+    <script src="../../JS/LIB/cannon.js"></script>
+    <script src="../../JS/LIB/dat.gui.min.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        createScene();
+        //scene.debugLayer.show();
+        MyBeforeRender();
+    }
+    var createScene = function () {
+        var camera0 = new BABYLON.ArcRotateCamera("camera0", 0, 0, -30, BABYLON.Vector3.Zero(), scene);
+        camera0.minZ=0.1;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        //get spaceship
+        var spaceDek;
+        //david.blob.core.windows.net/babylonjs/banner/SpaceDek/
+        /*BABYLON.SceneLoader.ImportMesh("Vaisseau", "scenes/", "SpaceDek.babylon", scene, function (newMeshes, particleSystems) {
+            spaceDek = newMeshes[0];
+            spaceDek.position = new BABYLON.Vector3(6, 0, 0);
+            spaceDek.scaling = new BABYLON.Vector3(0.2, 0.2, 0.2);
+            spaceDek.rotation.y = Math.PI;
+            spaceDek.rotation.z = -Math.PI / 7 * 3;
+            spaceDek.rotation.x = Math.PI;
+
+            scene.stopAnimation(spaceDek);
+            for (var i = 0; i < particleSystems.length; i++) {
+                if (particleSystems[i].emitter.name == "Part006" || particleSystems[i].emitter.name == "Part007") {
+                    particleSystems[i].stop();
+                }
+            }
+        });*/
+
+        var hemisphericLight = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 0.5, 0), scene);
+
+        var spaceScale = 10.0;
+        var space = BABYLON.Mesh.CreateCylinder("space", 10 * spaceScale, 0, 6 * spaceScale, 20, 20, scene);//这是一个星空圆锥体！！！！
+        //改用球形天空盒？
+        var starfieldPT = new BABYLON.StarfieldProceduralTexture("starfieldPT", 512, scene);
+        var starfieldMaterial = new BABYLON.StandardMaterial("starfield", scene);
+        starfieldMaterial.diffuseTexture = starfieldPT;
+        starfieldMaterial.diffuseTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        starfieldMaterial.backFaceCulling = false;
+        starfieldPT.beta = 0.1;
+
+        space.material = starfieldMaterial;
+
+        scene.registerBeforeRender(function () {
+            //starfieldPT.time += scene.getAnimationRatio() * 0.8;
+        });
+
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //lastframe=new Date().getTime();
+            scene.render();
+        });
+    }
+</script>
+</html>
