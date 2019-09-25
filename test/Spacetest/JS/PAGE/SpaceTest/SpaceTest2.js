@@ -91,8 +91,9 @@ function initObj()
     ship.renderingGroupId=2;
     //ship.v={x:0,y:0,z:0}
     ship.physicsImpostor = new BABYLON.PhysicsImpostor(ship, BABYLON.PhysicsImpostor.BoxImpostor//SphereImpostor//
-        , { mass: 1, restitution: 0.0005 ,friction:1}, scene);//Oimo里悬空的物体不受摩擦力影响，Ammo和Cannon里悬空的物体也受阻力作用
+        , { mass: 1, restitution: 0.0005 ,friction:1,damping:0}, scene);//Oimo里悬空的物体不受摩擦力影响，Ammo和Cannon里悬空的物体也受阻力作用
     ship.mass=1000000000;
+    ship.physicsImpostor.damping=0;
     MyGame.player.ship=ship;
     //在罗盘里为这个ship添加一个标志
     var camera0=MyGame.Cameras.camera0;
@@ -150,9 +151,9 @@ function initLoop()
     MyGame.AddNohurry("task_logpos",1000,0,function(){
         var posz=MyGame.player.ship.position.z;
         var poszb=MyGame.player.shipb.position.z;
-        //console.log("---"+(new Date().getTime())+"\n"+posz+"_"+(posz-posz_temp1)+"_"+(posz-posz_temp1-posz_temp2)+"@"+MyGame.player.ship.physicsImpostor.getLinearVelocity()
-        //    +"\n"+poszb+"_"+(poszb-posz_temp1b)+"_"+(poszb-posz_temp1b-posz_temp2b)+"@"+MyGame.player.shipb.physicsImpostor.getLinearVelocity());
-        console.log(MyGame.player.ship.physicsImpostor.getLinearVelocity());
+        console.log("---"+(new Date().getTime())+"\n"+posz+"_"+(posz-posz_temp1)+"_"+(posz-posz_temp1-posz_temp2)+"@"+MyGame.player.ship.physicsImpostor.getLinearVelocity()
+            +"\n"+poszb+"_"+(poszb-posz_temp1b)+"_"+(poszb-posz_temp1b-posz_temp2b)+"@"+MyGame.player.shipb.physicsImpostor.getLinearVelocity());
+        //console.log(MyGame.player.ship.physicsImpostor.getLinearVelocity());
         posz_temp2=posz-posz_temp1;
         posz_temp1=posz;
         posz_temp2b=poszb-posz_temp1b;
