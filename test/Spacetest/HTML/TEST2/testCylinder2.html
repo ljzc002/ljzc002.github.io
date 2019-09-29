@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>改为直接用顶点构造视锥体</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.min.js"></script><!--这里包含了babylon格式的模型导入,但不包含gltf等其他格式，包含了后期处理-->
+    <script src="../../JS/LIB/babylon.gui.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.loaders.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.materials.min.js"></script>
+    <script src="../../JS/LIB/earcut.min.js"></script>
+    <script src="../../JS/LIB/babylonjs.proceduralTextures.min.js"></script>
+    <script src="../../JS/LIB/oimo.min.js"></script>
+    <script src="../../JS/LIB/ammo.js"></script>
+    <script src="../../JS/LIB/cannon.js"></script>
+    <script src="../../JS/LIB/dat.gui.min.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/MYLIB/CREATE_XHR.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="lz_newland@163.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);
+    engine.displayLoadingUI();
+    gl=engine._gl;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        createScene();
+        //scene.debugLayer.show();
+        MyBeforeRender();
+    }
+    var createScene = function () {
+        camera0= new BABYLON.UniversalCamera("FreeCamera", new BABYLON.Vector3(0, 0, 0), scene);//FreeCamera
+        camera0.minZ=0.001;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+
+        var light1 = new BABYLON.HemisphericLight("hemi", new BABYLON.Vector3(0, 1, 0), scene);
+        light1.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light1.specular = new BABYLON.Color3(0,0,0);
+        light1.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1500.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/nebula", scene);
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.renderingGroupId = 1;
+        skybox.isPickable=false;
+        skybox.infiniteDistance = true;
+
+        var mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+        mat_frame.wireframe = true;
+
+        var vertexData= new BABYLON.VertexData();
+        var w=50;
+        var h=60;
+        var r=0.5;
+        var positions=[0,0,0,-w,w*r,h,-w,-w*r,h,w,-w*r,h,w,w*r,h];
+        var uvs=[0.5,0.5,0,0,0,1,1,1,1,0];
+        var normals=[];
+        var indices=[0,1,2,0,2,3,0,3,4,0,4,1];
+        BABYLON.VertexData.ComputeNormals(positions, indices, normals);//计算法线
+        BABYLON.VertexData._ComputeSides(0, positions, indices, normals, uvs);
+        vertexData.indices = indices.concat();//索引
+        vertexData.positions = positions.concat();
+        vertexData.normals = normals.concat();//position改变法线也要改变！！！！
+        vertexData.uvs = uvs.concat();
+
+        var mesh=new BABYLON.Mesh(name,scene);
+        vertexData.applyToMesh(mesh, true);
+        mesh.vertexData=vertexData;
+        mesh.renderingGroupId=2;
+        mesh.material=mat_frame;
+
+        var node_z=new BABYLON.TransformNode("node_z",scene);
+        node_z.position.z=32;
+        //node_z.parent=camera0;
+        var node_y=new BABYLON.TransformNode("node_y",scene);
+        node_y.position.z=32;
+        node_y.position.y=13;
+        //node_y.parent=camera0;
+        var node_x=new BABYLON.TransformNode("node_x",scene);
+        node_x.position.z=32;
+        node_x.position.x=28;
+        //node_x.parent=camera0;
+        //绘制罗盘
+        var compassz = Campass.MakeRingZ(12,36,0,0.5,node_z);
+        var compassy = Campass.MakeRingY(28,36,0,1,node_y);
+        var compassx = Campass.MakeRingX(12,36,0,1,node_x);
+
+    }
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+                //camera0.position.x=0;
+                //camera0.position.y=0;
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //lastframe=new Date().getTime();
+            scene.render();
+        });
+    }
+    var Campass={};
+    Campass.MakeRingX=function(radius,sumpoint,posx,sizec,parent){
+        var lines_x=[];
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var x=posx||0;
+            var rad=radp*i;
+            var y=radius*Math.sin(rad);
+            var z=radius*Math.cos(rad);
+            var pos=new BABYLON.Vector3(x,y,z)
+            arr_point.push(pos);
+            var pos2=pos.clone();
+            pos2.x-=sizec;
+            lines_x.push([pos,pos2]);
+            var node=new BABYLON.Mesh("node_X"+rad,scene);
+            node.parent=parent;
+            node.position=pos2;
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        lines_x.push(arr_point);
+        var compassx = new BABYLON.MeshBuilder.CreateLineSystem("compassx",{lines:lines_x,updatable:false},scene);
+        compassx.renderingGroupId=2;
+        compassx.color=new BABYLON.Color3(0, 1, 0);
+        compassx.useLogarithmicDepth = true;
+        //compassx.position=node_x.position.clone();
+        compassx.parent=parent;
+        compassx.mainpath=arr_point;
+        compassx.sumpoint=sumpoint;
+        compassx.radius=radius;
+        return compassx;
+    }
+
+    Campass.MakeRingY=function(radius,sumpoint,posy,sizec,parent){
+        var lines_y=[];
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var y=posy||0;
+            var rad=radp*i;
+            var z=radius*Math.sin(rad);
+            var x=radius*Math.cos(rad);
+            var pos=new BABYLON.Vector3(x,y,z)
+            arr_point.push(pos);
+            var pos2=pos.clone();
+            pos2.y-=sizec;
+            lines_y.push([pos,pos2]);
+            var node=new BABYLON.Mesh("node_Y"+rad,scene);
+            node.parent=parent;
+            node.position=pos2;
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        lines_y.push(arr_point);
+        var compassy = new BABYLON.MeshBuilder.CreateLineSystem("compassy",{lines:lines_y,updatable:false},scene);
+        compassy.renderingGroupId=2;
+        compassy.color=new BABYLON.Color3(0, 1, 0);
+        compassy.useLogarithmicDepth = true;
+        //compassy.position=node_y.position.clone();
+        compassy.parent=parent;
+        compassy.mainpath=arr_point;
+        compassy.sumpoint=sumpoint;
+        compassy.radius=radius;
+        return compassy;
+    }
+
+    Campass.MakeRingZ=function(radius,sumpoint,posz,sizec,parent){
+        var lines_z=[];
+        var arr_point=[];
+        var radp=Math.PI*2/sumpoint;
+        parent.arr_node=[];
+        for(var i=0.0;i<sumpoint;i++)
+        {
+            var z=posz||0;
+            var rad=radp*i;
+            var x=radius*Math.sin(rad);
+            var y=radius*Math.cos(rad);
+            var pos=new BABYLON.Vector3(x,y,z);
+            arr_point.push(pos);
+            var pos2=pos.clone();
+            pos2.normalizeFromLength(radius/(radius-sizec));//里面的数字表示坐标值除以几
+            lines_z.push([pos,pos2]);
+            var node=new BABYLON.Mesh("node_Z"+rad,scene);
+            node.parent=parent;
+            node.position=pos2;
+            parent.arr_node.push(node);
+        }
+        arr_point.push(arr_point[0].clone());//首尾相连，不能这样相连，否则变形时会多出一个顶点！！，看来这个多出的顶点无法去掉，只能在选取时额外处理它
+        lines_z.push(arr_point);
+        var compassz = new BABYLON.MeshBuilder.CreateLineSystem("compassz",{lines:lines_z,updatable:false},scene);
+        compassz.renderingGroupId=2;
+        compassz.color=new BABYLON.Color3(0, 1, 0);
+        compassz.useLogarithmicDepth = true;
+        compassz.parent=parent;
+        compassz.mainpath=arr_point;
+        compassz.sumpoint=sumpoint;
+        compassz.radius=radius;
+        return compassz;
+    }
+</script>
+</html>
