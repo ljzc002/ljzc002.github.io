@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实用版</title>
+    <style>
+        /*通用属性*/
+        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;
+            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;
+            -ms-touch-action: none;font-size: 12px;min-width: 600px;}
+        ul {    list-style: none;    margin: 0;    padding: 0;}
+        li{    list-style: none;    margin: 0;    padding: 0;}
+        ul li {    float: left;}
+        button{    cursor: pointer;    height: 23px;}
+        a:link{    text-decoration: none;}
+        
+        #div_top span,input,button{margin-left: 20px;float: left;}
+        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}
+        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}
+
+        .div_section{position:relative}
+        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;
+        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}
+        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;left:120px}
+    </style>
+</head><body>
+    <div id="div_allbase" style="top:0px;bottom:0px;width:100%;height: 100%;position:relative;overflow-x: hidden;overflow-y: scroll
+        ">
+        <div id="div_top" style="top:0px;left:0px;width:100%;height: 30px;position:absolute;">
+            <span style="margin-left: 20px">选择文本文件</span>
+            <input type="file" id="str_local" onchange="ShowStr()" style="margin-left: 20px">
+            <span style="margin-left: 20px">粘贴文本</span>
+            <input type="text" id="str_local2"><button onclick="ShowStr2()">确定</button>
+            <button onclick="ExportHtml()">导出Html</button>
+        </div>
+        <div id="div_main" style="top:30px;left:0px;width:100%;position:absolute;"><div class="div_section" id="div_section_0"><p class="p_h1" id="p_section_0">    第一版序文</p></div><div class="div_section" id="div_section_1"><p class="p_text" id="p_section_1">    人类理性具有此种特殊运命，即在其所有知识之一门类中，为种种问题所困，此等问题以其为理性自身之本质所加之于其自身者，故不能置之不顾，但又因其超越理性所有之一切能力，故又不能解答之也。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px; display: block;">人类的智慧总会在他的知识范围内，被种种问题所烦困，这种烦困是智慧的本能为智慧生命所赋予的，所以没有办法置之不理，但又因为智慧正是由这些烦困所产生的，所以又总不能彻底的解答这些问题。
+</p></div><div class="div_section" id="div_section_2"><p class="p_text" id="p_section_2">    理性如是所陷入之烦困，非由理性本身之过误。理性初以“唯能运用原理于经验过程，同时经验充分证明理性使用此等原理之为正当者”一类原理开始。以此等原理之助，理性穷溯(盖此亦由理性本质所规定者)事物更高更远之条件，惟立即自悟以此种方法进行则问题永无尽期，理性之事业，势必无完成之日；乃迫不得已求之于“超越一切可能之经验的使用且又似不能拒斥即常人亦易于接授”之原理。但由此种进程，则人类理性实陷入黑暗及矛盾之境；斯时理性固推测此等黑暗及矛盾，必起于某种隐藏之误谬，但不能发见之。盖因其所使用之原理，超越经验之限界，已不受经验之检讨。此等论争无已之战场即名为玄学。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">于是智慧生命陷入烦困，这并不是智慧本身的错误。智慧最初由“用理论影响实践过程，同时由实践证明理论的正确性”这样的作用所产生。在这种相互作用的效果之下，智慧可以不断的更高更远的推演事物的发展（这也是智慧的本能之一），我醒悟到用这种方法进行推论则烦困的问题永无尽期（可见“解决烦困”是作者思考的动力），智慧的事业也势必没有完成之日；于是迫不得已转向寻求“超越一切可能的实践同时又接近难以辩驳且常人也容易接受和传播”的道理。但若使用这种方法寻求超脱烦困，则人类的智慧其实已经走入了黑暗和矛盾的道路；到那时，智慧虽然可以感觉到这种起于隐藏的谬误的黑暗和矛盾，但却不能准确的找到它。因为产生这智慧所使用的道理已经超越了实践的界限，已经不能用实践修正。（前面提到这种思考方式是超越一切可能的实践的）。这种无限的论战的战场就叫做“玄学”。
+---
+一方面玄学是无尽的反馈循环，我们人类的智慧正在这循环中精进；另一方面，某一时刻为大部分人所基本公认并使用的道理，总还存在隐藏的黑暗和矛盾。
+</p></div><div class="div_section" id="div_section_3"><p class="p_text" id="p_section_3">    玄学固曾有尊为一切学问之女王一时代；且若以所愿望者为即事功，则以玄学所负事业之特殊重要，固足当此荣称而无愧。但今则时代之好尚已变，以致贱视玄学；老妇被弃诚有如海枯拔(hecuba)之所自悼者：昔我为人中之最有权力者，因有无数之子婿儿女而占支配者之地位，而今则为流离颠沛之身矣。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">玄学虽然曾经被尊为一切学问中的女王；并且如果以人们对一种事物的期望作为这种事物的功绩的话，因为玄学所肩负的事业的特殊重要性，获此殊荣本来也是当之无愧。但今日时代的风尚已经改变，以至于人们轻贱玄学；这种老妇被弃的感觉正像Hecuba（希腊神话中的特洛伊王后，其子死于特洛伊战争）所自我哀悼的一样：“曾经我是众人之中最有权力的人，我依靠众多的子婿儿女而能占据支配者的高位，而今我却沦为颠沛流离之人了。”</p></div><div class="div_section" id="div_section_4"><p class="p_text" id="p_section_4">    玄学之政权，初则在独断论者统治之下而为专制的。但因其立法仍留有古代蛮野之痕迹，故其帝国渐由内乱而陷入完全无政府之状态；而游牧种族之怀疑泒，则厌弃一切安定生活，时时破坏一切社会之组织。所幸此类人数不多，不能阻抑玄学之时时重建——虽无齐一及一贯之计划。在最近时期因有一种关于人类悟性之说明学问——声望卓著之洛克所著之悟性论——似将终结一切论争，且关于去学自身所主张之地位，似亦受有最后之判决。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">玄学的权柄，最初是由独断者控制为专制服务的。但因独断者的立法仍留有古代的野蛮痕迹，他的帝国会逐渐由于内乱而陷入完全的无政府状态；而游牧民族则厌弃一切的安定生活，时时破坏一切的社会组织。索性此类破坏社会组织的人不多，不能阻抑玄学的不断重建——虽然这种重建并没有计划性和连续性。在最近时期有一种关于人类悟性的学问——声望卓著的洛克所著的悟性论——似乎将终结一切争论，而关于过去的玄学所主张的高贵地位是否能够成立，也将由它最终决定。
+---
+这里作者也许是在论述哲学在历史上的作用，这样看就显得作者浅薄，因为史上确有很多哲学家并不为中央政权服务，而国家的内乱也不只由立法导致。另一种可能是作者将思想者的思想体系比作帝国，将其思考方法分成独断者、游牧者等种类。所谓“独断”可能指前文“超越一切可能的实践同时又接近难以辩驳且常人也容易接受和传播”
+</p></div><div class="div_section" id="div_section_5"><p class="p_text" id="p_section_5">    但其结果则适相反。盖虽推寻玄学之世系，谓其出自“通常经验”之卑贱门地，以图动摇其所谓女王之僭称，但以事实言，此种世系表实为妄造，故玄学仍继续固执其自身所主张之地位。因而玄学后退至古朽之独断论，复复忍受其所已振拔之鄙视地位。今则信为一切方法俱已用尽无效，对于玄学之态度，皆成为倦怠而冷淡——在一切学问中，玄学为混乱及黑暗之母，所幸在此种事例中，实为一切学问未来革新及更生之源泉，至少亦为其序幕。盖玄学至少已终结其所妄用之勤劳，此种妄用之勤劳，乃使玄学陷于黑暗、混乱及无效用者也。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">但结果却恰恰相反。因为这一学说虽然推寻玄学的世系，声称玄学是由“通常经验”这样的卑贱门第产生的，并企图以此动摇玄学所谓女王之僭越称号，但实事求是的说，这些世系表其实是伪造的，所以玄学仍能继续坚持主张自身的高贵地位。这样玄学就又退化为了之前的古板腐朽的独断论，不断忍受它已经不愿处于的被鄙视的地位。今日各种方法已经用尽却都没有效果，人们对于玄学的态度，也都变成了倦怠和冷淡——在一切学问中，玄学是混乱和黑暗之母，所幸这样的状况，其实是一切学问未来革新和更生的源泉，至少也是革新和更生的序幕。（破而后立，否极泰来？）因为玄学至少已经终结了它一些无用的工作，这种无用的工作，正是使玄学限于黑暗、混乱和无用的罪魁祸首。
+---
+按前面所说，作者所谓“玄学的黑暗”、“无用的工作”应指对真理的不完全不透彻的定义，作者认为这种定义是无意义的。
+另外，个人认为随着智慧循环的不断进行，人类的边界会不断扩展，人们总会找到新的道路。
+</p></div><div class="div_section" id="div_section_6"><p class="p_text" id="p_section_6">    但对于此种研究，貌为冷淡之人，实无聊之极，盖此等研究之对象，在人类本性，绝不能等闲视之者也。此等貌为冷淡者，不问其如何以日常用语代学术语，期掩饰其自身，但在彼等有所思维之限度内；则势必复归其向所宣称为极度鄙视之玄学主张。顾此种冷淡，显现于种种学问发达之时，且实影响于此等学问——此等学问之知识，如能得之，吾人至少应爱护之——实为务须注意及熟虑之一种现象。此非由轻率所致，乃由时代之成熟的判断力所致，彰彰明甚，盖时代之判断力，已不再为虚妄之知识所欺矣。且此为对于理性之一种要求，令其重行从事于理性所有之一切事业中最艰巨之事业(即理性自知之明)，及组织法庭不以独断的命令，而依据理性自身所有之永恒不变法则，以保证理性之合法主张而消除一切无根据之僭妄主张。此种法庭实惟纯粹理性之批判足当之。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">但对玄学研究表现出轻视的人，实在是无聊之极，因为玄学研究的对象在于人类的本性，是绝对不能等闲视之的。这些表现出轻视的人，不管他如何用平常的用语代替学术语言，以期在他的思维限度内掩饰自身（脱离烦困？）；最终也势必会回归到他宣称极度鄙视的玄学里。这种轻视往往显现于种种学问生发之时，并且事实上是受这种学问影响的——这种学问的知识，如果能够得到，则我们至少应该爱护这种知识——这种现象其实是非常需要注意和熟虑的。这种情况并不是轻率的猜测，而是由时代的判断力的成熟所导致的，这种时代的判断力闪耀出文明的光芒，已经不能再为虚妄的知识所蒙蔽。（时代判断力的主体是谁？时代判断力有怎样的变化规律？）并且对玄学的追求也是智慧本能的一种要求，令人们重新投入所有智慧事业中最艰巨的事业（这也就是智慧探索智慧本身的本能），人们组建了这样的一种法庭——它不以独断的观点，而是依据智慧自身所具有的永恒不变的法则，来保护所有合乎智慧的主张并消除一切没有根据的虚妄主张。把这种法庭叫做“纯粹理性批判”再合适不过了。
+---
+作者认为玄学的主要研究对象在于人类的本性，个人不否认研究人类本性的重要性，但除此之外，研究事物的运行规律、探求人类以外的意识等也是玄学的重要研究方向。
+</p></div><div class="div_section" id="div_section_7"><p class="p_text" id="p_section_7">    我之所谓批判非指批判书籍及体系而言，乃指就理性离一切经验所努力寻求之一切知识。以批判普泛所谓理性之能力而言。故此种批判乃决定普泛所谓玄学之可能与否、乃规定其源流、范围及限界者——凡此种种皆使之与原理相合。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">我所谓的批判并不是对批判特定的书籍或者某种思想体系而言，而是对智慧超脱了具体的事物之后，所努力寻求到的大统一的知识来说。是对批判通常被称为“智慧”的各种能力而言。所以这种批判乃是决定通常被称为所谓玄学是否能够成立、乃是规定玄学的源流、范围及界限的——凡此种种都要使之与我这种理论相合。
+---
+在这里作者提出“哲学”是“脱离”或者“超脱”于具体事物的，并且提出要对哲学的范围进行明确的界定。
+</p></div><div class="div_section" id="div_section_8"><p class="p_text" id="p_section_8">    我已进入此种途径——此为今所留存尚未开辟之唯一途径——且自以为遵从此种途径，我已发见一“防免一切误谬”之方法，此等误谬在理性离经验使用时，使理性自相矛盾者。我并不借口人类理性能力之不足而避免理性所有之问题。反之，我依据原理，将此等问题，—一列举详尽；且在发见理性自相矛盾所在之点(由于误解而起)以后，我已圆满解决此等问题。所解答者固不能如独断的幻想的主张在知识上之使吾人所期待者——此种期待仅能由魔术的计谋以迎合之，而我则非熟习 魔术者也。盖以此种方法解答问题，实不在吾人理性本质所有之意向以内，且因此等方法，乃由误解而来，故哲学之任务，唯在消除其惑人之影响，因不顾及“足值欣赏之幻梦”将因而消失也。在此种研究中，我以“周密”为主要目的，我敢断言玄学之问题，已无一不解决、或至少已提供解决此问题之关键。纯粹理性实为一完成之统一体，故若其原理不足以解决其自身所发生之问题之一时，吾人应即弃置此原理不用，盖因斯时吾人已不信赖此原理足以处理其他任何之问题矣。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">我已经走上了这条道路——这是到今天为止尚存的唯一一条从未有人走过的道路——并且自认为沿着这条道路，我已经发现了“防免一切谬误”的方法，这些谬误会使智慧在脱离具体事物使用时发生自相矛盾。我并不借口人类的智慧能力不足而回避所有智慧本身的问题。反之，我将依据我的理论将这些问题一一详细列举；并且在发现智慧每个自相矛盾的位置（由于误解引起）之后，我圆满的解决了这些问题。我的解答确实不如独断者的充满幻想的主张一样让人期待——人们的此种期待只能用虚假的魔术和计谋来迎合，而我并不是熟悉魔术的人。所以这种靠蒙骗解决问题的方式，实在不在我们的智慧本能的选择范围之内，并且这种蒙骗的方式，都是靠误解来生效的，而哲学的任务就在于消除这种误解对人的迷惑，因此我的理论并不顾及“值得欣赏的幻梦”将因此破灭。在这一研究中，我以“周密”为重，我敢断言玄学的各种问题，已无一不被解决、或者至少已经提供了解决此问题的关键。我的纯粹理性理论已经成为一个完成了的统一体，所以如果这一理论不足以解决其自身所引发出的问题时，则我们应该立即弃置这种理论，因为那时我们已经无法信任这一原理可以处理任何问题。（完美主义理论）
+---
+个人认为，一项理论即使不能解决所有问题，在其所能生效的范围内亦可有其作用，譬如牛顿力学，虽为相对论所颠覆，但仍能在现实中发挥具体之作用。但按作者的理论，在牛顿力学遇到解释不了的问题的那一刻，它便退化为“独断论”，失去了意义。
+
+也许差别在于这门学问是否与现实紧密相关，譬如玄学、神学与现实距离较远，故而失去完美便一无是处，但是一门学问即使真的一无是处，至少也可以作为文明的经验，让后来者以此为鉴少走弯路。那么作者是如何以人的不完美追求道理的完美呢？
+
+</p></div><div class="div_section" id="div_section_9"><p class="p_text" id="p_section_9">    当我言此时，我能想象读者对此令人感及其骄慢浮夸之自负，现有不悦而杂以轻侮之面容。但此等自负，较之所有在其通常之纲领上宣称证明心灵之单纯性及世界起源之必然性者等等著作者之夸张温 和多矣。盖此等著作者承当能扩大人类知识于可能经验之限界以外，顾我则谦卑自承此实为我之能力所不及者。我之所论究者，惟在理性本身及其纯粹思维；欲得其完备知识，固无须远求于外，盖理性及其纯粹思维实在我自身中见及之也。至理性之一切单纯活动，如何能详备举示，且列为系统，普通逻辑已提示其例证。今所论究之主题，则为除去经验所有之一切质料及助力时，吾人由理性所能希冀成就者究达何种程度之问题。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">当我说到这里时，我能想象到读者感觉我很骄慢浮夸，表现出不悦而又轻蔑的面容。然而我的这种自负，比起那些宣称证明了心灵单纯性和世界起源必然性的夸张著作者已经温和很多了。因为那些夸张的著作者号称能够在人类可能获得的经验以外扩大人类的知识，而我则谦卑的承认自己做不到这一点。我所研究讨论的，只在于智慧本身及其纯粹的思维；想获得完备的知识，本来就无须远求于外部事物，因为智慧及其纯粹的思维其实是体现在人的内心之中。至于如何研究智慧的各种简单的活动，如何详细列举并归纳为系统，则普通逻辑学已经做了这件事。现在我所研究的主题，则是除去一切的现实经验之后，我们人类单纯由智慧究竟能达到何种程度的问题。
+---
+关于现实经验作者提出了两个观点，一是完美的理论可以解释一切的现实事物，二是完美的理论不能从不全面的现实经验中得出。
+个人认为，譬如脑科学从外部对大脑运行方式的研究也能够帮助到对智慧本质的探究，只求诸于内容易陷入自己假设的世界中难以自拔，就如霍金所提出的“人择原理”——我们认为宇宙是这样只是因为我们这样的生命形式只能在这种环境中生存，我们所观察到的宇宙只是由人类的能力限制而选择的一部分，在我们的观察范围之外宇宙未必是我们想象的样子。
+
+</p></div><div class="div_section" id="div_section_10"><p class="p_text" id="p_section_10">    吾人规定所论究之每一问题时，务极注意其周密，而于规定所须论究之一切问题时，则务极注意其详备。盖此等问题并非任意采择者，乃知识自身之本质所加之吾人为批判研究之主要论题者。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">我们规定研究讨论每一个问题时，务必要极其注意其周密性，而在规划需要讨论的问题时，则务必要极其注意其详细完备。我研究的这些问题并不是随意选择的，而是智慧的本能驱动我把它们选作批判研究的主要论题的。</p></div><div class="div_section" id="div_section_11"><p class="p_text" id="p_section_11">    至关于吾人研究之方式，则正确及明晰二点，为二大基本要求，凡企图尝试此种精微事业者，自当令其充备此等条件。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">对于我们的这种研究方法，正确和明晰是两大基本要求，所有企图尝试此种精微事业的人，必须充分的具备此等条件。</p></div><div class="div_section" id="div_section_12"><p class="p_text" id="p_section_12">    关于正确，我对自身所制定之格率则为：在此类研究中，绝不容许臆断。故一切事物凡有类“假设”者，皆在禁止之列，一经发见，立即没收，固不容其廉价贩售也。任何知识，凡称为先天的所有者，皆要求被视为绝对必然者。此更适用于“一切纯粹先天的知识之任何规定”，盖因此种规定，实用为一切必然的(哲学的)正确性之尺度，因而用为其最高之例证。在我所从事之事业中，是否有成，自当一任读者之判断；著者之任务唯在举示其根据而不陈述判断者对此等根据所当有之结果。但著者以不欲自身减弱其论据，自当注意足以引人疑虑(虽仅偶然的)之处。其所以有时参以己见者，实欲用以消除“所有对于不甚重要之点所生无谓疑惑，以致影响读者对于主要论点之态度”之一类影响耳。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">对于正确，我自己制定的标准是：在此类研究中，绝不允许臆断。所以一切带有“假设”的事物都在禁止之列，一经发现立即没收，绝不允许这些廉价的假设四处流窜。任何先天具备的知识（意思是不由经验得来的？），都要被视作牢不可破的公理。这类公理可以总结为“一切纯粹先天的知识之任何规定”，因为这些规定就是一切哲学的正确性的尺度，所以要把它们作为哲学的最高例证。我所从事的事业是否有成，应当任由读者判断；著作者的任务只在指示出这些论据，而不需要陈述判断者应该对这些论据做什么评判。但如果著作者不想减弱其论据的分量，则自当注意可能引起读者疑虑（虽然只是偶然的）之处。所以有时我加入自己对论据的评断，其实是用来消除“我的观点中不很重要的地方产生了一些无意义的疑惑，以致于影响到读者对我的主要论点的看法”这一类情况。</p></div><div class="div_section" id="div_section_13"><p class="p_text" id="p_section_13">    我知“关于探讨吾人所名为悟性之能力，及规定其使用之规律、眼界”之论究，实无逾于我在先验分析论之第二章名为纯粹概念之演绎中所论述者。此等论述亦实为尽我最大之劳力者——如我所望。非无报偿之劳力。此种颇有甚深根据之论究有两方面。一方面与纯粹悟性之对象有关，意在说明其先天的概念之客观的效力，而使吾人能理解之。故此为我之目的根本所在。至其他一方面则为研讨纯粹悟性之本身，即其可能性及其所依据之认知能力，因而在主观方面论究之。此后者之说明，就我之主要目的言，虽极重要，但并不成为其基本部分。盖主要问题常为：悟性及理性离一切经验所能知者为何，及所知之程度如何？而非：思维自身能力之如何可能？后者乃追寻所得结果之原因，性质颇近似假设(我虽在他处将另有所说明，实际本不如是)；故在此种事例中我似只任意陈述意见，读者当亦可自由 发表其不同之意见。以此之故，我自必在读者批判之前，预有一言奉告，即我之主观的演绎，就令不能产生如我所希望之充分确信，而我主要所从事之客观的演绎，则仍保有其完全力量。关于此一点，在九十二页至九十三页(第一版)中所论究者，足以尽之矣。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">我的“关于探讨我们称为‘悟性’的能力，并且规定其使用规律、范围”的研究论述，与我在先验分析论第二章名为纯粹概念的演绎中所论述的一样。这种论述也已经是我尽最大努力的成果——如我所望。努力并非毫无成果。这种具有深厚论据的论究包含两个方面。一方面与纯粹悟性这个概念有关，意在说明其先天的概念和客观的能力，使得我们能够知道它究竟是什么。这也是我的根本目的所在。另一方面则是研讨纯粹悟性本身，也就是它的可能性和作为纯粹悟性依据的认知能力，我从主观的方面论究它。这第二方面的说明，相对我的主要目的而言，虽然也极其重要，但并不是我的基本目的。所以我讨论的主要问题就是：悟性和智慧脱离了一切现实经验之后还能探知哪些知识，其所知的程度如何？而不是：思维能力自身如何运转？后者是在追寻思维行为这一结果的原因，其性质非常近似假设（我在他处另有说明，追寻事物的原因不等于假设）；所以在这些事例中我只任意陈述意见，读者也可以自由发表不同的意见。因此，我必须在读者批判之前先说明，即使我的主观演绎不能如我所希望的那样被读者充分确信，我所主要进行的客观演绎也还是正确的。关于这一点在第一版的九十二页到九十三页所论述的内容足以说明。</p></div><div class="div_section" id="div_section_14"><p class="p_text" id="p_section_14">    至关于明晰，读者首先有权要求由概念而来之论证的(逻辑的)明晰，其次则要求由直观而来之直观的(感性的)明晰，即由于例证及其他具体之释明。关于第一点我已充分具备。盖此为我之目的根本所在；但亦为不能满足第二要求(此虽非十分重要但亦为合理的)之旁因。在我著作之进展中，关于此一点，我每彷惶不知应如何进行。例证及释明固常视为所必需者，在我初稿中，凡需及时，常采入之。但我立即语及我事业之宏大及所论究事项之繁复；且又见及我即纯然以学究的干枯论法论究之，而其结果在量上亦已充分过大，故再以例证及释明增大其数量，我殊觉其不宜。且此等例证及释明，仅为通俗起见所必需；而本书则绝不适于常人之理解。凡真纯研究学问之人无须乎此种例证释明之助，况例证释明虽常令人快适，实足以自弱其所论之效果。僧院长德勒森(terras－son)曾有言，书籍之分量，如不以页数为衡，而以通晓此书所需之时间为衡，则有许多书籍可谓为若不如是简短即应较此更大为简短。在另一方面，吾人如就“思辨的知识之全体(此虽广泛多歧，但具有自原理之统一而来之有条不紊始终一贯)能使人理解”而论，亦正可谓许多书籍若未曾如是努力使之明晰，则当较此更为明晰也。盖凡有助于明晰者，在其细密部分，虽有所补益，但常足妨吾人体 会其全体。读者因而不容急速到达概观其全体之点；盖释明所用材料之鲜明色彩，每掩蔽体系之脉络及组织，顾此种体系吾人如能就其统一及巩固判断之，则为吾人所首应注意之主要事项也。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">至于明晰，读者首先有权要求著作者具有能够通过概念进行论证的逻辑的明晰，其次则要求著作者具有直观的感性的明晰，即通过具体例证对论点的解释。第一点我已经充分具备。这本来就是我的根本目的所在；但我还不能完全满足第二个要求（这第二个要求虽然不是十分重要，但也是合理的）。在我著作的进展过程中，每次想到这一点我都彷徨无措不知应该如何进行。具体的例证和解释固然经常被视为必须的，在我的初稿中，需要使用具体的例证时，我也常采用它。但我立即醒悟我事业的宏大以及所研究事项的繁复性；又考虑到我完全是用学究的干枯的研究方法研究它，这些研究结果在体量上已经是过分巨大了，因此再以具体例证和解释增大它的体量就很不合适了。并且这些例证和解释，只对于普通俗人是必须的；而本书则绝不适于常人阅读理解。如果是真的纯粹研究学问的人并不需要这些具体例证的帮助，况且例证和解释虽然能让读者感到舒服，但也会减弱论证的效果。（具体事物往往由多方面原因共同引发，难以凸显核心论点）僧院院长德勒森曾说，如果不靠页数衡量书籍的分量，而以通晓此书所需的时间作为衡量标准，则很多书籍应该比现在大为简短。另一方面，就“全部思辨的知识能使人理解”而论（关于“全部思辨的知识”有许多不同的定义，但仍有一贯的共识），也有许多书籍没有我这本这么努力让内容明晰。有助于明晰（第二种？）的内容，在其细密的部分虽然对论点有所补益，但也常会妨碍读者体会论点的全貌。读者因此不容易最快达到统观全局的高度；因为解释时所使用的材料的鲜明色彩，经常会掩盖思想的体系脉络和组织方式，所以如果我们能从脱离具体例证的大统一层面判断这个问题，则我们尽量这样做。</p></div><div class="div_section" id="div_section_15"><p class="p_text" id="p_section_15">    我敢断言，当著者按今所立之计划，努力以成就一伟大而重要之事业至极完备之程度，而期垂之久远，读者自必大为感奋，悠然生愿随协作之感。玄学就吾人所采纳之见解而言，实为一切学问中之唯一学问，敢期许以微小而集中之努力，且在短时期中到达极完备之程度，其所遗留于后人之事业仅为各就其所择之教学方法采用之，不能有所增益其内容。盖玄学不过吾人由纯粹理性所有一切财产系统的排列之目录耳。在此领域中无一能自吾人遗漏。凡纯由理性本身所产生者，绝不能掩藏，在共通原理已发见以后，立即由理性本身呈显于吾人之前。此种知识之完全统一及其完全来自于纯粹概念而绝不为任何经验或特殊直观(此种直观可引达其能扩大及增进知识者之确定经验)所影响之事实，乃使此种绝对完备不仅能实行，且亦成为必然的。汝其详审汝家，则知汝之财产之如何简单矣。——普西乌斯(persius)。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">我敢断言，当著者按照这个计划，努力将一个伟大而重要的事业推至完备程度，以期名留青史时，读者必定感到极大的振奋，悠然而生追随作者的愿望。在我们看来，玄学实在是所有学问中独一无二的特殊学问，我期望通过微小而集中的工作，在短期内使之达到极其完备的程度，遗留给后人的工作仅为按照各自选择的教学方法使用这些知识，不能再对这门学问有所改进。这是因为玄学不过是我们根据纯粹智慧所获得的一切财产类型的排列目录而已。在这一领域中我们不会遗漏任何内容。凡是纯粹由智慧本身所产生的知识，都不会被掩藏，在大统一理论发现之后，将立即依靠智慧的本能显现于我们面前。这种知识是完全统一的，完全来自于纯粹的概念，并且绝不会为任何经验或者特例所影响（特例只能用来增进人们在某方面的具体经验），这使得这种绝对不但可行，且成为必然的。你自己查看你的家，就知道你的财产多么简单了——普西乌斯</p></div><div class="div_section" id="div_section_16"><p class="p_text" id="p_section_16">    此种纯粹(思辨的)理性之体系，我期望在我自然之玄学一书中成就之。此书较今所著批判一书，页数不及其半，但其内容之丰富，则远过于批判一书，盖批判一书以发见“批判所以可能之源流及条件”为首先要务，殆所以清除平整迄今尚在荒芜之土地者也。在本著中我乞求读者以法官之忍耐公正临之，在其他一著作(自然之玄学)，则乞求以协作者之仁爱援助临之。盖在批判一书中所呈现之体系，其所有之一切原理即极完备，但体系本身之完备，则尚须引伸而来之概念无一欠缺。顾此等引申而来之概念，绝不能由先天的计算列举之，而必须逐渐发见之者。惟在此批判一书中，概念之全部综合已申说详尽，所留存之工作惟在分析概念至同一程度之完备而已，此一种事业与其谓之劳役，毋宁谓之误乐。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">这种纯粹的思辨的理性体系，我期望在我的“自然之玄学”一书中完全建立。这本书与现在所著的“批判”一书相比，页数不及批判的一半，但内容之丰富则远超过批判一书，因为批判一书以发现“批判可能的来源和条件”为首要目的，是用来清理平整如今的荒芜土地的。在这本著作中我乞求读者用法官的忍耐和公正来面对它，在另一著作（自然之玄学），则乞求协作者的仁爱援助。这是因为在批判一书中所呈现的思想体系，其所有一切原理都已及其完备，但体系的完全之完备，还需从原理引申来的概念也无一欠缺。这种引申而来的概念，不可能事先计算列举，而必须由学习者逐渐发现。在此批判一书中，概念的全部综合内容已经介绍详尽，所剩的工作只是将各种引申概念分析到同一完备程度而已，这一种事业与其叫做劳役，不如说是娱乐。</p></div><div class="div_section" id="div_section_17"><p class="p_text" id="p_section_17">    关于印刷事项我尚有数言附述。因印刷开始已愆期，故我所校刊者不及半数，我今见有若干误排之处，所误排者除三百七十九页自下上数四行，“特殊的”(specifisch)误为“怀疑的”(skeptisch)以外，尚不致令读者误解其意义。纯粹理性之二律背驰，自四百二十五页至四百六十一页，排列成一表式，凡属于正面主张者列左，属于反面主张者列右。我之所以如是排列者，盖欲命题与相反之命题易于互相比较耳。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">关于印刷事项我尚有数言附述。因为印刷已经开始了，我所校对的内容还不到半数，我现在发现了若干排版错误，这些排版错误中除了三百七十九页自下向上数第四行，“特殊的”误排为“怀疑的”以外，都还不足以导致读者误解其意义。纯粹理性关于二律背驰的内容，从四百二十五页至四百六十一页，排列成统一的格式，属于正面主张的列在左侧，属于反面主张的列在右侧。我之所以这样排列，是为了让命题与相反命题易于相互比较。</p></div></div>
+    </div>
+
+<script>
+
+    window.onload=function(){
+        //处理导出html的事件有两种思路，一是使用innerHTML定义所有动态生成的标签，二是在每次打开网页时重新绑定事件
+        var div_main=document.getElementById("div_main");
+        var arr_section=div_main.getElementsByClassName("div_section");
+        var len=arr_section.length;
+        for(var i=0;i<len;i++)
+        {
+            let div_section=arr_section[i];
+            var arr_p=div_section.getElementsByTagName("p");
+            var len2=arr_p.length;
+            for(var j=0;j<len2;j++)
+            {
+                let p=arr_p[j];
+                if(j==0)
+                {
+                    p.ondblclick=function()
+                    {
+                        addAnnotate(div_section.id);
+                    }
+                }
+                else
+                {
+                    p.ondblclick=function(){openEdit(p)};
+                    p.onblur=function(){closeEdit(p)};
+                }
+            }
+        }
+    }
+    function ShowStr()
+    {
+        var str_local=document.getElementById("str_local");
+        var file=str_local.files[0];
+        var reader=new FileReader();
+        reader.readAsText(file);
+        reader.onload=function(e)
+        {
+            var str=e.target.result;
+            loadArticle(str);
+        }
+    }
+    function ShowStr2()
+    {
+        var str_local=document.getElementById("str_local2");
+        var str=str_local.value;
+        loadArticle(str);
+    }
+    var currentSectionid=null;
+    function loadArticle(str)
+    {
+        var div_main=document.getElementById("div_main");
+        div_main.innerHTML="";
+        var arr_section=str.split("\r\n");
+        var len=arr_section.length;
+        var count_p=0;//包含主标题在内一共分成几段
+        var arr_p=[];
+        for(var i=0;i<len;i++)
+        {
+            var section=arr_section[i];
+            if(section.length>0)
+            {
+                let div_section=document.createElement("div");
+                div_section.className="div_section";//这样可以更方便的在段内插入元素
+                div_section.id="div_section_"+count_p;
+
+                let p=document.createElement("p");
+                if(count_p==0)//标题段
+                {
+                    p.className="p_h1";
+                }
+                else
+                {
+                    p.className="p_text";
+                }
+                p.innerHTML="    "+section;
+                p.id="p_section_"+count_p;
+
+                p.ondblclick=function()
+                {
+                    addAnnotate(div_section.id);
+                }
+                count_p++;
+                div_section.appendChild(p);
+                div_main.appendChild(div_section);
+            }
+        }
+    }
+    function addAnnotate(id)
+    {
+        var div_section=document.getElementById(id);
+        currentSectionid=id;
+        var children=div_section.childNodes;
+        var len=children.length;
+        if(len==1)//此时还没有第一级注释
+        {
+            let p_a1=document.createElement("p");
+            p_a1.className="p_a1";
+            //点击第一级注释，进行编辑
+            p_a1.ondblclick=function(){openEdit(p_a1)};
+            p_a1.onblur=function(){closeEdit(p_a1)};
+            div_section.appendChild(p_a1)
+        }
+        else
+        {
+            if(children[1].style.display=="none")//如果当前是隐藏状态
+            {
+                for(var i=1;i<len;i++)
+                {
+                    children[i].style.display="block";
+                }
+            }
+            else
+            {
+                for(var i=1;i<len;i++)
+                {
+                    var child=children[i];
+                    child.style.display="none";
+                    if(child.className=="p_a1")
+                    {
+                        closeEdit(child);
+                    }
+                }
+            }
+        }
+    }
+    function openEdit(p)
+    {
+        p.style.border="2px solid cornflowerblue";
+        p.style.borderRadius="5px";
+        p.contentEditable="true";
+    }
+    function closeEdit(p)
+    {
+        p.style.border="0px";
+        p.contentEditable="false";
+        //Chrome的默认编辑模式会在p内插入一个div，这个div是用来分行的，空白的换行也会导致div！！
+        // 但在重新导入之后（在取innerHTML导出时尚正常）浏览器会自动把这个div绘制在p的外面！！！！
+        //多次换行是嵌套的！！！！所以简单的替换还不行！！
+        p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"@");
+        p.innerHTML=p.innerHTML.replace(new RegExp(("[@]+"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^/][\\S]{1,5}>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("</[\\S]{1,6}>"),"gm"),"");
+    }
+
+    function ExportHtml()
+    {
+        var str=str_head+window.document.body.outerHTML+"</html>";
+        var blob=new Blob([str],{
+            type: "text/plain"
+        })
+
+        var tmpa = document.createElement("a");
+        var p_h1=document.getElementsByClassName("p_h1")[0];
+        tmpa.download = (p_h1?p_h1.innerHTML:"test")+".html";
+        tmpa.href = URL.createObjectURL(blob);
+        tmpa.click();//导出后事件需要重新绑定，或者直接使用innHTML定义？
+        setTimeout(function () {
+            URL.revokeObjectURL(blob);
+        }, 100);
+    }
+
+    var str_head="<!DOCTYPE html>\n" +
+        "<html lang=\"en\">\n" +
+        "<head>\n" +
+        "    <meta charset=\"UTF-8\">\n" +
+        "    <title>实用版</title>\n" +
+        "    <style>\n" +
+        "        /*通用属性*/\n" +
+        "        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;\n" +
+        "            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;\n" +
+        "            -ms-touch-action: none;font-size: 12px;min-width: 600px;}\n" +
+        "        ul {    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        li{    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        ul li {    float: left;}\n" +
+        "        button{    cursor: pointer;    height: 23px;}\n" +
+        "        a:link{    text-decoration: none;}\n" +
+        "        \n" +
+        "        #div_top span,input,button{margin-left: 20px;float: left;}\n" +
+        "        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}\n" +
+        "        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}\n" +
+        "\n" +
+        "        .div_section{position:relative}\n" +
+        "        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;\n" +
+        "        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}\n" +
+        "        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;left:120px}\n" +
+        "    </style>\n" +
+        "</head>";
+</script>
+</body></html>
