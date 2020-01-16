@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实用版，处理事件问题</title>
+    <style>
+        /*通用属性*/
+        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;
+            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;
+            -ms-touch-action: none;font-size: 12px;min-width: 600px;}
+        ul {    list-style: none;    margin: 0;    padding: 0;}
+        li{    list-style: none;    margin: 0;    padding: 0;}
+        ul li {    float: left;}
+        button{    cursor: pointer;    height: 23px;}
+        a:link{    text-decoration: none;}
+
+        #div_top span,input,button,textarea{margin-left: 20px;float: left;}
+        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}
+        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}
+
+        .div_section{position:relative}
+        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;
+        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}
+        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left:120px}
+    </style>
+</head>
+<body>
+    <div id="div_allbase" style="top:0px;bottom:0px;width:100%;height: 100%;position:relative;overflow-x: hidden;overflow-y: scroll
+        ">
+        <div id="div_top" style="top:0px;left:0px;width:100%;height: 30px;position:absolute;">
+            <span style="margin-left: 20px">选择文本文件</span>
+            <input type="file" id="str_local" onchange="ShowStr()" style="margin-left: 20px">
+            <span style="margin-left: 20px">粘贴文本</span>
+            <textarea type="text" id="str_local2" style="word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap;width: 200px;height:40px"></textarea>
+            <button onclick="ShowStr2()">确定</button>
+            <button onclick="ExportHtml()">导出Html</button>
+        </div>
+        <div id="div_main" style="top:30px;left:0px;width:100%;position:absolute;">
+
+        </div>
+    </div>
+</body>
+<script>
+
+    window.onload=function(){
+        //处理导出html的事件有两种思路，一是使用innerHTML定义所有动态生成的标签，二是在每次打开网页时重新绑定事件
+        var div_main=document.getElementById("div_main");
+        var arr_section=div_main.getElementsByClassName("div_section");
+        var len=arr_section.length;
+        for(var i=0;i<len;i++)
+        {
+            let div_section=arr_section[i];
+            var arr_p=div_section.getElementsByTagName("p");
+            var len2=arr_p.length;
+            for(var j=0;j<len2;j++)
+            {
+                let p=arr_p[j];
+                if(j==0)
+                {
+                    p.ondblclick=function()
+                    {
+                        addAnnotate(div_section.id);
+                    }
+                }
+                else
+                {
+                    p.ondblclick=function(){openEdit(p)};
+                    p.onblur=function(){closeEdit(p)};
+                }
+            }
+        }
+    }
+    function ShowStr()
+    {
+        var str_local=document.getElementById("str_local");
+        var file=str_local.files[0];
+        var reader=new FileReader();
+        reader.readAsText(file);
+        reader.onload=function(e)
+        {
+            var str=e.target.result;
+            loadArticle(str);
+        }
+    }
+    function ShowStr2()
+    {
+        var str_local=document.getElementById("str_local2");
+        var str=str_local.value||str_local.innerHTML;
+        loadArticle(str);
+    }
+    var currentSectionid=null;
+    function loadArticle(str)
+    {
+        var div_main=document.getElementById("div_main");
+        div_main.innerHTML="";
+        var arr_section=str.split("\r\n");
+        var len=arr_section.length;
+        if(len==1)
+        {
+            arr_section=str.split("\n");
+        }
+        len=arr_section.length;
+        var count_p=0;//包含主标题在内一共分成几段
+        var arr_p=[];
+        for(var i=0;i<len;i++)
+        {
+            var section=arr_section[i];
+            if(section.length>0)
+            {
+                let div_section=document.createElement("div");
+                div_section.className="div_section";//这样可以更方便的在段内插入元素
+                div_section.id="div_section_"+count_p;
+
+                let p=document.createElement("p");
+                if(count_p==0)//标题段
+                {
+                    p.className="p_h1";
+                }
+                else
+                {
+                    p.className="p_text";
+                }
+                p.innerHTML="    "+section;
+                p.id="p_section_"+count_p;
+
+                p.ondblclick=function()
+                {
+                    addAnnotate(div_section.id);
+                }
+                count_p++;
+                div_section.appendChild(p);
+                div_main.appendChild(div_section);
+            }
+        }
+    }
+    function addAnnotate(id)
+    {
+        var div_section=document.getElementById(id);
+        currentSectionid=id;
+        var children=div_section.childNodes;
+        var len=children.length;
+        if(len==1)//此时还没有第一级注释
+        {
+            let p_a1=document.createElement("p");
+            p_a1.className="p_a1";
+            //点击第一级注释，进行编辑
+            p_a1.ondblclick=function(){openEdit(p_a1)};
+            p_a1.onblur=function(){closeEdit(p_a1)};
+            div_section.appendChild(p_a1)
+        }
+        else
+        {
+            if(children[1].style.display=="none")//如果当前是隐藏状态
+            {
+                for(var i=1;i<len;i++)
+                {
+                    children[i].style.display="block";
+                }
+            }
+            else
+            {
+                for(var i=1;i<len;i++)
+                {
+                    var child=children[i];
+                    child.style.display="none";
+                    if(child.className=="p_a1")
+                    {
+                        closeEdit(child);
+                    }
+                }
+            }
+        }
+    }
+    function openEdit(p)
+    {
+        p.style.border="2px solid cornflowerblue";
+        p.style.borderRadius="5px";
+        p.contentEditable="true";
+    }
+    function closeEdit(p)
+    {
+        p.style.border="0px";
+        p.contentEditable="false";
+        //Chrome的默认编辑模式会在p内插入一个div，这个div是用来分行的，空白的换行也会导致div！！
+        // 但在重新导入之后（在取innerHTML导出时尚正常）浏览器会自动把这个div绘制在p的外面！！！！
+        //多次换行是嵌套的！！！！所以简单的替换还不行！！
+        p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"@");
+        p.innerHTML=p.innerHTML.replace(new RegExp(("[@]+"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^/][\\S]{1,5}>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("</[\\S]{1,6}>"),"gm"),"");
+    }
+
+    function ExportHtml()
+    {
+        var str=str_head+window.document.body.outerHTML+"</html>";
+        var blob=new Blob([str],{
+            type: "text/plain"
+        })
+
+        var tmpa = document.createElement("a");
+        var p_h1=document.getElementsByClassName("p_h1")[0];
+        var dt=new Date();
+        var str_date=dt.getFullYear()+(dt.getMonth()+101+"").substr(1)+(dt.getDate()+100+"").substr(1)
+            +"_"+dt.getHours()+"_"+dt.getMinutes()+"_"+dt.getSeconds();
+        tmpa.download = str_date+(p_h1?p_h1.innerHTML:"test")+".html";
+        tmpa.href = URL.createObjectURL(blob);
+        tmpa.click();//导出后事件需要重新绑定，或者直接使用innHTML定义？
+        setTimeout(function () {
+            URL.revokeObjectURL(blob);
+        }, 100);
+    }
+
+    var str_head="<!DOCTYPE html>\n" +
+        "<html lang=\"en\">\n" +
+        "<head>\n" +
+        "    <meta charset=\"UTF-8\">\n" +
+        "    <title>实用版</title>\n" +
+        "    <style>\n" +
+        "        /*通用属性*/\n" +
+        "        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;\n" +
+        "            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;\n" +
+        "            -ms-touch-action: none;font-size: 12px;min-width: 600px;}\n" +
+        "        ul {    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        li{    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        ul li {    float: left;}\n" +
+        "        button{    cursor: pointer;    height: 23px;}\n" +
+        "        a:link{    text-decoration: none;}\n" +
+        "        \n" +
+        "        #div_top span,input,button,textarea{margin-left: 20px;float: left;}\n" +
+        "        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}\n" +
+        "        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}\n" +
+        "\n" +
+        "        .div_section{position:relative}\n" +
+        "        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;\n" +
+        "        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}\n" +
+        "        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;left:120px}\n" +
+        "    </style>\n" +
+        "</head>";
+</script>
+</html>
