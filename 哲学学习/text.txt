@@ -1,1 +1,3 @@
 text
+
+Annotate3evt.html是一个运行在Chrome浏览器下的文章注释工具，可以在https://www.cnblogs.com/ljzc002/p/12048895.html查看详细介绍。
