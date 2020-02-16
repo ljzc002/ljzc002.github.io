@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实用版</title>
+    <style>
+        /*通用属性*/
+        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;
+            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;
+            -ms-touch-action: none;font-size: 12px;min-width: 600px;}
+        ul {    list-style: none;    margin: 0;    padding: 0;}
+        li{    list-style: none;    margin: 0;    padding: 0;}
+        ul li {    float: left;}
+        button{    cursor: pointer;    height: 23px;}
+        a:link{    text-decoration: none;}
+        
+        #div_top span,input,button,textarea{margin-left: 20px;float: left;}
+        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}
+        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}
+
+        .div_section{position:relative}
+        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;
+        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}
+        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;left:120px}
+    </style>
+</head><body>
+<div id="div_allbase" style="top:0px;bottom:0px;width:100%;height: 100%;position:relative;overflow-x: hidden;overflow-y: scroll
+        ">
+    <div id="div_top" style="top:0px;left:0px;width:100%;height: 30px;position:absolute;">
+        <span style="margin-left: 20px">选择文本文件</span>
+        <input type="file" id="str_local" onchange="ShowStr()" style="margin-left: 20px">
+        <span style="margin-left: 20px">粘贴文本</span>
+        <textarea type="text" id="str_local2" style="word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap;width: 200px;height:40px"></textarea>
+        <button onclick="ShowStr2()">确定</button>
+        <button onclick="ExportHtml()">导出Html</button>
+        <input id="str_split" style="margin-left: 20px" placeholder="输入额外的分割符，多个分割符以‘@’分割">
+    </div>
+    <div id="div_main" style="top:30px;left:0px;width:100%;position:absolute;"><div class="div_section" id="div_section_0"><p class="p_h1" id="p_section_0">    论正义的定义与分类</p></div><div class="div_section" id="div_section_1"><p class="p_text" id="p_section_1">    2020年2月初为新冠疫情困于家中，无他事烦扰遂有时间总结关于正义之思考于一文。文章借两虚拟角色之口，论现实正义之理，不求文辞宜人，但愿道理扎实。</p></div><div class="div_section" id="div_section_2"><p class="p_text" id="p_section_2">    苏克吕贝特与讲道理的妖怪正在讨论正义定义的问题。（角色‘苏克吕贝特’在后文中简称为“苏”，这碰巧与苏格拉底的简称相同，但它其实来自舒克与贝塔的谐音；讲道理的妖怪很喜欢讲道理，但因为是妖怪，他的言辞有时与常人不同。）</p></div><div class="div_section" id="div_section_3"><p class="p_text" id="p_section_3">    妖怪：“苏！我发现你们人类对于正义有好多种不同的定义，即便是你们中最聪明的个体也说不出一种让所有人都认可的正义定义，你们的文明竟然无法对一个如此基础的概念达成共识，这真的很奇怪。不如让我们来好好讨论一下正义究竟是什么。”</p></div><div class="div_section" id="div_section_4"><p class="p_text" id="p_section_4">    苏：“你都发现了哪几种正义？”</p></div><div class="div_section" id="div_section_5"><p class="p_text" id="p_section_5">    妖怪：“首先我在你们人类的词典中找到了三条正义的定义：</p></div><div class="div_section" id="div_section_6"><p class="p_text" id="p_section_6">    1、公正的、正当的道理</p></div><div class="div_section" id="div_section_7"><p class="p_text" id="p_section_7">    ‘公正’说明你们认为在一次‘正义事件（涉及到判断正义与否的事件）’中应该存在一种区别于他人的‘判断者’，他或他们需要公正的对待所有‘被判断者’，‘正当’则说明正义应该依凭一些被预先认可的规则，比如道德或法律。</p></div><div class="div_section" id="div_section_8"><p class="p_text" id="p_section_8">    2、正确的含义，古时多用作书名，如《五经正义》</p></div><div class="div_section" id="div_section_9"><p class="p_text" id="p_section_9">    这说明正义要求实事求是地探索真像，反对欺骗混淆。</p></div><div class="div_section" id="div_section_10"><p class="p_text" id="p_section_10">    3、公道的，有利于人民的</p></div><div class="div_section" id="div_section_11"><p class="p_text" id="p_section_11">    这说明正义要有利于群体中的大多数个体，同时暗示正义只在特定的生效范围内起作用。”</p></div><div class="div_section" id="div_section_12"><p class="p_text" id="p_section_12">    苏：“在中文里这三种‘正义’都着落在同一个词语上使用，不妨将这三者合并为一个‘正义体系’，因为这个正义体系来自词典我把它称为‘经典正义体系’。这个正义体系不互斥的具备词典中提到的三种‘正义特性’，并且我们可以使用这一正义体系解释各种正义事件”</p></div><div class="div_section" id="div_section_13"><p class="p_text" id="p_section_13">    妖怪：“经典正义体系应该就来自于你们人类作为群居动物的进化惯性吧，我来试着用这个正义体系解释一些正义事件：‘见义勇为’——因为有利于群体的利益所以是正义的；‘欺压弱者’——因为破坏了群体中的公平所以是邪恶的；‘保家卫国’——因为符合人民对和平稳定的期望（假定人民期望的就是对人们有利的）所以是正义的；‘侵略战争’——因为与公认的道德相违所以是邪恶的。</p></div><div class="div_section" id="div_section_14"><p class="p_text" id="p_section_14">    如上所示经典正义体系在解释一些‘大是大非’的正义事件时很好用，但在我尝试用它解释一些更复杂的正义事件时却遇到矛盾：比如在资源有限的情况下，两个群体都需要资源因而爆发争夺，他们都可以在自己的群体内部根据经典正义体系声明自己是正义的一方，那么正义究竟站在哪一边？再比如在群体内鼓励竞争可以促进群体的发展，进而让群体变得更加富强，但竞争造成的贫富变化必将破坏群体中已经达到平稳的‘平等’状态，那么究竟如何选择是正义的？”</p></div><div class="div_section" id="div_section_15"><p class="p_text" id="p_section_15">    苏：“看来用经典正义体系很难解决这些复杂问题，你再说说其他的正义体系，把它们相互结合也许能找到解决问题的方法。”</p></div><div class="div_section" id="div_section_16"><p class="p_text" id="p_section_16">    妖怪：“好的，我在知乎上提问时得到的大部分回答认为‘正义是群体中的一些个体利用群体力量获取自身利益的工具’，它包括‘群体中的个体以正义的名义从群体财富中划取更多份额’和‘群体中的少数个体以正义为口号鼓动所在的整个群体与外界争夺利益’两种形式。</p></div><div class="div_section" id="div_section_17"><p class="p_text" id="p_section_17">    据我观察，你们人类确实惯用这种正义，小处比如一个办公室中的同事间使用手段相互倾轧，按照正义的规则让对方受到损害进而维护自己的地位；大处比如当一个国家想要掠夺另一个国家资源时，往往会将另一个国家描述为‘邪恶者’、‘卑下者’或‘待拯救者’，进而以正义的名义发动战争。</p></div><div class="div_section" id="div_section_18"><p class="p_text" id="p_section_18">    按照这种正义体系，前面经典正义体系所提到的见义勇为和保家卫国也有了新的解释：所谓见义勇为乃是求救者以呼救为工具，驱使施救者作出正义行为；所谓保家卫国则是少数人以正义为口号鼓动多数人的结果。</p></div><div class="div_section" id="div_section_19"><p class="p_text" id="p_section_19">    这时经典正义体系的难以解释复杂问题的矛盾也被解决了，因为在这种将正义作为工具的正义体系中只有利益是真实的，正义工具的使用者完全可以在需要矛时说矛是正义的，需要盾时说盾是正义的，只要他能够说服群体中的大部分人即可。”</p></div><div class="div_section" id="div_section_20"><p class="p_text" id="p_section_20">    苏：“但这种工具正义仍存在一个致命的漏洞：如你所言，在使用正义工具驱使他人的人看来正义是一种工具，但在很多被驱使者看来自己正是在遵循经典正义行事的，甚至有时被驱使者已经认识到他人对自己的利用，但仍会按照经典正义体系坚持自己的正义行为，这说明‘工具正义’和‘经典正义’是同时存在的两个不同事物，工具正义依附于经典正义发挥作用而不能代替经典正义。”</p></div><div class="div_section" id="div_section_21"><p class="p_text" id="p_section_21">    妖怪：“确实有这样的情况，比如战争中被送到前线的士兵在明知自己是被后方的得利者利用时，也仍可能按照经典正义体系牺牲自己的生命。但也存在其他可能：比如士兵自身也可能通过掠夺战利品成为战争的得利者，或者是士兵受到逼迫不得已不冲锋，又或者后方的指挥者也做出了同等程度的牺牲。”</p></div><div class="div_section" id="div_section_22"><p class="p_text" id="p_section_22">    苏：“看来事关正义判断需要具体问题具体分析，不可一概而论。”</p></div><div class="div_section" id="div_section_23"><p class="p_text" id="p_section_23">    妖怪：“让我们为这种正义体系取个名字吧。”</p></div><div class="div_section" id="div_section_24"><p class="p_text" id="p_section_24">    苏：“说实话，这种将正义当做工具的‘正义’本质上不过是以信息不对称为手段利用经典正义体系而已，它本身并不能作为一种单独的正义体系，就好像‘伪君子’不应作为‘君子’的一种。”</p></div><div class="div_section" id="div_section_25"><p class="p_text" id="p_section_25">    妖怪：“但不知出于什么目的，知乎上很多人支持这种观点，你无法否认人类中的一部分就是这样认为的。”</p></div><div class="div_section" id="div_section_26"><p class="p_text" id="p_section_26">    苏：“那么出于对客观存在的尊重，我将它命名为‘工具正义体系’。”</p></div><div class="div_section" id="div_section_27"><p class="p_text" id="p_section_27">    妖怪：“看来工具正义体系也不能单独解释所有的问题，说到具体问题具体分析，也许我们需要更细粒度的正义判断方法？”</p></div><div class="div_section" id="div_section_28"><p class="p_text" id="p_section_28">    苏：“这个稍后再说，先继续讲你找到的其他正义体系吧。”</p></div><div class="div_section" id="div_section_29"><p class="p_text" id="p_section_29">    妖怪：“接下来是我们妖怪界非常流行的正义体系——强者为尊，不论具体情况如何，强大的一方（或者说争斗胜利的一方）就是正义的，同时连同强者所亲近喜欢的事物也都是正义的，我觉得可以把这种正义体系叫做‘强者正义体系’。</p></div><div class="div_section" id="div_section_30"><p class="p_text" id="p_section_30">    我们的强者正义体系应该可以解决前面的所有问题——不论双方的观点如何，让它们互相争斗，最终取得胜利的一方就是正义的，这就像进化中的优胜劣汰一样，你们人类的学者不是也常说‘历史由胜利者书写’吗。”</p></div><div class="div_section" id="div_section_31"><p class="p_text" id="p_section_31">    苏：“纯粹的强者正义体系确实能解决很多问题，但并不完全适合我们人族。</p></div><div class="div_section" id="div_section_32"><p class="p_text" id="p_section_32">    首先，我们人类中尚无法产生“绝对的强者”，与你们妖怪中的强者不同，我们人类无法靠单一个体的力量压制整个群体，我们的领袖也无法对整个群体的情况做到全知，所以现今我们人类社会的领航者必定是一个由多人组成的相互制衡的群体，这样的群体虽然强大，但在大部分情况下缺少明确而自由的意志，也许随着人工智能技术的发展这一切会有所改变。</p></div><div class="div_section" id="div_section_33"><p class="p_text" id="p_section_33">    其二，我们缺少适合强者正义体系的准确公开的评价方式，这导致人们的期望从‘变强’异化为‘在当前规则下获胜’，其结果就是‘劣币驱逐良币’，比如牛奶厂家为了提高蛋白质检测量纷纷在牛奶中添加三聚氰胺；比如价格更贵的药品因营销投入更高而战胜便宜的药品获得在医院中出售的机会，比如汉芯、红芯、木兰等换皮创新获得国家的巨额资助。</p></div><div class="div_section" id="div_section_34"><p class="p_text" id="p_section_34">    其三，人生苦短只争朝夕，寿命短暂的人类缺少不断进取的‘强者之心’，在通过竞争获得群体中的领先地位后，大部分人类‘强者’想的不是如何继续提高自己的实力，而是开始思考如何更安全稳妥的打压同领域中的后进者，以维护自身的优势地位，小到一家公司大到一个政权皆是如此。</p></div><div class="div_section" id="div_section_35"><p class="p_text" id="p_section_35">    可以说‘历史由胜利者书写’一直在我们的历史中发生，但这种情况未见得总是对我们的文明产生正面影响。”</p></div><div class="div_section" id="div_section_36"><p class="p_text" id="p_section_36">    妖怪：“但也不能因此否认强者正义体系的普遍应用！不过由此看来人们认可的‘正义’也可能是不公平的、对群体不利的。”</p></div><div class="div_section" id="div_section_37"><p class="p_text" id="p_section_37">    苏：“你还找到了别的正义体系吗？”</p></div><div class="div_section" id="div_section_38"><p class="p_text" id="p_section_38">    妖怪：“我还找到了一种‘义理正义’，按照百度百科的说法，这种正义体系源自日本武士道思想，强调对同时存在的多种道德进行对比，然后遵从对于自己更高的道德而不惜违反其他的道德，并且以这种对道德的抉择为荣。</p></div><div class="div_section" id="div_section_39"><p class="p_text" id="p_section_39">    不过我自己思考了一下，这种义理正义其实并不是日本武士道专有，比如《三国演义》中刘安为了向刘备尽忠，杀死妻子为刘备提供肉食；再比如《圣经》中亚伯拉罕为了向上帝‘尽信’杀死自己的儿子以撒作为祭品（最后被上帝派天使阻止）。你们人类在面对类似的‘难以两全’的困境时往往都会采用‘义理正义体系’进行抉择，日本武士道只是规范化这一抉择过程并且以这一过程为荣而已。</p></div><div class="div_section" id="div_section_40"><p class="p_text" id="p_section_40">    同时义理正义也不只是不同种类道德之间的抉择，同一道德种类之中不同载体的抉择也同样适用义理正义，比如你们人类在讨论道德问题时经常提到的‘电车难题’，同样是‘拯救他人’的道德种类，但也存在‘杀一救十’还是‘杀十救一’的义理抉择。”</p></div><div class="div_section" id="div_section_41"><p class="p_text" id="p_section_41">    苏：“任何人都难以确保不会在生命中遇到义理抉择，但义理抉择必然伴随着对其他道德的牺牲，我们只能尽量把义理正义体系作为实在没有其他办法时的不得以选择，并且对被牺牲的道德抱以哀悼而非荣耀。</p></div><div class="div_section" id="div_section_42"><p class="p_text" id="p_section_42">    另外现实中的义理抉择往往比作为一个思想实验的电车难题复杂的多，比如我们可以在思想实验中想象一头驴子左右两边各有一根完全相同的胡萝卜，于是驴子因为难以抉择先吃哪一根而饿死。但现实中不存在两根完全相同的胡萝卜，驴子的左右两边也不可能完全对称，驴子总会决定一个顺序将两个胡萝卜吃掉。”</p></div><div class="div_section" id="div_section_43"><p class="p_text" id="p_section_43">    妖怪：“还有人提出‘每个人都有自己独一无二的正义’这种说法，我不知道这能不能作为一种正义体系。”</p></div><div class="div_section" id="div_section_44"><p class="p_text" id="p_section_44">    苏：“这种观点本身并不存在具体的逻辑和行为模式，所以算不上是正义体系，但这种观点在‘工具正义体系’、‘强者正义体系’、‘义理正义体系’中都可以生效，所以应该算是对正义的特性的一种思考。”</p></div><div class="div_section" id="div_section_45"><p class="p_text" id="p_section_45">    妖怪：“还有人认为‘对抗邪恶就是正义’。”</p></div><div class="div_section" id="div_section_46"><p class="p_text" id="p_section_46">    苏：“‘如何定义邪恶’是一个和如何定义正义对称的巨大课题，所以不能把这种观点当做是一种正义体系，它是对正义与邪恶关系的声明。”</p></div><div class="div_section" id="div_section_47"><p class="p_text" id="p_section_47">    妖怪：“还有人提出‘欠债还钱’的正义（苏格拉底）。”</p></div><div class="div_section" id="div_section_48"><p class="p_text" id="p_section_48">    苏：“对欠债还钱可以有两种理解：一是指人与人之间的报复或交易，它可能是经典正义的组成部分之一；二可以指天理循环的报应，类似老子所说的‘天之道，损有余而补不足’，但我们人类并不是全知全能的‘天’，我们实在难以普遍地依靠难以捉摸的‘天道’来解释正义事件，所以欠债还钱的第二种解释也不能作为实用的正义体系。”</p></div><div class="div_section" id="div_section_49"><p class="p_text" id="p_section_49">    妖怪：“类似的对正义的零散定义还有很多，比如宗教的正义、美的正义、绝对公平的正义等等。看来你们人类对正义的定义不但种类繁多，连定义的形式和复杂度也各有不同。”</p></div><div class="div_section" id="div_section_50"><p class="p_text" id="p_section_50">    苏：“也许我们可以综合已有的正义体系和这些零散的正义定义来建立一种通用的正义体系。首先，我们假设各种正义定义都由基础的‘可辩论的正义元素’（简称正义元素）组成，有的正义定义包含多个可辩论的正义元素，有的则只包含一个可辩论的正义元素。”</p></div><div class="div_section" id="div_section_51"><p class="p_text" id="p_section_51">    妖怪：“何为‘可辩论的正义元素’？”</p></div><div class="div_section" id="div_section_52"><p class="p_text" id="p_section_52">    苏：“想象这样的场景：</p></div><div class="div_section" id="div_section_53"><p class="p_text" id="p_section_53">    热闹的街市上，面包店老板抓住了一个偷面包的年轻人，正准备把他送到警察局去，路人们围拢了过来。</p></div><div class="div_section" id="div_section_54"><p class="p_text" id="p_section_54">    年轻人：“对不起，我实在是太饿才偷了面包，求你们放过我吧。”</p></div><div class="div_section" id="div_section_55"><p class="p_text" id="p_section_55">    路人甲：“看他破旧的衣服肯定是个穷苦人，他说不定已经饿了好几天了，如果是我落在这步田地可能也会这么做吧。”</p></div><div class="div_section" id="div_section_56"><p class="p_text" id="p_section_56">    路人乙：“你们看这个孩子多么年青啊！他真是可怜！”</p></div><div class="div_section" id="div_section_57"><p class="p_text" id="p_section_57">    路人丙：“谁没有个困难的时候啊，我替他付了面包钱吧。”</p></div><div class="div_section" id="div_section_58"><p class="p_text" id="p_section_58">    老板：“好吧，这事就这么算了，这些面包给你。”</p></div><div class="div_section" id="div_section_59"><p class="p_text" id="p_section_59">    年轻人：“谢谢你们！”</p></div><div class="div_section" id="div_section_60"><p class="p_text" id="p_section_60">    按照大部分正义定义，年轻人偷窃他人物品被抓住都是邪恶的行为，但路人甲乙丙分别在自己的头脑中以‘求生必须’、‘保护幼儿’、‘帮助弱者’的道理与‘这个年轻人应该按照规则被送去警察局’的说法相互辩论，并且由此认为年轻人的邪恶程度应当减轻，进而做出帮助年轻人的行为，这里的‘求生必须’、‘保护幼儿’、‘帮助弱者’、‘遵从规则’就可以看做‘可辩论的正义元素’。</p></div><div class="div_section" id="div_section_61"><p class="p_text" id="p_section_61">    另一方面对于面包店老板，他在通过‘同情效应’收到路人甲乙丙对前述三种正义元素的强调的同时，也因路人丙的补偿而达成了‘保护自身利益’的需求，又考虑到‘遵从群体中的大多数’于是做出原谅年轻人的决定，这里的‘保护自身利益’和‘遵从群体中的大多数’也是可辩论的正义元素。</p></div><div class="div_section" id="div_section_62"><p class="p_text" id="p_section_62">    更近一步的，正义可能违反群体预先约定的道德（见前文关于工具正义、强者正义、义理正义的讨论），偷窃面包前年轻人也在‘求生必须’和‘遵从群体规则’之间进行了辩论，最终做出违反道德偷窃面包的行为，对于年轻人来讲‘生存必须’和‘遵从规则’都是可辩论的正义元素。</p></div><div class="div_section" id="div_section_63"><p class="p_text" id="p_section_63">    由此总结，‘可辩论的正义元素’是人们进行理智抉择时的基础辩论论点，这就好像迪士尼动画里经常出现在角色两边相互争论的天使和恶魔小人儿，只是正义元素往往不止两个（想象议会里的一排排坐席）。</p></div><div class="div_section" id="div_section_64"><p class="p_text" id="p_section_64">    可辩论的正义元素具有以下性质：</p></div><div class="div_section" id="div_section_65"><p class="p_text" id="p_section_65">    1、具备同情效应</p></div><div class="div_section" id="div_section_66"><p class="p_text" id="p_section_66">    正义元素能够容易的被同一文明中的其他个体所理解，比如路人甲能够体会到年轻人的‘生存必须’，老板能够理解路人甲乙丙的劝告。</p></div><div class="div_section" id="div_section_67"><p class="p_text" id="p_section_67">    2、依凭于理智存在</p></div><div class="div_section" id="div_section_68"><p class="p_text" id="p_section_68">    如果一个智慧生命已经失去了理智自然不会在头脑中进行辩论。特殊的，一个会思考的疯子也可以在头脑中进行辩论，但他理解的正义元素往往与常人的正义元素有很大区别，难以产生同情作用。”</p></div><div class="div_section" id="div_section_69"><p class="p_text" id="p_section_69">    苏：“每个人因其成长经历的不同，对于各种正义元素的认同程度存在差异，在面对正义事件时又因具体环境的不同导致各种正义元素受到不同程度的激发，进而可能让相同的正义事件引发出不同的正义行为，比如前文偷面包的场景也可能这样发展：</p></div><div class="div_section" id="div_section_70"><p class="p_text" id="p_section_70">    热闹的街市上，面包店老板抓住了一个偷面包的年轻人，正准备把他送到警察局去，路人们围拢了过来。</p></div><div class="div_section" id="div_section_71"><p class="p_text" id="p_section_71">    年轻人：“臭老头，不就是拿了你几个破面包吗？”</p></div><div class="div_section" id="div_section_72"><p class="p_text" id="p_section_72">    路人甲：“一身破衣服，一看就是个贱民。要我说，这帮贱民没一个好东西。”</p></div><div class="div_section" id="div_section_73"><p class="p_text" id="p_section_73">    路人乙：“啊！他在瞪着我！他的眼神真可怕！”</p></div><div class="div_section" id="div_section_74"><p class="p_text" id="p_section_74">    路人丙：“可不能让这样的祸害为祸乡里。”</p></div><div class="div_section" id="div_section_75"><p class="p_text" id="p_section_75">    年轻人：“放开我！”奋力挣扎。</p></div><div class="div_section" id="div_section_76"><p class="p_text" id="p_section_76">    老板：“大家打小偷！”</p></div><div class="div_section" id="div_section_77"><p class="p_text" id="p_section_77">    同样的偷面包事件，但因激发的正义元素不同而导向了完全不同的结果。”</p></div><div class="div_section" id="div_section_78"><p class="p_text" id="p_section_78">    妖怪：“我来分析一下，甲从衣着上攻击年轻人，可能是因为他将衣着形制看做了某种阶级的优越感，激发了维护自身优越感的正义元素；乙觉得年轻人的眼神很可怕进而攻击年轻人，应该是激发了自我保护的正义元素；丙则是以维护群体利益的正义元素为名义攻击年轻人。在这一过程中年轻人一直激发保护自身的正义元素进行反抗，而老板则最终在保护自身利益、遵从群体决定、宣示强者力量的正义元素作用下决定对年轻人进行殴打。”</p></div><div class="div_section" id="div_section_79"><p class="p_text" id="p_section_79">    妖怪：“究竟有哪些种正义元素呢？”</p></div><div class="div_section" id="div_section_80"><p class="p_text" id="p_section_80">    苏：“从细分概念上讲可能有无数种，例如假设‘保护植物是正义’是正义元素，那么细分开来‘保护梅、兰、竹、菊’都可以算是一种正义元素，再按每种植物的品相细分又可以得到无数种分类。但考虑到人类文明现有的普遍思维水平和表达能力，无限的细分并没有实际意义。这里我们采用一种概括的分类方式，虽然精确度不是最高，但应该可以适应人类文明当前的需要。</p></div><div class="div_section" id="div_section_81"><p class="p_text" id="p_section_81">    在概括的层面上我找到了这些可辩论的正义元素种类：</p></div><div class="div_section" id="div_section_82"><p class="p_text" id="p_section_82">    A、对个体自身的生存和发展有利即为正义</p></div><div class="div_section" id="div_section_83"><p class="p_text" id="p_section_83">    自身的生存是生命进行一切行为的基础，如果不能保持自身的生存和发展则一切都是空谈。</p></div><div class="div_section" id="div_section_84"><p class="p_text" id="p_section_84">    B、对一定范围内的大多数个体有利即为正义</p></div><div class="div_section" id="div_section_85"><p class="p_text" id="p_section_85">    分工合作是人类文明的基础，在文明世界里没有人能脱离群体单独生存，所以对群体有利也就包含并超越了对个体有利。而群体中的大部分个体最能代表整个群体，所以群体中的大部分个体的利益和愿望就是正义。</p></div><div class="div_section" id="div_section_86"><p class="p_text" id="p_section_86">    C、服从被广泛认可的规则即为正义</p></div><div class="div_section" id="div_section_87"><p class="p_text" id="p_section_87">    群体的规则应高于群体中个体的意志，因为个体的意志往往只能关注与当前和周边的情况，而经过充分设计和时间验证的规则则能保证更长远更广泛的利益。</p></div><div class="div_section" id="div_section_88"><p class="p_text" id="p_section_88">    D、充分利用资源即为正义</p></div><div class="div_section" id="div_section_89"><p class="p_text" id="p_section_89">    无论个体还是群体的生存和发展都以有限的资源为基础，所以善用资源物尽其用才能让文明获得最好的发展，这种为了伟大目标对欲望的克制就是正义。</p></div><div class="div_section" id="div_section_90"><p class="p_text" id="p_section_90">    E、保护和自身关系亲密的个体即为正义</p></div><div class="div_section" id="div_section_91"><p class="p_text" id="p_section_91">    我所获得和给予的大部分正向作用，都是在我和与我亲近的个体之间发生的，所以我要不惜一切代价保护与我亲近的事物，一切对这些事物的侵害都是邪恶的。</p></div><div class="div_section" id="div_section_92"><p class="p_text" id="p_section_92">    F、不干涉其他智慧生命的自由即为正义</p></div><div class="div_section" id="div_section_93"><p class="p_text" id="p_section_93">    每个智慧生命都有权决定自己的生存方式，同时每个生命也由其独有的生长经历而产生对世界的独特看法，对其他生命独有的生存方式和世界观的尊重就是正义。</p></div><div class="div_section" id="div_section_94"><p class="p_text" id="p_section_94">    G、美丽可爱的事物即为正义</p></div><div class="div_section" id="div_section_95"><p class="p_text" id="p_section_95">    人人都喜欢美丽可爱的事物，所以对美的追求便是正义，同时这‘美’也可以引申为‘稀有’和‘难以达到’。</p></div><div class="div_section" id="div_section_96"><p class="p_text" id="p_section_96">    H、某种特殊的图腾和偶像代表正义</p></div><div class="div_section" id="div_section_97"><p class="p_text" id="p_section_97">    这种象征物解答了我们生命中的困惑，我们和偶像相互理解，我们从图腾中获得力量，一切违逆这种象征的异端者皆为邪恶。</p></div><div class="div_section" id="div_section_98"><p class="p_text" id="p_section_98">    I、敬畏自然保持自然的原貌即为正义</p></div><div class="div_section" id="div_section_99"><p class="p_text" id="p_section_99">    我们人类与孕育了一切的宇宙相比无比渺小，原初的自然高于人类的文明，在宇宙的尺度下所有生命与人类平等，人类应该谦卑友善的与自然万物相处，这种谦卑友善就是正义。</p></div><div class="div_section" id="div_section_100"><p class="p_text" id="p_section_100">    J、探索并传播更多知识即为正义</p></div><div class="div_section" id="div_section_101"><p class="p_text" id="p_section_101">    认识世界与自我改进是智慧生命的根本属性，正是这种特性让我们不断前进，建立了辉煌灿烂的文明。</p></div><div class="div_section" id="div_section_102"><p class="p_text" id="p_section_102">    K、力量强大即为正义</p></div><div class="div_section" id="div_section_103"><p class="p_text" id="p_section_103">    强者引领者社会的发展方向，并在发展的过程中做出关键性的贡献，所以强大就是正义，至于弱者，一方面要恭顺的服从强者，另一方面要努力的成为强者。</p></div><div class="div_section" id="div_section_104"><p class="p_text" id="p_section_104">    L、帮助弱小和处于困境的个体即为正义</p></div><div class="div_section" id="div_section_105"><p class="p_text" id="p_section_105">    能力越大责任越大，群体中最强大的个体应该帮助和关怀群体中处于最弱势地位的个体，这可以最大程度的降低群体中的不公平，而这种对公平的关注就是正义。</p></div><div class="div_section" id="div_section_106"><p class="p_text" id="p_section_106">    M、维护和平与稳定即为正义</p></div><div class="div_section" id="div_section_107"><p class="p_text" id="p_section_107">    我看到过很多以各种理念为借口发动战争的人，无论他们的理念听起来多么伟大，最终带给世界的都是深重的灾难，对于人民来说只有和平与稳定才是最实在的正义。</p></div><div class="div_section" id="div_section_108"><p class="p_text" id="p_section_108">    N、直接的愉悦感就是正义</p></div><div class="div_section" id="div_section_109"><p class="p_text" id="p_section_109">    人类各种行为的目的说到底就是追求肉体或精神上的愉悦感觉，那么如果能一直保持肉体和精神上的愉悦感，不就是达到了一切目标的终点吗？”</p></div><div class="div_section" id="div_section_110"><p class="p_text" id="p_section_110">    妖怪：“我可以添加更多的正义元素吗？”</p></div><div class="div_section" id="div_section_111"><p class="p_text" id="p_section_111">    苏：“当然可以，但新添加的正义元素除了要符合同情性和理智性之外，还必须避免与已有的正义元素重叠，比如我们之前提到过的‘保护幼儿’，因为可以被分解为已有的CDEGLM几种正义元素，所以不能再把它作为一种单独的正义元素。”</p></div><div class="div_section" id="div_section_112"><p class="p_text" id="p_section_112">    妖怪：“如何用‘可辩论的正义体系’解释正义事件呢？”</p></div><div class="div_section" id="div_section_113"><p class="p_text" id="p_section_113">    苏：“我举一个例子：某流量明星粉丝与恶搞流量明星的网友之间的争论</p></div><div class="div_section" id="div_section_114"><p class="p_text" id="p_section_114">    粉丝方的正义元素：</p></div><div class="div_section" id="div_section_115"><p class="p_text" id="p_section_115">    E（保护和自身关系亲密的个体即为正义）——粉丝将明星视为与自己关系亲密的个体，所以在明星受到攻击时做出保护行为。</p></div><div class="div_section" id="div_section_116"><p class="p_text" id="p_section_116">    F（不干涉其他智慧生命的自由即为正义）——明星具有‘表演’的自由，粉丝具有‘追星’的自由</p></div><div class="div_section" id="div_section_117"><p class="p_text" id="p_section_117">    G（美丽可爱的事物即为正义）——在粉丝看来明星美丽可爱并且稀有</p></div><div class="div_section" id="div_section_118"><p class="p_text" id="p_section_118">    H（某种特殊的图腾和偶像代表正义）——粉丝将明星看做偶像</p></div><div class="div_section" id="div_section_119"><p class="p_text" id="p_section_119">    K（力量强大即为正义）——明星的个体力量强于社会中个体的普遍水平</p></div><div class="div_section" id="div_section_120"><p class="p_text" id="p_section_120">    N（直接的愉悦感就是正义）——明星的表演给粉丝带来精神上的直接愉悦</p></div><div class="div_section" id="div_section_121"><p class="p_text" id="p_section_121">    网友方的正义元素：</p></div><div class="div_section" id="div_section_122"><p class="p_text" id="p_section_122">    A（对个体自身的生存和发展有利即为正义）——该流量明星通过造假的方式使中国大部分人口成为了他的粉丝，这损害了个体的知情权和投票权。</p></div><div class="div_section" id="div_section_123"><p class="p_text" id="p_section_123">    B（对一定范围内的大多数个体有利即为正义）——同上</p></div><div class="div_section" id="div_section_124"><p class="p_text" id="p_section_124">    C（服从被广泛认可的规则即为正义）——明星的行为违反了‘诚实’的道德</p></div><div class="div_section" id="div_section_125"><p class="p_text" id="p_section_125">    F（不干涉其他智慧生命的自由即为正义）——网友具有‘不接受明星宣传’的自由</p></div><div class="div_section" id="div_section_126"><p class="p_text" id="p_section_126">    G（美丽可爱的事物即为正义）——有的网友认为该明星并不美丽可爱</p></div><div class="div_section" id="div_section_127"><p class="p_text" id="p_section_127">    H（某种特殊的图腾和偶像代表正义）——该明星的一些象征物与网友的已有偶像发生冲突，比如李小龙、篮球、迈克尔杰克逊</p></div><div class="div_section" id="div_section_128"><p class="p_text" id="p_section_128">    J（探索并传播更多知识即为正义）——网友认为流量的洗脑式宣传会使民众变得愚昧。</p></div><div class="div_section" id="div_section_129"><p class="p_text" id="p_section_129">    那么在裁判者看来，粉丝和网友同时具有的FGH正义元素可以相互抵消，剩下粉丝的EKN与网友的ABCJ相互辩论。如此混乱的争论变得清晰明了，一方面辩论的双方可以绕开分歧理解对方的观点，另一方面裁判者也可以根据社会中现有的正义元素‘权重’对辩论的双方做出是否正义的判断。”</p></div><div class="div_section" id="div_section_130"><p class="p_text" id="p_section_130">    妖怪：“如何确定社会的正义元素权重？”</p></div><div class="div_section" id="div_section_131"><p class="p_text" id="p_section_131">    苏：“可以定期在群体中组织各个正义元素的支持者就各个正义元素的重要性进行辩论，然后根据投票结果分配每种正义元素的权重，以最终的权重分配结果作为群体认可的‘公义’，以公义作为事件是否正义的参考标准。”</p></div><div class="div_section" id="div_section_132"><p class="p_text" id="p_section_132">    妖怪：“我大概理解你说的这种可辩论的正义体系了，其实仔细想想你们人类其实一直在按照这种体系行事，你不过是把它相对清楚的表述出来而已。现在就姑且把它当做是通用的正义定义吧。”</p></div></div>
+</div>
+
+<script>
+
+    window.onload=function(){
+        //处理导出html的事件有两种思路，一是使用innerHTML定义所有动态生成的标签，二是在每次打开网页时重新绑定事件
+        var div_main=document.getElementById("div_main");
+        var arr_section=div_main.getElementsByClassName("div_section");
+        var len=arr_section.length;
+        for(var i=0;i<len;i++)
+        {
+            let div_section=arr_section[i];
+            var arr_p=div_section.getElementsByTagName("p");
+            var len2=arr_p.length;
+            for(var j=0;j<len2;j++)
+            {
+                let p=arr_p[j];
+                if(j==0)
+                {
+                    p.ondblclick=function()
+                    {
+                        addAnnotate(div_section.id);
+                    }
+                }
+                else
+                {
+                    p.ondblclick=function(){openEdit(p)};
+                    p.onblur=function(){closeEdit(p)};
+                }
+            }
+        }
+    }
+    function ShowStr()
+    {
+        var str_local=document.getElementById("str_local");
+        var file=str_local.files[0];
+        var reader=new FileReader();
+        reader.readAsText(file);
+        reader.onload=function(e)
+        {
+            var str=e.target.result;
+            loadArticle(str);
+        }
+    }
+    function ShowStr2()
+    {
+        var str_local=document.getElementById("str_local2");
+        var str=str_local.value||str_local.innerHTML;
+        loadArticle(str);
+    }
+    var currentSectionid=null;
+    function loadArticle(str)
+    {
+        var div_main=document.getElementById("div_main");
+        div_main.innerHTML="";
+        var arr_section=str.split("\r\n");
+        var len=arr_section.length;
+        if(len==1)
+        {
+            arr_section=str.split("\n");
+        }
+        len=arr_section.length;
+
+        var str_split=document.getElementById("str_split").value;
+        if(str_split)//如果有额外的分割符号
+        {
+            var arr_temp=[];
+            var arr_split=str_split.split("@");
+            var len2=arr_split.length;
+            var str_temp="/";
+            for(var j=0;j<len2;j++)
+            {
+                str_temp+=(arr_split[j]+(j==len2-1?"":"|"));
+            }
+            str_temp+="/";
+            var var_split=eval(str_temp);
+            for(var i=0;i<len;i++)//对于每一个自然段
+            {
+                var section=arr_section[i];
+                if(section.length>0)
+                {
+                    arr_temp=arr_temp.concat(section.split(var_split));
+                    //arr_temp=arr_temp.splice(arr_temp.length,0,section.split(var_split))
+                }
+            }
+            arr_section=arr_temp;
+            len=arr_section.length;
+        }
+        var count_p=0;//包含主标题在内一共分成几段
+        for(var i=0;i<len;i++)
+        {
+            var section=arr_section[i];
+            if(section.length>0)
+            {
+                let div_section=document.createElement("div");
+                div_section.className="div_section";//这样可以更方便的在段内插入元素
+                div_section.id="div_section_"+count_p;
+
+                let p=document.createElement("p");
+                if(count_p==0)//标题段
+                {
+                    p.className="p_h1";
+                }
+                else
+                {
+                    p.className="p_text";
+                }
+                p.innerHTML="    "+section;
+                p.id="p_section_"+count_p;
+
+                p.ondblclick=function()
+                {
+                    addAnnotate(div_section.id);
+                }
+                count_p++;
+                div_section.appendChild(p);
+                div_main.appendChild(div_section);
+            }
+        }
+    }
+    function addAnnotate(id)
+    {
+        var div_section=document.getElementById(id);
+        currentSectionid=id;
+        var children=div_section.childNodes;
+        var len=children.length;
+        if(len==1)//此时还没有第一级注释
+        {
+            let p_a1=document.createElement("p");
+            p_a1.className="p_a1";
+            //点击第一级注释，进行编辑
+            p_a1.ondblclick=function(){openEdit(p_a1)};
+            p_a1.onblur=function(){closeEdit(p_a1)};
+            div_section.appendChild(p_a1)
+        }
+        else
+        {
+            if(children[1].style.display=="none")//如果当前是隐藏状态
+            {
+                for(var i=1;i<len;i++)
+                {
+                    children[i].style.display="block";
+                }
+            }
+            else
+            {
+                for(var i=1;i<len;i++)
+                {
+                    var child=children[i];
+                    child.style.display="none";
+                    if(child.className=="p_a1")
+                    {
+                        closeEdit(child);
+                    }
+                }
+            }
+        }
+    }
+    function openEdit(p)
+    {
+        p.style.border="2px solid cornflowerblue";
+        p.style.borderRadius="5px";
+        p.contentEditable="true";
+    }
+    function closeEdit(p)
+    {
+        p.style.border="0px";
+        p.contentEditable="false";
+        //Chrome的默认编辑模式会在p内插入一个div，这个div是用来分行的，空白的换行也会导致div！！
+        // 但在重新导入之后（在取innerHTML导出时尚正常）浏览器会自动把这个div绘制在p的外面！！！！
+        //多次换行是嵌套的！！！！所以简单的替换还不行！！
+        p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"@");
+        p.innerHTML=p.innerHTML.replace(new RegExp(("[@]+"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^/][\\S]{1,5}>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("</[\\S]{1,6}>"),"gm"),"");
+    }
+
+    function ExportHtml()
+    {
+        var str=str_head+window.document.body.outerHTML+"</html>";
+        var blob=new Blob([str],{
+            type: "text/plain"
+        })
+
+        var tmpa = document.createElement("a");
+        var p_h1=document.getElementsByClassName("p_h1")[0];
+        var dt=new Date();
+        var str_date=dt.getFullYear()+(dt.getMonth()+101+"").substr(1)+(dt.getDate()+100+"").substr(1)
+            +"_"+dt.getHours()+"_"+dt.getMinutes()+"_"+dt.getSeconds();
+        tmpa.download = str_date+(p_h1?p_h1.innerHTML:"test")+".html";
+        tmpa.href = URL.createObjectURL(blob);
+        tmpa.click();//导出后事件需要重新绑定，或者直接使用innHTML定义？
+        setTimeout(function () {
+            URL.revokeObjectURL(blob);
+        }, 100);
+    }
+
+    var str_head="<!DOCTYPE html>\n" +
+        "<html lang=\"en\">\n" +
+        "<head>\n" +
+        "    <meta charset=\"UTF-8\">\n" +
+        "    <title>实用版</title>\n" +
+        "    <style>\n" +
+        "        /*通用属性*/\n" +
+        "        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;\n" +
+        "            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;\n" +
+        "            -ms-touch-action: none;font-size: 12px;min-width: 600px;}\n" +
+        "        ul {    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        li{    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        ul li {    float: left;}\n" +
+        "        button{    cursor: pointer;    height: 23px;}\n" +
+        "        a:link{    text-decoration: none;}\n" +
+        "        \n" +
+        "        #div_top span,input,button,textarea{margin-left: 20px;float: left;}\n" +
+        "        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}\n" +
+        "        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}\n" +
+        "\n" +
+        "        .div_section{position:relative}\n" +
+        "        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;\n" +
+        "        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}\n" +
+        "        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;left:120px}\n" +
+        "    </style>\n" +
+        "</head>";
+</script>
+</body></html>
