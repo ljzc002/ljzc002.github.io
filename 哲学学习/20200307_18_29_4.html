@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实用版</title>
+    <style>
+        /*通用属性*/
+        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;
+            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;
+            -ms-touch-action: none;font-size: 12px;min-width: 600px;}
+        ul {    list-style: none;    margin: 0;    padding: 0;}
+        li{    list-style: none;    margin: 0;    padding: 0;}
+        ul li {    float: left;}
+        button{    cursor: pointer;    height: 23px;}
+        a:link{    text-decoration: none;}
+        
+        #div_top span,input,button,textarea{margin-left: 20px;float: left;}
+        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}
+        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}
+
+        .div_section{position:relative}
+        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;
+        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}
+        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;left:120px}
+    </style>
+</head><body>
+<div id="div_allbase" style="top:0px;bottom:0px;width:100%;height: 100%;position:relative;overflow-x: hidden;overflow-y: scroll
+        ">
+    <div id="div_top" style="top:0px;left:0px;width:100%;height: 30px;position:absolute;">
+        <span style="margin-left: 20px">选择文本文件</span>
+        <input type="file" id="str_local" onchange="ShowStr()" style="margin-left: 20px">
+        <span style="margin-left: 20px">粘贴文本</span>
+        <textarea type="text" id="str_local2" style="word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap;width: 200px;height:40px"></textarea>
+        <button onclick="ShowStr2()">确定</button>
+        <button onclick="ExportHtml()">导出Html</button>
+        <input id="str_split" style="margin-left: 20px" placeholder="输入额外的分割符，多个分割符以‘@’分割">
+    </div>
+    <div id="div_main" style="top:30px;left:0px;width:100%;position:absolute;"><div class="div_section" id="div_section_0"><p class="p_h1" id="p_section_0">    中华人民共和国外国人永久居留管理条例（征求意见稿）</p></div><div class="div_section" id="div_section_1"><p class="p_text" id="p_section_1">    第一章 总则</p></div><div class="div_section" id="div_section_2"><p class="p_text" id="p_section_2">    第一条 为了进一步扩大对外开放，规范外国人在中国境内永久居留管理，保障取得永久居留资格外国人（以下称永久居留外国人）的合法权益，依据《中华人民共和国出境入境管理法》，制定本条例。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">
+改为：“为了进一步扩大对外开放，引进外国高级人才建设中国特色社会主义，规范外国人在中国境内永久居留管理，保障取得永久居留资格外国人（以下称永久居留外国人）的合法权益，依据《中华人民共和国出境入境管理法》，制定本条例。”
+说明：在各种辟谣文章中反复提到设立此条例的初衷是引进外国高级人才，如果党的初衷确实如此，则应该在条例开头明确写出。
+</p></div><div class="div_section" id="div_section_3"><p class="p_text" id="p_section_3">    第二条 外国人永久居留资格的申请和审批，以及对永久居留外国人的服务和管理，适用本条例。</p></div><div class="div_section" id="div_section_4"><p class="p_text" id="p_section_4">    第三条 外国人永久居留制度应当符合国家安全和利益需要，与国家经济社会发展水平相适应。</p></div><div class="div_section" id="div_section_5"><p class="p_text" id="p_section_5">    第四条 永久居留外国人在中国境内的合法权益受法律保护，在中国境内居留的期限不受限制。</p></div><div class="div_section" id="div_section_6"><p class="p_text" id="p_section_6">    在中国境内的永久居留外国人应当遵守中国法律，不得危害中国国家安全、损害社会公共利益、破坏社会公共秩序。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">第二句改为：“
+在中国境内的永久居留外国人应当遵守中国法律，尊重中华民族的文化传统和生活习惯，认同中国共产党的执政和中国特色社会主义，不得危害中国国家安全、损害社会公共利益、破坏社会公共秩序。违反此条情节严重者取消永久居留资格。
+”
+说明：难道你们要靠不
+尊重中华民族的文化传统和生活习惯，不认同中国共产党的执政和中国特色社会主义的外国人才实现伟大复兴？
+</p></div><div class="div_section" id="div_section_7"><p class="p_text" id="p_section_7">    第五条 国家移民管理部门负责外国人永久居留管理工作。国务院有关部门在各自职责范围内做好永久居留外国人有关的服务管理工作。</p></div><div class="div_section" id="div_section_8"><p class="p_text" id="p_section_8">    地方各级人民政府做好本行政区域内永久居留外国人的服务管理工作。</p></div><div class="div_section" id="div_section_9"><p class="p_text" id="p_section_9">    第六条 国家移民管理部门会同国家有关主管部门建立外国人永久居留服务管理工作协调机制、信息共享机制。</p></div><div class="div_section" id="div_section_10"><p class="p_text" id="p_section_10">    第七条 国家建立外国人永久居留政策定期评估调整机制。必要时，经国务院批准，对外国人永久居留资格实行定额审批制度。</p></div><div class="div_section" id="div_section_11"><p class="p_text" id="p_section_11">    第八条 国家移民管理部门会同科技、人力资源社会保障部门适时制定积分评估制度。</p></div><div class="div_section" id="div_section_12"><p class="p_text" id="p_section_12">    第九条 国家移民管理部门应当通过政府网站等公开方式，统一发布外国人永久居留资格申请所需材料、手续以及办理流程等审批政策信息。</p></div><div class="div_section" id="div_section_13"><p class="p_text" id="p_section_13">    第二章 申请条件</p></div><div class="div_section" id="div_section_14"><p class="p_text" id="p_section_14">    第十条 外国人遵守中国法律，具备在中国生活的基本经济保障，并且符合本条例规定申请条件的，可以申请永久居留资格。</p></div><div class="div_section" id="div_section_15"><p class="p_text" id="p_section_15">    外国人因外交、公务事由在中国境内停留居留期间，不得申请永久居留资格。</p></div><div class="div_section" id="div_section_16"><p class="p_text" id="p_section_16">    第十一条 外国人为中国经济社会发展作出突出贡献，属于下列情形之一的，经国家有关主管部门或者省、自治区、直辖市人民政府推荐，可以申请永久居留资格：</p></div><div class="div_section" id="div_section_17"><p class="p_text" id="p_section_17">    （一）为中国科技、教育、文化、卫生、体育等事业作出突出贡献；</p></div><div class="div_section" id="div_section_18"><p class="p_text" id="p_section_18">    （二）在中国境内从事公益活动，为中国公益事业发展作出突出贡献；</p></div><div class="div_section" id="div_section_19"><p class="p_text" id="p_section_19">    （三）为推进中外友好交流合作、维护世界和平、促进共同发展作出突出贡献；</p></div><div class="div_section" id="div_section_20"><p class="p_text" id="p_section_20">    （四）为中国经济社会发展作出突出贡献的其他情形。</p></div><div class="div_section" id="div_section_21"><p class="p_text" id="p_section_21">    第十二条 在经济、科技、教育、文化、卫生、体育等领域取得国际公认杰出成就的外国人，可以直接申请永久居留资格。</p></div><div class="div_section" id="div_section_22"><p class="p_text" id="p_section_22">    第十三条 因国家经济社会发展需要引进的外国人，属于下列情形之一的，可以申请永久居留资格：</p></div><div class="div_section" id="div_section_23"><p class="p_text" id="p_section_23">    （一）国家重点发展的行业、区域引进并经主管部门推荐的急需紧缺人才；</p></div><div class="div_section" id="div_section_24"><p class="p_text" id="p_section_24">    （二）国家重点建设的高等学校、科研机构引进并推荐的助理教授、助理研究员以上职称的学术科研人员，以及其他高等学校、科研机构引进并推荐的教授、研究员；</p></div><div class="div_section" id="div_section_25"><p class="p_text" id="p_section_25">    （三）高新技术企业、创新型企业以及国内知名企业引进并推荐的高级经营管理人员、高级专业技术人员。</p></div><div class="div_section" id="div_section_26"><p class="p_text" id="p_section_26">    （四）根据本条例第十二条规定取得永久居留资格的外国人推荐的专业人才。</p></div><div class="div_section" id="div_section_27"><p class="p_text" id="p_section_27">    前款所列推荐单位和个人应当出具真实、可靠的推荐函件，对引进事由及推荐对象相关资质的真实性负责。</p></div><div class="div_section" id="div_section_28"><p class="p_text" id="p_section_28">    第十四条 国家移民管理部门应当与外交、发展改革、教育、科技、人力资源社会保障、商务、文化、卫生健康、体育等国务院有关部门建立会商机制，就本条例第十二条和第十三条规定的具体标准等进行会商。</p></div><div class="div_section" id="div_section_29"><p class="p_text" id="p_section_29">    第十五条 外国人依法在中国境内工作，属于下列情形之一，且纳税记录和信用记录良好的，可以申请永久居留资格：</p></div><div class="div_section" id="div_section_30"><p class="p_text" id="p_section_30">    （一）具有博士研究生学历或者从国际知名高校毕业，在中国境内工作满三年，其间实际居留累计不少于一年；</p></div><div class="div_section" id="div_section_31"><p class="p_text" id="p_section_31">    （二）在国家重点发展的行业、区域连续工作满三年，其间实际居留累计不少于一年，工资性年收入不低于上一年度所在地区城镇在岗职工平均工资的四倍；</p></div><div class="div_section" id="div_section_32"><p class="p_text" id="p_section_32">    （三）在中国境内连续工作满四年，其间实际居留累计不少于二年，工资性年收入不低于上一年度所在地区城镇在岗职工平均工资的六倍；</p></div><div class="div_section" id="div_section_33"><p class="p_text" id="p_section_33">    （四）在中国境内连续工作满八年，其间实际居留累计不少于四年，工资性年收入不低于上一年度所在地区城镇在岗职工平均工资的三倍。</p></div><div class="div_section" id="div_section_34"><p class="p_text" id="p_section_34">    前款第二项至第四项规定的工资性年收入为最低标准，具体标准由国家移民管理部门商省、自治区、直辖市人民政府确定。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">增加：“按前款第二项至第四项规定获得永久居留权的外国人，居留地即为计算工资性年收入的地区，如需更换居留地，需符合目的居留地的工资标准。
+”</p></div><div class="div_section" id="div_section_35"><p class="p_text" id="p_section_35">    第十六条 外国人按照外商投资法律的规定，以自然人身份或者作为控股股东的企业投资，属于下列情形之一，且连续三年投资情况稳定，纳税记录和信用记录良好的，可以申请永久居留资格：</p></div><div class="div_section" id="div_section_36"><p class="p_text" id="p_section_36">    （一）在中国境内投资折合人民币一千万以上；</p></div><div class="div_section" id="div_section_37"><p class="p_text" id="p_section_37">    （二）在国家实行外商投资鼓励措施的区域投资，投资数额、纳税金额和聘雇中国公民人数达到规定标准的；</p></div><div class="div_section" id="div_section_38"><p class="p_text" id="p_section_38">    （三）在中国境内设立高新技术企业、创新型企业，效益显著并经省、自治区、直辖市人民政府主管部门推荐的。</p></div><div class="div_section" id="div_section_39"><p class="p_text" id="p_section_39">    前款第二项规定的具体标准由国家移民管理部门商国务院有关部门确定。</p></div><div class="div_section" id="div_section_40"><p class="p_text" id="p_section_40">    第十七条 外国人有家庭团聚需要，属于下列情形之一的，可以申请永久居留资格：</p></div><div class="div_section" id="div_section_41"><p class="p_text" id="p_section_41">    （一）配偶为居住在中国境内的中国公民或者永久居留外国人，婚后已在中国境内与配偶共同生活五年，且每年实际居留累计不少于九个月，有稳定生活保障和住所；</p></div><div class="div_section" id="div_section_42"><p class="p_text" id="p_section_42">    （二）未满十八周岁的子女投靠居住在中国境内的中国籍父母或者在中国境内永久居留的外国籍父母；</p></div><div class="div_section" id="div_section_43"><p class="p_text" id="p_section_43">    （三）年满六十周岁，在境外无直系亲属，投靠居住在中国境内的中国籍直系亲属或者在中国境内永久居留的外国籍直系亲属，已在中国境内连续居留五年，且每年实际居留累计不少于九个月，有稳定生活保障和住所。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">增加：（四）以家庭团聚为由与亲人甲团聚获取永久居留资格的外国人乙，不可再作为其他外国人丙以家庭团聚为由获取永久居留资格的团聚对象，如丙确需以乙作为团聚对象，则乙必须按第十一条、第十二条、第十三条、第十五条、第十六条中的一种规定条件独立获取永久居留资格，并且不可重复使用甲已经做出的贡献。
+</p></div><div class="div_section" id="div_section_44"><p class="p_text" id="p_section_44">    第十八条 外国人符合本条例第十一条、第十二条、第十三条、第十五条、第十六条规定条件，申请永久居留资格的，其配偶和未满十八周岁的子女可以同时申请永久居留资格。</p></div><div class="div_section" id="div_section_45"><p class="p_text" id="p_section_45">    第十九条 外国人因其他正当理由需要在中国境内永久居留的，可以申请永久居留资格。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">修改：“该特殊原因必须由承办单位负责人担保，并在国家公正机构备案，如该外国人在国内因违法犯罪等原因被取消永久居留资格，则追究担保人和担保单位的责任。”</p></div><div class="div_section" id="div_section_46"><p class="p_text" id="p_section_46">    第三章 审批和管理</p></div><div class="div_section" id="div_section_47"><p class="p_text" id="p_section_47">    第二十条 外国人申请永久居留资格，应当向居留地公安机关出入境管理机构提出申请，如实填报申请信息，提交本人护照或者其他国际旅行证件、符合规定的照片和申请材料，按规定接受面谈，并留存指纹等人体识别信息。</p></div><div class="div_section" id="div_section_48"><p class="p_text" id="p_section_48">    依据本条例第十二条和第十三条规定申请永久居留资格的，不受居留地限制，并可以直接向国家移民管理部门提出申请。</p></div><div class="div_section" id="div_section_49"><p class="p_text" id="p_section_49">    第二十一条 县级以上地方人民政府公安机关出入境管理机构按照国家移民管理部门的委托，受理外国人永久居留资格的申请。</p></div><div class="div_section" id="div_section_50"><p class="p_text" id="p_section_50">    外国人申请永久居留资格的手续和材料符合规定的，公安机关出入境管理机构应当受理并出具受理回执。申请材料不齐全或者不符合规定形式的，公安机关出入境管理机构应当当场或者在五日内一次性告知申请人需要履行手续和补正材料的全部内容，并进行登记。</p></div><div class="div_section" id="div_section_51"><p class="p_text" id="p_section_51">    对依据本条例第十二条、第十三条规定申请永久居留资格的，优先受理。</p></div><div class="div_section" id="div_section_52"><p class="p_text" id="p_section_52">    第二十二条 公安机关出入境管理机构应当认真核查申请事由的真实性以及申请人的国籍、信用记录和在中国境内工作、生活等情况。有关单位和个人应当予以协助配合。</p></div><div class="div_section" id="div_section_53"><p class="p_text" id="p_section_53">    第二十三条 外国人永久居留资格的审批期限最长为一百二十日，自公安机关出入境管理机构受理之日起计算。</p></div><div class="div_section" id="div_section_54"><p class="p_text" id="p_section_54">    等待配额的时间不计入审批期限。</p></div><div class="div_section" id="div_section_55"><p class="p_text" id="p_section_55">    第二十四条 对符合条件的外国人，由国家移民管理部门批准永久居留资格，并签发外国人永久居留身份证。</p></div><div class="div_section" id="div_section_56"><p class="p_text" id="p_section_56">    外国人永久居留身份证是永久居留外国人在中国境内的身份证明。永久居留外国人可以凭该证证明身份从事相关活动，有关单位及其工作人员不得拒绝。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px; display: none;"></p></div><div class="div_section" id="div_section_57"><p class="p_text" id="p_section_57">    第二十五条 外国人永久居留身份证登记的项目包括：姓名、性别、出生日期、国籍、本人照片、永久居留身份号码、发证机关、证件有效期等。</p></div><div class="div_section" id="div_section_58"><p class="p_text" id="p_section_58">    外国人永久居留身份证的式样，由国家移民管理部门规定。</p></div><div class="div_section" id="div_section_59"><p class="p_text" id="p_section_59">    第二十六条 外国人有下列情形之一的，国家移民管理部门应当作出不予批准永久居留的决定：</p></div><div class="div_section" id="div_section_60"><p class="p_text" id="p_section_60">    （一）不符合申请条件或者未按照规定提供申请材料；</p></div><div class="div_section" id="div_section_61"><p class="p_text" id="p_section_61">    （二）患有严重精神障碍、传染性肺结核病或者可能对公共卫生造成重大危害的其他传染病；</p></div><div class="div_section" id="div_section_62"><p class="p_text" id="p_section_62">    （三）可能危害中国国家安全和利益、破坏社会公共秩序；</p></div><div class="div_section" id="div_section_63"><p class="p_text" id="p_section_63">    （四）在申请过程中弄虚作假；</p></div><div class="div_section" id="div_section_64"><p class="p_text" id="p_section_64">    （五）不能保障在中国境内生活所需费用；</p></div><div class="div_section" id="div_section_65"><p class="p_text" id="p_section_65">    （六）不适宜在中国境内永久居留的其他情形。</p></div><div class="div_section" id="div_section_66"><p class="p_text" id="p_section_66">    第二十七条 永久居留外国人每年在中国境内实际居留时间不得少于三个月。</p></div><div class="div_section" id="div_section_67"><p class="p_text" id="p_section_67">    确有正当理由不能满足前款居留时限要求的永久居留外国人，经省级人民政府公安机关出入境管理机构批准，并报国家移民管理部门备案后，可以适当降低居留时限要求。</p></div><div class="div_section" id="div_section_68"><p class="p_text" id="p_section_68">    第二十八条 外国人永久居留身份证有效期满或者登记事项有变更的，持证件人应当在证件有效期届满前三十日内或者自登记事项发生变更之日起三十日内向居留地公安机关出入境管理机构申请换发。</p></div><div class="div_section" id="div_section_69"><p class="p_text" id="p_section_69">    外国人永久居留身份证损毁、遗失、被盗抢的，应当及时向居留地公安机关出入境管理机构申请补发。</p></div><div class="div_section" id="div_section_70"><p class="p_text" id="p_section_70">    第二十九条 外国人永久居留身份证换发、补发申请符合受理规定的，公安机关出入境管理机构应当受理并出具有效期不超过三十日的受理回执，在受理回执有效期内作出是否批准换发、补发的决定。</p></div><div class="div_section" id="div_section_71"><p class="p_text" id="p_section_71">    在外国人永久居留身份证换发、补发期间，永久居留外国人凭受理回执在中国境内合法居留。</p></div><div class="div_section" id="div_section_72"><p class="p_text" id="p_section_72">    第三十条 公安机关出入境管理机构根据工作需要核查永久居留外国人在中国的实际居留时间、居留地、国籍变更以及在中国工作、生活等信息的，有关单位和个人应当予以协助配合。</p></div><div class="div_section" id="div_section_73"><p class="p_text" id="p_section_73">    第三十一条 永久居留外国人具有下列情形之一的，国家移民管理部门应当取消其永久居留资格，宣布其持有的永久居留身份证作废：</p></div><div class="div_section" id="div_section_74"><p class="p_text" id="p_section_74">    （一）对中国国家安全和利益造成危害的；</p></div><div class="div_section" id="div_section_75"><p class="p_text" id="p_section_75">    （二）被处驱逐出境的；</p></div><div class="div_section" id="div_section_76"><p class="p_text" id="p_section_76">    （三）弄虚作假骗取在中国境内永久居留资格的；</p></div><div class="div_section" id="div_section_77"><p class="p_text" id="p_section_77">    （四）在中国境内居留未达到规定时限的；</p></div><div class="div_section" id="div_section_78"><p class="p_text" id="p_section_78">    （五）不适宜在中国境内永久居留的其他情形。</p></div><div class="div_section" id="div_section_79"><p class="p_text" id="p_section_79">    第三十二条 有下列情形之一的，由公安机关出入境管理机构收缴外国人永久居留身份证：</p></div><div class="div_section" id="div_section_80"><p class="p_text" id="p_section_80">    （一）被批准加入或恢复中国国籍的；</p></div><div class="div_section" id="div_section_81"><p class="p_text" id="p_section_81">    （二）永久居留资格外国人死亡的；</p></div><div class="div_section" id="div_section_82"><p class="p_text" id="p_section_82">    （三）外国人永久居留证被宣布作废的。</p></div><div class="div_section" id="div_section_83"><p class="p_text" id="p_section_83">    第三十三条 外国人被取消永久居留资格的，五年内不得再次提出申请。</p></div><div class="div_section" id="div_section_84"><p class="p_text" id="p_section_84">    第三十四条 国家工作人员对于履行职责过程中知悉的永久居留外国人的个人信息，应当依法予以保密。</p></div><div class="div_section" id="div_section_85"><p class="p_text" id="p_section_85">    第四章 服务和待遇</p></div><div class="div_section" id="div_section_86"><p class="p_text" id="p_section_86">    第三十五条 地方各级人民政府应当将永久居留外国人纳入常住人口服务管理体系，根据本地区经济社会发展水平和实际需要，为永久居留外国人提供通用语言文字培训、国情常识、法律政策咨询等社会融入服务。</p></div><div class="div_section" id="div_section_87"><p class="p_text" id="p_section_87">    地方各级人民政府应当积极引导和规范永久居留外国人所在单位、社区和相关中介机构、法律服务机构等社会力量参与为永久居留外国人提供社会融入服务。</p></div><div class="div_section" id="div_section_88"><p class="p_text" id="p_section_88">    第三十六条 国务院有关部门和地方各级人民政府应当根据本部门、本地区实际情况，逐步推进永久居留身份证社会化应用，为永久居留外国人凭外国人永久居留身份证在中国境内办理金融、外汇、教育、医疗、交通、电信、社会保险、住宿登记、财产登记、机动车驾驶证申领等事务提供便利。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">改为：“
+国务院有关部门和地方各级人民政府应当根据本部门、本地区实际情况，逐步推进永久居留身份证社会化应用，为永久居留外国人凭外国人永久居留身份证在中国境内办理金融、外汇、教育、医疗、交通、电信、社会保险、住宿登记、财产登记、机动车驾驶证申领等事务提供与居留地所在地本国国民同等的便利。
+”
+说明：一方面防止“超国民”情况发生，避免民族矛盾激化；另一方面中国不同地区之间、城乡之间收入差距巨大，应避免外国人利用收入较低地区获得永久居留权后自由流窜至高收入地区。
+</p></div><div class="div_section" id="div_section_89"><p class="p_text" id="p_section_89">    第三十七条 永久居留外国人的入境安家物品按照海关对定居旅客有关规定办理。永居外国人自入境之日起，居留时间不满两年，又出境定居的，其免税携运入境的安家物品应复运出境或者向海关补税。永久居留外国人的其他入出境货物、物品通关事宜，参照居民旅客规定办理。</p></div><div class="div_section" id="div_section_90"><p class="p_text" id="p_section_90">    永久居留外国人出入境时，可以从中国公民专用通道通行。</p></div><div class="div_section" id="div_section_91"><p class="p_text" id="p_section_91">    第三十八条 永久居留外国人在中国境内工作免办外国人工作许可，并可按照有关规定参加职称评审、职业资格考试和政府设立的自然科学、技术创新类奖励的评选。</p></div><div class="div_section" id="div_section_92"><p class="p_text" id="p_section_92">    第三十九条 永久居留外国人按照中国税收法律法规以及中国对外缔结的有关税收的国际条约、协定的有关规定，履行相应的纳税义务。</p></div><div class="div_section" id="div_section_93"><p class="p_text" id="p_section_93">    永久居留外国人对在中国境内取得的收入，依法纳税并按照规定在税务部门开具税收证明或完税凭证，或者办理对外支付税务备案后，可以按照规定兑换外汇汇往境外。</p></div><div class="div_section" id="div_section_94"><p class="p_text" id="p_section_94">    第四十条 永久居留外国人可以按照有关规定在中国境内购买自用、自住商品住房。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">改为：“永久居留外国人可以按照与居留地所在地本国国民相同的规定在中国境内购买自用、自住商品住房。
+”</p></div><div class="div_section" id="div_section_95"><p class="p_text" id="p_section_95">    永久居留外国人可以按照住房公积金管理有关规定缴存和使用住房公积金，离开缴存地时，可以按照规定办理住房公积金的提取或转移手续。</p></div><div class="div_section" id="div_section_96"><p class="p_text" id="p_section_96">    第四十一条 永久居留外国人在中国境内工作的，按照社会保险法律法规的规定参加各项社会保险。在中国境内居留但未工作的，可以按照居留地相关规定参加城乡居民基本医疗保险和城乡居民基本养老保险，享受社会保险待遇。</p></div><div class="div_section" id="div_section_97"><p class="p_text" id="p_section_97">    第四十二条 适龄永久居留外国人或随迁的未成年子女可以在中国接受义务教育，不收取国家规定以外的费用。</p></div><div class="div_section" id="div_section_98"><p class="p_text" id="p_section_98">    第四十三条 省、自治区、直辖市人民政府应当根据本地区实际情况，制定完善配套措施，保障本地区内永久居留外国人在参加社会保险、购买自住自用房以及本人或随迁的未成年子女接受义务教育等方面的合法权益。</p></div><div class="div_section" id="div_section_99"><p class="p_text" id="p_section_99">    第四十四条 永久居留外国人的其他待遇事项本条例未规定，法律法规和国务院有关部门有规定的，从其规定。</p><p class="p_a1" contenteditable="false" style="border: 0px; border-radius: 5px;">第四十五条 永久居留外国人以中国名义参与体育赛事、文化交流等国际活动时，按照永久居留外国人占中国总人口比例确定最大参与比例，如不足一人则记为一人。
+说明：比如一项体育赛事运动员为20人，永久居留外国人占人口比例为1%，则最多允许0.2名永久居留外国人加入，0.2不足一人则记为一人，最终允许一人加入队伍。
+</p></div><div class="div_section" id="div_section_100"><p class="p_text" id="p_section_100">    第五章 法律责任</p></div><div class="div_section" id="div_section_101"><p class="p_text" id="p_section_101">    第四十五条 本章规定的行政处罚，除本章另有规定外，由县级以上地方人民政府公安机关决定；其中警告或者五千元以下罚款，可以由县级以上地方人民政府公安机关出入境管理机构决定。</p></div><div class="div_section" id="div_section_102"><p class="p_text" id="p_section_102">    第四十六条 履行外国人永久居留管理职责的工作人员，有下列情形之一的，依法给予处分：</p></div><div class="div_section" id="div_section_103"><p class="p_text" id="p_section_103">    （一）违反法律、行政法规，对应当受理的永久居留资格申请未予受理的；</p></div><div class="div_section" id="div_section_104"><p class="p_text" id="p_section_104">    （二）违反法律、行政法规，为不符合规定条件的外国人签发外国人永久居留身份证件的；</p></div><div class="div_section" id="div_section_105"><p class="p_text" id="p_section_105">    （三）泄露在履行职责过程中知悉的永久居留外国人个人信息，侵害当事人合法权益的；</p></div><div class="div_section" id="div_section_106"><p class="p_text" id="p_section_106">    （四）滥用职权、玩忽职守、徇私舞弊，不依法履行法定职责的其他行为。</p></div><div class="div_section" id="div_section_107"><p class="p_text" id="p_section_107">    第四十七条 有关单位和个人有下列情形之一的，给予警告，责令改正；拒不改正或情节严重的，处一千元以上五千元以下罚款：</p></div><div class="div_section" id="div_section_108"><p class="p_text" id="p_section_108">    （一）拒不配合信息核查工作或提供虚假信息的；</p></div><div class="div_section" id="div_section_109"><p class="p_text" id="p_section_109">    （二）无正当理由拒绝承认永久居留外国身份证件效力的。</p></div><div class="div_section" id="div_section_110"><p class="p_text" id="p_section_110">    第四十八条 有关单位和个人有下列情形之一的，依据《中华人民共和国出境入境管理法》有关规定予以处罚：</p></div><div class="div_section" id="div_section_111"><p class="p_text" id="p_section_111">    （一）违反规定为外国人出具推荐函件或其他申请材料的；</p></div><div class="div_section" id="div_section_112"><p class="p_text" id="p_section_112">    （二）弄虚作假骗取永久居留身份证件的；</p></div><div class="div_section" id="div_section_113"><p class="p_text" id="p_section_113">    （三）永久居留外国人居留地发生变更未依法办理登记的；</p></div><div class="div_section" id="div_section_114"><p class="p_text" id="p_section_114">    （四）有其他违反出境入境法律规定情形的。</p></div><div class="div_section" id="div_section_115"><p class="p_text" id="p_section_115">    违反规定为外国人出具推荐函件的，同时取消推荐资格。</p></div><div class="div_section" id="div_section_116"><p class="p_text" id="p_section_116">    第四十九条 违反本条例规定，构成犯罪的，依法追究刑事责任。</p></div><div class="div_section" id="div_section_117"><p class="p_text" id="p_section_117">    第六章 附则</p></div><div class="div_section" id="div_section_118"><p class="p_text" id="p_section_118">    第五十条 本条例所称居留地是指与外国人申请永久居留事由直接相关的，申请人的引进单位或工作单位所在地、投资地，以及本人或其配偶、投靠人或赡养人的经常居住地等。</p></div><div class="div_section" id="div_section_119"><p class="p_text" id="p_section_119">    第五十一条 本条例规定的审批期限以工作日计算，不含法定节假日。</p></div><div class="div_section" id="div_section_120"><p class="p_text" id="p_section_120">    第五十二条 申请在中国永久居留以及签发、换发、补发外国人永久居留身份证，有关收费项目和标准按照国务院财政和价格主管部门的规定执行。</p></div><div class="div_section" id="div_section_121"><p class="p_text" id="p_section_121">    第五十三条 本条例自 年 月 日起施行。</p></div></div>
+</div>
+
+<script>
+
+    window.onload=function(){
+        //处理导出html的事件有两种思路，一是使用innerHTML定义所有动态生成的标签，二是在每次打开网页时重新绑定事件
+        var div_main=document.getElementById("div_main");
+        var arr_section=div_main.getElementsByClassName("div_section");
+        var len=arr_section.length;
+        for(var i=0;i<len;i++)
+        {
+            let div_section=arr_section[i];
+            var arr_p=div_section.getElementsByTagName("p");
+            var len2=arr_p.length;
+            for(var j=0;j<len2;j++)
+            {
+                let p=arr_p[j];
+                if(j==0)
+                {
+                    p.ondblclick=function()
+                    {
+                        addAnnotate(div_section.id);
+                    }
+                }
+                else
+                {
+                    p.ondblclick=function(){openEdit(p)};
+                    p.onblur=function(){closeEdit(p)};
+                }
+            }
+        }
+    }
+    function ShowStr()
+    {
+        var str_local=document.getElementById("str_local");
+        var file=str_local.files[0];
+        var reader=new FileReader();
+        reader.readAsText(file);
+        reader.onload=function(e)
+        {
+            var str=e.target.result;
+            loadArticle(str);
+        }
+    }
+    function ShowStr2()
+    {
+        var str_local=document.getElementById("str_local2");
+        var str=str_local.value||str_local.innerHTML;
+        loadArticle(str);
+    }
+    var currentSectionid=null;
+    function loadArticle(str)
+    {
+        var div_main=document.getElementById("div_main");
+        div_main.innerHTML="";
+        var arr_section=str.split("\r\n");
+        var len=arr_section.length;
+        if(len==1)
+        {
+            arr_section=str.split("\n");
+        }
+        len=arr_section.length;
+
+        var str_split=document.getElementById("str_split").value;
+        if(str_split)//如果有额外的分割符号
+        {
+            var arr_temp=[];
+            var arr_split=str_split.split("@");
+            var len2=arr_split.length;
+            var str_temp="/";
+            for(var j=0;j<len2;j++)
+            {
+                str_temp+=(arr_split[j]+(j==len2-1?"":"|"));
+            }
+            str_temp+="/";
+            var var_split=eval(str_temp);
+            for(var i=0;i<len;i++)//对于每一个自然段
+            {
+                var section=arr_section[i];
+                if(section.length>0)
+                {
+                    arr_temp=arr_temp.concat(section.split(var_split));
+                    //arr_temp=arr_temp.splice(arr_temp.length,0,section.split(var_split))
+                }
+            }
+            arr_section=arr_temp;
+            len=arr_section.length;
+        }
+        var count_p=0;//包含主标题在内一共分成几段
+        for(var i=0;i<len;i++)
+        {
+            var section=arr_section[i];
+            if(section.length>0)
+            {
+                let div_section=document.createElement("div");
+                div_section.className="div_section";//这样可以更方便的在段内插入元素
+                div_section.id="div_section_"+count_p;
+
+                let p=document.createElement("p");
+                if(count_p==0)//标题段
+                {
+                    p.className="p_h1";
+                }
+                else
+                {
+                    p.className="p_text";
+                }
+                p.innerHTML="    "+section;
+                p.id="p_section_"+count_p;
+
+                p.ondblclick=function()
+                {
+                    addAnnotate(div_section.id);
+                }
+                count_p++;
+                div_section.appendChild(p);
+                div_main.appendChild(div_section);
+            }
+        }
+    }
+    function addAnnotate(id)
+    {
+        var div_section=document.getElementById(id);
+        currentSectionid=id;
+        var children=div_section.childNodes;
+        var len=children.length;
+        if(len==1)//此时还没有第一级注释
+        {
+            let p_a1=document.createElement("p");
+            p_a1.className="p_a1";
+            //点击第一级注释，进行编辑
+            p_a1.ondblclick=function(){openEdit(p_a1)};
+            p_a1.onblur=function(){closeEdit(p_a1)};
+            div_section.appendChild(p_a1)
+        }
+        else
+        {
+            if(children[1].style.display=="none")//如果当前是隐藏状态
+            {
+                for(var i=1;i<len;i++)
+                {
+                    children[i].style.display="block";
+                }
+            }
+            else
+            {
+                for(var i=1;i<len;i++)
+                {
+                    var child=children[i];
+                    child.style.display="none";
+                    if(child.className=="p_a1")
+                    {
+                        closeEdit(child);
+                    }
+                }
+            }
+        }
+    }
+    function openEdit(p)
+    {
+        p.style.border="2px solid cornflowerblue";
+        p.style.borderRadius="5px";
+        p.contentEditable="true";
+    }
+    function closeEdit(p)
+    {
+        p.style.border="0px";
+        p.contentEditable="false";
+        //Chrome的默认编辑模式会在p内插入一个div，这个div是用来分行的，空白的换行也会导致div！！
+        // 但在重新导入之后（在取innerHTML导出时尚正常）浏览器会自动把这个div绘制在p的外面！！！！
+        //多次换行是嵌套的！！！！所以简单的替换还不行！！
+        p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"@");
+        p.innerHTML=p.innerHTML.replace(new RegExp(("[@]+"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^>]+>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("<[^/][\\S]{1,5}>"),"gm"),"\r\n");
+        //p.innerHTML=p.innerHTML.replace(new RegExp(("</[\\S]{1,6}>"),"gm"),"");
+    }
+
+    function ExportHtml()
+    {
+        var str=str_head+window.document.body.outerHTML+"</html>";
+        var blob=new Blob([str],{
+            type: "text/plain"
+        })
+
+        var tmpa = document.createElement("a");
+        var p_h1=document.getElementsByClassName("p_h1")[0];
+        var dt=new Date();
+        var str_date=dt.getFullYear()+(dt.getMonth()+101+"").substr(1)+(dt.getDate()+100+"").substr(1)
+            +"_"+dt.getHours()+"_"+dt.getMinutes()+"_"+dt.getSeconds();
+        tmpa.download = str_date+(p_h1?p_h1.innerHTML:"test")+".html";
+        tmpa.href = URL.createObjectURL(blob);
+        tmpa.click();//导出后事件需要重新绑定，或者直接使用innHTML定义？
+        setTimeout(function () {
+            URL.revokeObjectURL(blob);
+        }, 100);
+    }
+
+    var str_head="<!DOCTYPE html>\n" +
+        "<html lang=\"en\">\n" +
+        "<head>\n" +
+        "    <meta charset=\"UTF-8\">\n" +
+        "    <title>实用版</title>\n" +
+        "    <style>\n" +
+        "        /*通用属性*/\n" +
+        "        body{    margin: 0;    padding: 0;    border: 0;    text-align: center;    overflow: hidden;width: 100%;\n" +
+        "            height: 100%;position: fixed;    font-family: verdana,arial,sans-serif;    touch-action: none;\n" +
+        "            -ms-touch-action: none;font-size: 12px;min-width: 600px;}\n" +
+        "        ul {    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        li{    list-style: none;    margin: 0;    padding: 0;}\n" +
+        "        ul li {    float: left;}\n" +
+        "        button{    cursor: pointer;    height: 23px;}\n" +
+        "        a:link{    text-decoration: none;}\n" +
+        "        \n" +
+        "        #div_top span,input,button,textarea{margin-left: 20px;float: left;}\n" +
+        "        .p_h1{font-size: 24px;font-weight: bolder;background-color: darkseagreen}\n" +
+        "        .p_text{font-size: 20px;font-weight: normal;text-align: left;background-color: darkseagreen}\n" +
+        "\n" +
+        "        .div_section{position:relative}\n" +
+        "        .p_a1{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;margin-left: 60px;margin-right: 60px;\n" +
+        "        ;min-height: 80px;display: block;word-break: break-all;overflow-wrap: break-word;white-space: pre-wrap}\n" +
+        "        .p_a2{font-size: 20px;font-weight: normal;text-align: left;background-color: beige;left:120px}\n" +
+        "    </style>\n" +
+        "</head>";
+</script>
+</body></html>
