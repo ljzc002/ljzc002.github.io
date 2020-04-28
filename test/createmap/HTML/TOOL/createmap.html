@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编写并导出一张地图（babylon格式）</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.max.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/LIB/babylonjs.materials.min.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+</div>
+</body>
+<script>
+    var VERSION=1.0,AUTHOR="1113908055@qq.com";
+    var machine,canvas,engine,scene,gl,MyGame;
+    machine=navigator;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true,{ stencil: true });//启用网格高亮描边功能
+    engine.displayLoadingUI();
+    gl=engine._gl;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var obj_ground={};
+
+    window.onload=beforewebGL;
+    function beforewebGL()
+    {
+        webGLStart();
+    }
+    function webGLStart()
+    {
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1,1,1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0,0,0);
+        light0.groundColor = new BABYLON.Color3(1,1,1);//这个与第一道正相反
+
+        camera0= new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        //camera0.minZ=0.1;
+        camera0.attachControl(canvas,true);
+        scene.activeCameras.push(camera0);
+        var mat_green=new BABYLON.StandardMaterial("mat_green", scene);
+        mat_green.diffuseColor = new BABYLON.Color3(0, 1, 0);
+        mat_green.freeze();
+        var mat_blue=new BABYLON.StandardMaterial("mat_blue", scene);
+        mat_blue.diffuseColor = new BABYLON.Color3(0, 0, 1);
+        mat_blue.freeze();
+
+        //三个参照物
+        var mesh_base=new BABYLON.MeshBuilder.CreateSphere("mesh_base",{diameter:1},scene);
+        mesh_base.material=mat_green;
+        mesh_base.position.x=0;
+        mesh_base.renderingGroupId=2;
+        //mesh_base.layerMask=2;
+        var mesh_base1=new BABYLON.MeshBuilder.CreateSphere("mesh_base1",{diameter:1},scene);
+        mesh_base1.position.y=10;
+        mesh_base1.position.x=0;
+        mesh_base1.material=mat_green;
+        mesh_base1.renderingGroupId=2;
+        //mesh_base1.layerMask=2;
+        var mesh_base2=new BABYLON.MeshBuilder.CreateSphere("mesh_base2",{diameter:1},scene);
+        mesh_base2.position.y=-10;
+        mesh_base2.position.x=0;
+        mesh_base2.material=mat_green;
+        mesh_base2.renderingGroupId=2;
+
+        //天空盒
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
+        skyboxMaterial.disableLighting = true;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../../ASSETS/IMAGE/SKYBOX/skybox", scene);//这里的目录不能更深否则babyljs找不到！！
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skybox.renderingGroupId = 1;//这个参数使得天空盒处于所有其他元素之外！？
+        skybox.isPickable=false;
+
+        var ground1=new FrameGround();
+        var obj_p={
+            name:"ground1",
+            segs_x:100,
+            segs_z:100,
+            size_per_x:1,
+            size_per_z:1,
+            mat:"mat_grass",
+        };
+        ground1.init(obj_p);
+        //ground1.TransVertexGradientlyByDistance(new BABYLON.Vector3(0,0,-50),30,[[0,14,15],[15,4,5],[30,0,1]]);
+        obj_ground["ground1"]=ground1;
+
+
+
+        cri();
+        ct2(isInArea1,3);
+        ct2(isInArea2,-3);
+
+            ct3(15,15,-Math.PI/4,6,3,3,0);
+            ct3(70,20,-Math.PI/4,6,3,0,-3);
+            ct3(45,45,-Math.PI/4,6,3,0,-3);
+            ct3(20,70,-Math.PI/4,6,3,0,-3);
+            ct3(85,85,-Math.PI/4,6,3,0,3);
+            ct3(80,30,-Math.PI/4,6,3,-3,0);
+            ct3(55,55,-Math.PI/4,6,3,-3,0);
+            ct3(30,80,-Math.PI/4,6,3,-3,0);
+
+
+
+        ground1.MakeLandtype1(function(vec){
+            if(vec.y<-2)
+            {
+                return true;
+            }
+        },ground1.obj_mat.mat_sand,"ground_sand");
+
+        var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(101, 101));
+        water.backFaceCulling = true;
+        water.bumpTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/waterbump.png", scene);
+        water.windForce = -5;
+        water.waveHeight = 0.1;
+        water.bumpHeight = 0.1;
+        water.waveLength = 0.05;
+        water.colorBlendFactor = 0.2;
+        water.addToRenderList(skybox);
+        //water.addToRenderList(ground1.ground_base);
+        water.addToRenderList(ground1.ground_sand);
+
+        ground1.MakeLandtype1(function(vec){
+            if(vec.y<-0)
+            {
+                return true;
+            }
+        },
+            //ground1.obj_mat.mat_shallowwater
+            water
+            ,"ground_water",true,-2.5);
+
+        /*cig(function(){
+            ground1.MakeLandtype1(function(vec){
+                if(vec.y<-2)
+                {
+                    return true;
+                }
+            },ground1.obj_mat.mat_sand,"ground_sand",);
+
+            /*ground1.MakeLandtype1(function(vec){
+                if(vec.y<-2)
+                {
+                    return true;
+                }
+            },water,"ground_water",true,-2);*/
+
+            /*var mesh_water=obj_ground["ground_sand"].ground_base.clone();
+            mesh_water.position.y+=1;
+            mesh_water.material=water;
+            obj_ground["ground_water"]={ground_base:mesh_water};*/
+        //});*/
+
+
+
+        MyBeforeRender();
+    }
+
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //lastframe=new Date().getTime();
+            scene.render();
+        });
+    }
+
+
+</script>
+<script src="../../JS/CHARACTER/FrameGround.js"></script>
+<script src="../../JS/COM/command.js"></script>
+</html>
