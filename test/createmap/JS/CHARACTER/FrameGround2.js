@@ -11,7 +11,7 @@ FrameGround.CreateGroundMaterial=function(name,url,segs_x,segs_z)
     mat.diffuseTexture = new BABYLON.Texture(url, scene);
     //mat.diffuseTexture.uScale = segs_x+1;//纹理重复效果《-不重复uv？！
     //mat.diffuseTexture.vScale = segs_z+1;
-    mat.backFaceCulling=false;
+    mat.backFaceCulling=true;
     //mat.useLogarithmicDepth = true;
     mat.freeze();
     return mat;
