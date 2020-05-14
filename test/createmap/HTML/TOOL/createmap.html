@@ -118,6 +118,8 @@
                 return true;
             }
         },ground1.obj_mat.mat_sand,"ground_sand");
+        
+        ground1.ground_base.convertToFlatShadedMesh();
 
         var water = new BABYLON.WaterMaterial("water", scene, new BABYLON.Vector2(101, 101));
         water.backFaceCulling = true;
