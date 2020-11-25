@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>将文本文件转为room</title>
+    <link href="../../CSS/newland.css" rel="stylesheet">
+    <script src="../../JS/LIB/babylon.max.js"></script>
+    <script src="../../JS/MYLIB/newland.js"></script>
+    <script src="../../JS/PAGE/ROOM/handlebuilding.js"></script>
+    <script src="../../JS/PAGE/ROOM/createmesh.js"></script>
+</head>
+<body>
+<div id="div_allbase">
+    <canvas id="renderCanvas"></canvas>
+    <div id="fps" style="z-index: 302;"></div>
+</div>
+</body>
+<script>
+    var seg_z=5,seg_x=7;
+    var machine,canvas,engine,scene,gl,MyGame;
+    machine=navigator;
+    canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true);//这个页面注重逻辑，显示尽量简化
+    engine.displayLoadingUI();
+    gl=engine._gl;
+    scene = new BABYLON.Scene(engine);
+    var divFps = document.getElementById("fps");
+    var obj_building={};
+    var obj_meshclass={};
+    var mat_grass,mat_frame;
+    window.onload=function(){
+
+        var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
+        light0.diffuse = new BABYLON.Color3(1, 1, 1);//这道“颜色”是从上向下的，底部收到100%，侧方收到50%，顶部没有
+        light0.specular = new BABYLON.Color3(0, 0, 0);
+        light0.groundColor = new BABYLON.Color3(1, 1, 1);//这个与第一道正相反
+
+        var camera0 = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        camera0.minZ=0.1;
+        camera0.attachControl(canvas, true);
+        scene.activeCameras.push(camera0);
+
+        mat_grass = new BABYLON.StandardMaterial("mat_grass", scene);
+        mat_grass.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/grass.jpg", scene);
+        mat_grass.backFaceCulling=false;
+        mat_grass.freeze();
+        mat_frame = new BABYLON.StandardMaterial("mat_frame", scene);
+        mat_frame.wireframe = true;
+        //mat_frame.useLogarithmicDepth = true;
+        mat_frame.freeze();
+
+        initMeshClass();
+
+        var str=newland.importString("06.txt");
+        //console.log(str);
+        var arr=str.split("\r\n")//限于window操作系统下？？
+        var len=arr.length;
+        for(var i=0;i<len;i++)//对于每一行
+        {
+            var line=arr[i];
+            if(line.substring(0,2)=="//")
+            {
+                var arr2=line.substring(2).split("@");
+                var len2=arr2.length;
+                for(var j=0;j<len2;j++)
+                {
+                    var obj=arr2[j];
+                    var arr3=obj.split(":");
+                    var ptype=arr3[0];
+                    var pvalue=arr3[1];
+                    if(ptype=="seg_z")
+                    {
+                        seg_z=parseInt(pvalue);
+                    }
+                    else if(ptype=="seg_x")
+                    {
+                        seg_x=parseInt(pvalue);
+                    }
+                    else if(ptype=="floor")//进入了一层
+                    {
+                        i=handleFloor(pvalue,arr,i+1);
+                    }
+                }
+            }
+        }
+        handleBuilding();//综合房间和楼层的关系处理所有渲染网格
+        MyBeforeRender()
+    }
+
+    var sizex = 9;
+    var sizey = 9;
+    var sizez = 9;
+
+    var height_floor=9;
+    var width_road=3;
+    var height_road=3;
+    var offset_width=0;//道路相对于房间中心的偏移
+    var offset_height=0;
+
+
+    function drawMesh(type,name,pos,rot)
+    {
+        var instance=obj_meshclass[type].createInstance(name);
+        instance.position=pos;
+        instance.rotation=rot;
+    }
+
+
+    function MyBeforeRender()
+    {
+        scene.registerBeforeRender(
+            function(){
+                //Think();
+
+            }
+        )
+        scene.registerAfterRender(
+            function() {
+            }
+        )
+        engine.runRenderLoop(function () {
+            engine.hideLoadingUI();
+            if (divFps) {
+                // Fps
+                divFps.innerHTML = engine.getFps().toFixed() + " fps";
+            }
+            //lastframe=new Date().getTime();
+            scene.render();
+        });
+    }
+</script>
+</html>
