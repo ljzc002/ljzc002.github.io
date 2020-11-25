@@ -11,7 +11,7 @@ function initMeshClass()
     add_plan2({x:-1.5,y:-1.5,z:0},{x:4.5,y:-1.5,z:0},{x:4.5,y:-4.5,z:0},{x:-1.5,y:-4.5,z:0},8,3/size_per_u,6/size_per_v);
     add_plan2({x:-4.5,y:1.5,z:0},{x:-1.5,y:1.5,z:0},{x:-1.5,y:-4.5,z:0},{x:-4.5,y:-4.5,z:0},12,0,3/size_per_v);
     var mesh=vertexData2Mesh(positions, indices, normals, uvs,"class_hole",mat_frame);
-    mesh.setEnabled(false);//令源网格不显示
+    //mesh.setEnabled(false);//令源网格不显示
     obj_meshclass["hole"]=mesh;
 
     positions=[];//新建式清空，理论上不影响引用的数据
@@ -20,7 +20,7 @@ function initMeshClass()
     indices=[];
     add_plan2({x:-4.5,y:4.5,z:0},{x:4.5,y:4.5,z:0},{x:4.5,y:-4.5,z:0},{x:-4.5,y:-4.5,z:0},0);
     var mesh=vertexData2Mesh(positions, indices, normals, uvs,"class_wall",mat_frame);
-    mesh.setEnabled(false);
+    //mesh.setEnabled(false);
     obj_meshclass["wall"]=mesh;
 
     positions=[];
@@ -29,7 +29,7 @@ function initMeshClass()
     indices=[];
     add_plan2({x:-1.5,y:1.5,z:0},{x:1.5,y:1.5,z:0},{x:1.5,y:-1.5,z:0},{x:-1.5,y:-1.5,z:0},0);
     var mesh=vertexData2Mesh(positions, indices, normals, uvs,"class_smallwall",mat_frame);
-    mesh.setEnabled(false);
+    //mesh.setEnabled(false);
     obj_meshclass["smallwall"]=mesh;
 
     positions=[];
@@ -41,7 +41,7 @@ function initMeshClass()
     add_plan2({x:1.5,y:-1.5,z:-4.5},{x:1.5,y:-1.5,z:4.5},{x:-1.5,y:-1.5,z:4.5},{x:-1.5,y:-1.5,z:-4.5},8);
     add_plan2({x:-1.5,y:-1.5,z:-4.5},{x:-1.5,y:-1.5,z:4.5},{x:-1.5,y:1.5,z:4.5},{x:-1.5,y:1.5,z:-4.5},12);
     var mesh=vertexData2Mesh(positions, indices, normals, uvs,"class_channel",mat_grass);
-    mesh.setEnabled(false);//很奇怪如果不对长通道设置mesh.setEnabled(false);则实例无法正常显示，但其他类的实例则没有这种问题。
+    //mesh.setEnabled(false);//很奇怪如果不对长通道设置mesh.setEnabled(false);则实例无法正常显示，但其他类的实例则没有这种问题。
     obj_meshclass["channel"]=mesh;
 
     positions=[];
@@ -53,7 +53,7 @@ function initMeshClass()
     add_plan2({x:1.5,y:-1.5,z:1.5},{x:1.5,y:-1.5,z:4.5},{x:-1.5,y:-1.5,z:4.5},{x:-1.5,y:-1.5,z:1.5},8);
     add_plan2({x:-1.5,y:-1.5,z:1.5},{x:-1.5,y:-1.5,z:4.5},{x:-1.5,y:1.5,z:4.5},{x:-1.5,y:1.5,z:1.5},12);
     var mesh=vertexData2Mesh(positions, indices, normals, uvs,"class_shortchannel",mat_frame);
-    mesh.setEnabled(false);
+    //mesh.setEnabled(false);
     obj_meshclass["shortchannel"]=mesh;
 }
 function vertexData2Mesh(positions, indices, normals, uvs,name,material)
