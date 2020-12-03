@@ -187,19 +187,19 @@ function MyBeforeRender()
                 }
                 if(obj_keystate["d"]==1)
                 {
-                    v_temp.x+=0.1*flag_speed;
+                    v_temp.x+=0.05*flag_speed;
                 }
                 if(obj_keystate["a"]==1)
                 {
-                    v_temp.x-=0.1*flag_speed;
+                    v_temp.x-=0.05*flag_speed;
                 }
                 if(obj_keystate[" "]==1)
                 {
-                    v_temp.y+=0.1*flag_speed;
+                    v_temp.y+=0.05*flag_speed;
                 }
                 if(obj_keystate["c"]==1)
                 {
-                    v_temp.y-=0.1*flag_speed;
+                    v_temp.y-=0.05*flag_speed;
                 }
 
                 //camera0.position=camera0.position.add(BABYLON.Vector3.TransformCoordinates(v_temp,camera0.getWorldMatrix()).subtract(camera0.position));
