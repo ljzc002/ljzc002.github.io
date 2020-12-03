@@ -93,8 +93,8 @@ function handleBuilding()
                     var room=row[j+""];
                     //根据房间的类型不同决定是否要查看其周围的房间
                     if(room)
-                    {
-                        if(room.type=="0"||room.type=="#"||room.type=="^")//普通房间，要考虑前后左右的四个房间状态，要考虑资源放置
+                    {//@@@@普通房间，要考虑前后左右的四个房间状态，要考虑资源放置
+                        if(room.type=="0"||room.type=="#"||room.type=="^")
                         {
                             //考虑前面
                             if(floor[i-1+""]&&floor[i-1+""][j+""])
@@ -228,7 +228,7 @@ function handleBuilding()
                                 //还要负责向上连接
                                 if(floor_shang)
                                 {
-                                    for(var k=int_key+1;k<floor_shang;k++)
+                                    for(var k=int_key+1;k<int_key_shang;k++)
                                     {
                                         drawMesh("channel","channel_^_"+k+"_"+i+"_"+j,new BABYLON.Vector3((j)*sizex,(k)*sizey,(-i)*sizez)
                                             ,new BABYLON.Vector3(Math.PI/2,0,0))
@@ -255,7 +255,8 @@ function handleBuilding()
                             //翻转方向会影响碰撞检测吗？
                             //最后处理资源
                         }
-                        else if(room.type=="-"||room.type=="+"||room.type=="|")//表示通道的三种符号，要考虑其前后左右的位置
+                        //@@@@表示通道的三种符号，要考虑其前后左右的位置
+                        else if(room.type=="-"||room.type=="+"||room.type=="|")
                         {
                             if(room.type=="-")
                             {//横向长通道
@@ -383,6 +384,101 @@ function handleBuilding()
                                 //下面
                                 drawMesh("smallwall","smallwall_y-_"+int_key+"_"+i+"_"+j,new BABYLON.Vector3((j)*sizex,(int_key-0.5/3)*sizey,(-i)*sizez)
                                     ,new BABYLON.Vector3(Math.PI/2,0,0))
+
+                            }
+                        }
+                        //如果这个房间有资源
+                        if(room.sourceType=="mp4"||room.sourceType=="jpg"||room.sourceType=="png")
+                        {
+                            var mesh_plan=new BABYLON.MeshBuilder.CreatePlane(room.sourceType+"_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j,
+                                {height:4.5,width:8},scene);
+                            var pos={x:0,y:0,z:0},rot=new BABYLON.Vector3(0,0,0);
+                            if(room.sourceSide=="z")
+                            {
+                                pos.z=0.4
+                            }else if(room.sourceSide=="z-")
+                            {
+                                pos.z=-0.4;
+                                rot.y=Math.PI;
+                            }
+                            else if(room.sourceSide=="x")
+                            {
+                                pos.x=0.4;
+                                rot.y=-Math.PI/2;
+                            }
+                            else if(room.sourceSide=="x-")
+                            {
+                                pos.x=-0.4;
+                                rot.y=Math.PI/2;
+                            }
+                            else if(room.sourceSide=="y")
+                            {
+                                pos.y=0.4;
+                                rot.x=Math.PI/2;
+                            }
+                            else if(room.sourceSide=="z-")
+                            {
+                                pos.y=-0.4;
+                                rot.x=-Math.PI/2;
+                            }
+                            mesh_plan.position=new BABYLON.Vector3((j+pos.x)*sizex,(int_key+pos.y)*sizey,(-i+pos.z)*sizez);
+                            mesh_plan.rotation=rot;
+                            mesh_plan.renderingGroupId=2;
+                            if(room.sourceType=="jpg"||room.sourceType=="png")
+                            {
+                                var materialf = new BABYLON.StandardMaterial("mat_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j, scene);
+
+                                materialf.diffuseTexture = new BABYLON.Texture(room.sourceUrl, scene);
+                                materialf.diffuseTexture.hasAlpha = false;
+                                materialf.backFaceCulling = true;
+                                materialf.freeze();
+                                mesh_plan.material =materialf;
+                            }
+                            else if(room.sourceType=="mp4")
+                            {
+                                var mat = new BABYLON.StandardMaterial("mat_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j, scene);
+                                //Chrome 66为了避免标签产生随机噪音禁止没有交互前使用js进行播放
+                                var videoTexture = new BABYLON.VideoTexture("video_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j, [room.sourceUrl], scene, true, false);
+                                //videoTexture.video.autoplay=false;//这两个设置
+                                //videoTexture.video.muted=true;不起作用
+                                mat.diffuseTexture = videoTexture;
+                                mat.emissiveColor=new BABYLON.Color3(1,1,1);
+                                //监听到交互需求
+                                // videoTexture.onUserActionRequestedObservable.add(() => {
+                                //     scene.onPointerDown = function (evt) {
+                                //         if(evt.pickInfo.pickedMesh == mesh_plan)
+                                //         {
+                                //             if(videoTexture.video.paused)
+                                //             {
+                                //                 videoTexture.video.play();
+                                //             }
+                                //             else
+                                //             {
+                                //                 videoTexture.video.pause();
+                                //             }
+                                //         }
+                                //
+                                //     }
+                                // });
+                                //mat.emissiveTexture= videoTexture;
+                                mesh_plan.material =mat;
+                                obj_videos[mesh_plan.name]=videoTexture;
+                                if(false)
+                                {
+                                    scene.onPointerDown = function (evt) {//这个evt是dom的，不会有pickInfo！！
+                                        if(evt.pickInfo&&(evt.pickInfo.pickedMesh == mesh_plan))
+                                        {
+                                            if(videoTexture.video.paused)
+                                            {
+                                                videoTexture.video.play();
+                                            }
+                                            else
+                                            {
+                                                videoTexture.video.pause();
+                                            }
+                                        }
+                                    }
+                                }
 
                             }
                         }
