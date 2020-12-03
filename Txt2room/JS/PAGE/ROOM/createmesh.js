@@ -42,7 +42,7 @@ function initMeshClass()
     add_plan2({x:1.5,y:1.5,z:-4.5},{x:1.5,y:1.5,z:4.5},{x:1.5,y:-1.5,z:4.5},{x:1.5,y:-1.5,z:-4.5},4);
     add_plan2({x:1.5,y:-1.5,z:-4.5},{x:1.5,y:-1.5,z:4.5},{x:-1.5,y:-1.5,z:4.5},{x:-1.5,y:-1.5,z:-4.5},8);
     add_plan2({x:-1.5,y:-1.5,z:-4.5},{x:-1.5,y:-1.5,z:4.5},{x:-1.5,y:1.5,z:4.5},{x:-1.5,y:1.5,z:-4.5},12);
-    var mesh=vertexData2Mesh(positions, indices, normals, uvs,"class_channel",mat_grass);
+    var mesh=vertexData2Mesh(positions, indices, normals, uvs,"class_channel",mat_frame);
     //mesh.setEnabled(false);
     // 很奇怪如果不对长通道设置mesh.setEnabled(false);则实例无法正常显示，但其他类的实例则没有这种问题。
     mesh.setEnabled(false);
