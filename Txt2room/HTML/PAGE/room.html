@@ -8,6 +8,7 @@
     <script src="../../JS/MYLIB/newland.js"></script>
     <script src="../../JS/PAGE/ROOM/handlebuilding.js"></script>
     <script src="../../JS/PAGE/ROOM/createmesh.js"></script>
+    <script src="../../JS/PAGE/ROOM/Control.js"></script>
 </head>
 <body>
 <div id="div_allbase">
@@ -17,7 +18,7 @@
 </body>
 <script>
     var seg_z=5,seg_x=7;
-    var machine,canvas,engine,scene,gl,MyGame;
+    var machine,canvas,engine,scene,gl,camera0;
     machine=navigator;
     canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true);//这个页面注重逻辑，显示尽量简化
@@ -28,6 +29,7 @@
     var obj_building={};
     var obj_meshclass={};
     var mat_grass,mat_frame;
+    var obj_videos={};
     window.onload=function(){
 
         var light0 = new BABYLON.HemisphericLight("light0", new BABYLON.Vector3(0, 1, 0), scene);
@@ -35,10 +37,11 @@
         light0.specular = new BABYLON.Color3(0, 0, 0);
         light0.groundColor = new BABYLON.Color3(1, 1, 1);//这个与第一道正相反
 
-        var camera0 = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
+        camera0 = new BABYLON.FreeCamera("FreeCamera", new BABYLON.Vector3(0, 10, -30), scene);
         camera0.minZ=0.1;
         camera0.attachControl(canvas, true);
         scene.activeCameras.push(camera0);
+
 
         mat_grass = new BABYLON.StandardMaterial("mat_grass", scene);
         mat_grass.diffuseTexture = new BABYLON.Texture("../../ASSETS/IMAGE/LANDTYPE/grass.jpg", scene);
@@ -84,6 +87,16 @@
             }
         }
         handleBuilding();//综合房间和楼层的关系处理所有渲染网格
+
+        InitMouse();
+        window.addEventListener("resize", function () {
+            if (engine) {
+                engine.resize();
+            }
+        },false);
+        window.addEventListener("keydown", onKeyDown, false);//按键按下
+        window.addEventListener("keyup", onKeyUp, false);//按键抬起
+
         MyBeforeRender()
     }
 
@@ -106,27 +119,6 @@
     }
 
 
-    function MyBeforeRender()
-    {
-        scene.registerBeforeRender(
-            function(){
-                //Think();
 
-            }
-        )
-        scene.registerAfterRender(
-            function() {
-            }
-        )
-        engine.runRenderLoop(function () {
-            engine.hideLoadingUI();
-            if (divFps) {
-                // Fps
-                divFps.innerHTML = engine.getFps().toFixed() + " fps";
-            }
-            //lastframe=new Date().getTime();
-            scene.render();
-        });
-    }
 </script>
 </html>
