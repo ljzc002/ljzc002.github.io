@@ -5,7 +5,7 @@
 0     |
       00
       0#
-//source:2|4|z|mp4|http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 
+//source:2|4|z|mp4|.big_buck_bunny.mp4
 //floor:-1
 0
 |
