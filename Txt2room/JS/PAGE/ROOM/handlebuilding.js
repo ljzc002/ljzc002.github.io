@@ -39,7 +39,8 @@ function handleFloor(int_floor,arr,index)
             }
             else if(line.substring(0,8)=="//source")//为这个房间设置资源
             {
-                var arr2=line.split(":")[1].split("|");
+                //var arr2=line.split(":")[1].split("|");
+                var arr2=line.substring(line.search(":")+1).split("|");
                 if(floor[arr2[0]]&&floor[arr2[0]][arr2[1]])
                 {
                     var obj=floor[arr2[0]][arr2[1]];
