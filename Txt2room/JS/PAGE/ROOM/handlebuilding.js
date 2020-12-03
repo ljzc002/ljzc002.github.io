@@ -26,7 +26,7 @@ function handleFloor(int_floor,arr,index)
                 if(line[j])
                 {
 
-                    floor[count+""][j+1+""]={type:line[j]};//这个“数组”都是从一开始的
+                    floor[count+""][j+1+""]={type:line[j],arr_source:[]};//这个“数组”都是从一开始的
                     //addRoom(count-1,j);//行、列,规划完毕后统一添加渲染
                 }
             }
@@ -43,10 +43,12 @@ function handleFloor(int_floor,arr,index)
                 var arr2=line.substring(line.search(":")+1).split("|");
                 if(floor[arr2[0]]&&floor[arr2[0]][arr2[1]])
                 {
-                    var obj=floor[arr2[0]][arr2[1]];
+                    var arr_source=floor[arr2[0]][arr2[1]].arr_source;
+                    var obj={};
                     obj.sourceSide=arr2[2];
                     obj.sourceType=arr2[3];
                     obj.sourceUrl=arr2[4];
+                    arr_source.push(obj);
                 }
 
             }
@@ -97,6 +99,7 @@ function handleBuilding()
                     {//@@@@普通房间，要考虑前后左右的四个房间状态，要考虑资源放置
                         if(room.type=="0"||room.type=="#"||room.type=="^")
                         {
+                            //room.arr_source=[];
                             //考虑前面
                             if(floor[i-1+""]&&floor[i-1+""][j+""])
                             {
@@ -389,100 +392,110 @@ function handleBuilding()
                             }
                         }
                         //如果这个房间有资源
-                        if(room.sourceType=="mp4"||room.sourceType=="jpg"||room.sourceType=="png")
+                        if(room.arr_source)
                         {
-                            var mesh_plan=new BABYLON.MeshBuilder.CreatePlane(room.sourceType+"_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j,
-                                {height:4.5,width:8},scene);
-                            var pos={x:0,y:0,z:0},rot=new BABYLON.Vector3(0,0,0);
-                            if(room.sourceSide=="z")
+                            var arr_source=room.arr_source;
+                            var len=arr_source.length;
+                            for(var k=0;k<len;k++)
                             {
-                                pos.z=0.4
-                            }else if(room.sourceSide=="z-")
-                            {
-                                pos.z=-0.4;
-                                rot.y=Math.PI;
-                            }
-                            else if(room.sourceSide=="x")
-                            {
-                                pos.x=0.4;
-                                rot.y=-Math.PI/2;
-                            }
-                            else if(room.sourceSide=="x-")
-                            {
-                                pos.x=-0.4;
-                                rot.y=Math.PI/2;
-                            }
-                            else if(room.sourceSide=="y")
-                            {
-                                pos.y=0.4;
-                                rot.x=Math.PI/2;
-                            }
-                            else if(room.sourceSide=="z-")
-                            {
-                                pos.y=-0.4;
-                                rot.x=-Math.PI/2;
-                            }
-                            mesh_plan.position=new BABYLON.Vector3((j+pos.x)*sizex,(int_key+pos.y)*sizey,(-i+pos.z)*sizez);
-                            mesh_plan.rotation=rot;
-                            mesh_plan.renderingGroupId=2;
-                            if(room.sourceType=="jpg"||room.sourceType=="png")
-                            {
-                                var materialf = new BABYLON.StandardMaterial("mat_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j, scene);
-
-                                materialf.diffuseTexture = new BABYLON.Texture(room.sourceUrl, scene);
-                                materialf.diffuseTexture.hasAlpha = false;
-                                materialf.backFaceCulling = true;
-                                materialf.freeze();
-                                mesh_plan.material =materialf;
-                            }
-                            else if(room.sourceType=="mp4")
-                            {
-                                var mat = new BABYLON.StandardMaterial("mat_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j, scene);
-                                //Chrome 66为了避免标签产生随机噪音禁止没有交互前使用js进行播放
-                                var videoTexture = new BABYLON.VideoTexture("video_"+room.sourceSide+"_"+int_key+"_"+i+"_"+j, [room.sourceUrl], scene, true, false);
-                                //videoTexture.video.autoplay=false;//这两个设置
-                                //videoTexture.video.muted=true;不起作用
-                                mat.diffuseTexture = videoTexture;
-                                mat.emissiveColor=new BABYLON.Color3(1,1,1);
-                                //监听到交互需求
-                                // videoTexture.onUserActionRequestedObservable.add(() => {
-                                //     scene.onPointerDown = function (evt) {
-                                //         if(evt.pickInfo.pickedMesh == mesh_plan)
-                                //         {
-                                //             if(videoTexture.video.paused)
-                                //             {
-                                //                 videoTexture.video.play();
-                                //             }
-                                //             else
-                                //             {
-                                //                 videoTexture.video.pause();
-                                //             }
-                                //         }
-                                //
-                                //     }
-                                // });
-                                //mat.emissiveTexture= videoTexture;
-                                mesh_plan.material =mat;
-                                obj_videos[mesh_plan.name]=videoTexture;
-                                if(false)
+                                var source=arr_source[k];
+                                if(source.sourceType=="mp4"||source.sourceType=="jpg"||source.sourceType=="png")
                                 {
-                                    scene.onPointerDown = function (evt) {//这个evt是dom的，不会有pickInfo！！
-                                        if(evt.pickInfo&&(evt.pickInfo.pickedMesh == mesh_plan))
+                                    var mesh_plan=new BABYLON.MeshBuilder.CreatePlane(source.sourceType+"_"+source.sourceSide+"_"+int_key+"_"+i+"_"+j,
+                                        {height:4.5,width:8},scene);
+                                    var pos={x:0,y:0,z:0},rot=new BABYLON.Vector3(0,0,0);
+                                    if(source.sourceSide=="z")
+                                    {
+                                        pos.z=0.4
+                                    }else if(source.sourceSide=="z-")
+                                    {
+                                        pos.z=-0.4;
+                                        rot.y=Math.PI;
+                                    }
+                                    else if(source.sourceSide=="x")
+                                    {
+                                        pos.x=0.4;
+                                        rot.y=-Math.PI/2;
+                                    }
+                                    else if(source.sourceSide=="x-")
+                                    {
+                                        pos.x=-0.4;
+                                        rot.y=Math.PI/2;
+                                    }
+                                    else if(source.sourceSide=="y")
+                                    {
+                                        pos.y=0.4;
+                                        rot.x=Math.PI/2;
+                                    }
+                                    else if(source.sourceSide=="z-")
+                                    {
+                                        pos.y=-0.4;
+                                        rot.x=-Math.PI/2;
+                                    }
+                                    mesh_plan.position=new BABYLON.Vector3((j+pos.x)*sizex,(int_key+pos.y)*sizey,(-i+pos.z)*sizez);
+                                    mesh_plan.rotation=rot;
+                                    mesh_plan.renderingGroupId=2;
+                                    if(source.sourceType=="jpg"||source.sourceType=="png")
+                                    {
+                                        var materialf = new BABYLON.StandardMaterial("mat_"+source.sourceSide+"_"+int_key+"_"+i+"_"+j, scene);
+
+                                        materialf.diffuseTexture = new BABYLON.Texture(source.sourceUrl, scene);
+                                        materialf.diffuseTexture.hasAlpha = false;
+                                        materialf.backFaceCulling = true;
+                                        materialf.freeze();
+                                        mesh_plan.material =materialf;
+                                    }
+                                    else if(source.sourceType=="mp4")
+                                    {
+                                        var mat = new BABYLON.StandardMaterial("mat_"+source.sourceSide+"_"+int_key+"_"+i+"_"+j, scene);
+                                        //Chrome 66为了避免标签产生随机噪音禁止没有交互前使用js进行播放
+                                        var videoTexture = new BABYLON.VideoTexture("video_"+source.sourceSide+"_"+int_key+"_"+i+"_"+j, [source.sourceUrl], scene, true, false);
+                                        //videoTexture.video.autoplay=false;//这两个设置
+                                        //videoTexture.video.muted=true;不起作用
+                                        mat.diffuseTexture = videoTexture;
+                                        mat.emissiveColor=new BABYLON.Color3(1,1,1);
+                                        //监听到交互需求
+                                        // videoTexture.onUserActionRequestedObservable.add(() => {
+                                        //     scene.onPointerDown = function (evt) {
+                                        //         if(evt.pickInfo.pickedMesh == mesh_plan)
+                                        //         {
+                                        //             if(videoTexture.video.paused)
+                                        //             {
+                                        //                 videoTexture.video.play();
+                                        //             }
+                                        //             else
+                                        //             {
+                                        //                 videoTexture.video.pause();
+                                        //             }
+                                        //         }
+                                        //
+                                        //     }
+                                        // });
+                                        //mat.emissiveTexture= videoTexture;
+                                        mesh_plan.material =mat;
+                                        obj_videos[mesh_plan.name]=videoTexture;
+                                        if(false)
                                         {
-                                            if(videoTexture.video.paused)
-                                            {
-                                                videoTexture.video.play();
-                                            }
-                                            else
-                                            {
-                                                videoTexture.video.pause();
+                                            scene.onPointerDown = function (evt) {//这个evt是dom的，不会有pickInfo！！
+                                                if(evt.pickInfo&&(evt.pickInfo.pickedMesh == mesh_plan))
+                                                {
+                                                    if(videoTexture.video.paused)
+                                                    {
+                                                        videoTexture.video.play();
+                                                    }
+                                                    else
+                                                    {
+                                                        videoTexture.video.pause();
+                                                    }
+                                                }
                                             }
                                         }
+
                                     }
                                 }
-
                             }
                         }
+
                     }
                 }
             }
